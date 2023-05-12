@@ -15,9 +15,8 @@ To run the game, you'll need to have Node.js and npm installed on your computer.
 
 * Clone this repository to your local machine using `git clone https://github.com/JoeKarlsson/flappy-birds-clone.git`
 * Navigate to the project directory using `cd flappy-birds-clone`
-* Install the dependencies using `npm install`
-* Start the local development server using `npm start`
-* Open your web browser and go to `http://localhost:8080`
+* You'll need to start a local live server, I used the VS Code extension [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to do this.
+* Open your web browser and go to `http://localhost:3000`
 
 ### Credits
 

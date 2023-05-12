@@ -27,10 +27,11 @@ var mainState = {
         game.physics.arcade.enable(this.bird);
         this.bird.body.gravity.y = 1000;
 
-        // Call the 'jump' function when the spacekey is hit
+        // Call the 'jump' function when the space key is hit or if the game box is clicked or tapped
         var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spaceKey.onDown.add(this.jump, this);
 
+        // jump 
         this.game.input.onDown.add(this.jump, this);
 
         this.pipes = game.add.group(); // Create a group  
