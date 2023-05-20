@@ -1,0 +1,11 @@
+TOKEN "top_10_sessions_endpoint_read_0473" READ
+
+NODE endpoint
+SQL >
+
+    SELECT session_id, count() as score FROM scores
+    GROUP BY session_id
+    ORDER BY score DESC
+    LIMIT 10
+
+
