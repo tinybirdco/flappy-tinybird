@@ -1,4 +1,6 @@
 import Phaser from "phaser";
+import { send_score } from "./tinybird";
+import { v4 as uuidv4 } from "uuid";
 
 export default class FlappyTinybirdScene extends Phaser.Scene {
   scoreText;
@@ -7,12 +9,17 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
   pipes;
   bird;
   timer;
+  session = {};
 
   constructor() {
     super({ key: "FlappyTinybirdScene" });
   }
 
   preload() {
+    this.session.id = uuidv4();
+    this.session.name = "test";
+    this.session.email = "test@test.test";
+
     this.load.image("bird", "assets/bird.png");
     this.load.image("pipe", "assets/pipe.png");
     this.canvas = this.sys.game.canvas;
@@ -91,6 +98,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
       }
 
     this.score += 1;
+    send_score(this.session);
     this.scoreText.text = this.score;
   }
 

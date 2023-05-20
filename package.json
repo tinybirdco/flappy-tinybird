@@ -9,7 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "phaser": "^3.60.0"
+    "phaser": "^3.60.0",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "eslint": "^8.41.0",
