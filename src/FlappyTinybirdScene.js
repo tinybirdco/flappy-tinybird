@@ -15,6 +15,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
   preload() {
     this.load.image("bird", "assets/bird.png");
     this.load.image("pipe", "assets/pipe.png");
+    this.canvas = this.sys.game.canvas;
   }
 
   create() {
@@ -52,6 +53,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
       if (pipe.x < -50) pipe.destroy();
       else pipe.setVelocityX(-100);
     });
+    if (this.bird.y > this.canvas.height) this.restartGame();
+    if (this.bird.y < 35) this.bird.setY(35);
   }
 
   jump() {
