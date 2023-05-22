@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 
 export default class FlappyTinybirdScene extends Phaser.Scene {
   scoreText;
-  gameOver = false;
   score = 0;
   pipes;
   bird;
@@ -51,6 +50,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     this.scoreText = this.add.text(20, 20, "0", {
       font: "30px Arial",
     });
+    this.scoreText.setDepth(1);
   }
 
   update() {
@@ -60,7 +60,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
       if (pipe.x < -50) pipe.destroy();
       else pipe.setVelocityX(-100);
     });
-    if (this.bird.y > this.canvas.height) this.restartGame();
+    if (this.bird.y > this.canvas.height) this.endGame();
     if (this.bird.y < 35) this.bird.setY(35);
   }
 
@@ -69,26 +69,21 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     this.bird.body.velocity.y = -350;
   }
 
-  restartGame() {
-    this.scene.restart();
-  }
-
-  hitPipe() {
-    this.restartGame();
-    this.timer.remove();
+  endGame() {
+    this.scene.start("MainMenu");
   }
 
   addOnePipe(x, y) {
-    var pipe = this.physics.add.sprite(x, y, "pipe");
+    const pipe = this.physics.add.sprite(x, y, "pipe");
     this.pipes.add(pipe);
-    this.physics.add.overlap(this.bird, pipe, this.hitPipe, null, this);
+    this.physics.add.overlap(this.bird, pipe, this.endGame, null, this);
     pipe.setActive(true);
   }
 
   addRowOfPipes() {
     const middleGapStart = this.getRandomInt(2, 6);
 
-    for (var i = 0; i < 9; i++)
+    for (let i = 0; i < 9; i++)
       if (
         i != middleGapStart &&
         i != middleGapStart + 1 &&

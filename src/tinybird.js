@@ -1,7 +1,7 @@
 const events_url = "https://api.tinybird.co/v0/events?name=scores";
 
 export async function send_score(session) {
-  const response = await fetch(events_url, {
+  return fetch(events_url, {
     method: "POST",
     body: JSON.stringify({
       session_id: session.id,
@@ -13,5 +13,6 @@ export async function send_score(session) {
     },
   })
     .then((res) => res.json())
-    .then((data) => console.log(data));
+    .then((data) => console.log(data))
+    .catch((error) => console.log(error));
 }

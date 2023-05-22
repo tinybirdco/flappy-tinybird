@@ -1,7 +1,9 @@
 import Phaser from "phaser";
 
 import FlappyTinybirdScene from "./FlappyTinybirdScene";
+import MainMenuScene from "./MainMenuScene";
 
+/** @type {import('phaser').Types.Core.GameConfig} */
 const config = {
   type: Phaser.AUTO,
   parent: "app",
@@ -11,11 +13,11 @@ const config = {
     default: "arcade",
     arcade: {
       gravity: { y: 1000 },
-      debug: true,
+      debug: import.meta.env.DEV,
     },
   },
   backgroundColor: "rgba(113, 197, 207,0)",
-  scene: [FlappyTinybirdScene],
+  scene: [MainMenuScene, FlappyTinybirdScene],
 };
 
 export default new Phaser.Game(config);
