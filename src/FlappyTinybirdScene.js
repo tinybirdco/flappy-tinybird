@@ -34,6 +34,9 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     spaceKey.on("down", (key, event) => {
       this.jump();
     });
+    this.input.on('pointerdown', (pointer) => {
+      this.jump();
+    });
 
     this.pipes = this.physics.add.group({
       allowGravity: false,
