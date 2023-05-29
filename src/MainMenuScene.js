@@ -4,7 +4,7 @@ export default class MainMenuScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.html('userForm', 'assets/UserForm.html');
+    this.load.html('userForm', 'UserForm.html');
   }
 
   create() {

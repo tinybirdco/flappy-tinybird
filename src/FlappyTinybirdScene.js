@@ -27,8 +27,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image("bird", "assets/bird.png");
-    this.load.image("pipe", "assets/pipe.png");
+    this.load.image("bird", "bird.png");
+    this.load.image("pipe", "pipe.png");
     this.canvas = this.sys.game.canvas;
   }
 
