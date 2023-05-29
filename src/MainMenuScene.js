@@ -3,11 +3,20 @@ export default class MainMenuScene extends Phaser.Scene {
     super({ key: "MainMenu" });
   }
 
+  preload() {
+    this.load.html('userForm', 'assets/UserForm.html');
+  }
+
   create() {
-    const graphics = this.add.graphics();
-    graphics.fillStyle(0x1fcc83, 1);
-    graphics.fillRect(150, 265, 100, 50);
-    graphics.setInteractive(
+    const userForm = this.add.dom(170, 277.5).createFromCache('userForm');
+    const nameElement = userForm.getChildByID('name');
+    const emailElement = userForm.getChildByID('email');
+    const errorElement = userForm.getChildByID('error');
+
+    const playButton = this.add.graphics();
+    playButton.fillStyle(0x1fcc83, 1);
+    playButton.fillRect(150, 265, 100, 50);
+    playButton.setInteractive(
       new Phaser.Geom.Rectangle(150, 265, 100, 50),
       Phaser.Geom.Rectangle.Contains
     );
@@ -17,10 +26,17 @@ export default class MainMenuScene extends Phaser.Scene {
       color: "#ffffff",
     });
 
-    graphics.on(
+    playButton.on(
       "pointerup",
       function () {
-        this.scene.start("FlappyTinybirdScene");
+        const email = emailElement.value;
+        const name = nameElement.value;
+        console.log({ email: email, name: name })
+        if (email == '' || name == '') {
+          errorElement.className = 'error-enable';
+        } else {
+          this.scene.start("FlappyTinybirdScene", { email: email, name: name });
+        }
       },
       this
     );

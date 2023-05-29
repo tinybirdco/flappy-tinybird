@@ -8,23 +8,32 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
   pipes;
   bird;
   timer;
-  session = {};
+  player = {};
+  session = {
+    email: '',
+    name: '',
+    id: ''
+  };
 
   constructor() {
     super({ key: "FlappyTinybirdScene" });
+
+  }
+
+  init(player) {
+    this.session.email = player.email;
+    this.session.name = player.name;
+    this.session.id = uuidv4();
   }
 
   preload() {
-    this.session.id = uuidv4();
-    this.session.name = "test";
-    this.session.email = "test@test.test";
-
     this.load.image("bird", "assets/bird.png");
     this.load.image("pipe", "assets/pipe.png");
     this.canvas = this.sys.game.canvas;
   }
 
   create() {
+    console.log(this.player)
     this.bird = this.physics.add.sprite(100, 245, "bird");
 
     const spaceKey = this.input.keyboard.addKey(

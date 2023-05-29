@@ -16,6 +16,9 @@ const config = {
       debug: import.meta.env.DEV,
     },
   },
+  dom: {
+    createContainer: true
+  },
   backgroundColor: "rgba(113, 197, 207,0)",
   scene: [MainMenuScene, FlappyTinybirdScene],
 };
