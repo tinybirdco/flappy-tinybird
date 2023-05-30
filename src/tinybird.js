@@ -13,6 +13,6 @@ export async function send_score(session) {
     },
   })
     .then((res) => res.json())
-    .then((data) => console.log(data))
+    .then((data) => { })
     .catch((error) => console.log(error));
 }
