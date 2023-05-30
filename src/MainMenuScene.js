@@ -1,6 +1,6 @@
 export default class MainMenuScene extends Phaser.Scene {
   constructor() {
-    super({ key: "MainMenu" });
+    super({ key: "MainMenuScene" });
   }
 
   preload() {
@@ -31,7 +31,6 @@ export default class MainMenuScene extends Phaser.Scene {
       function () {
         const email = emailElement.value;
         const name = nameElement.value;
-        console.log({ email: email, name: name })
         if (email == '' || name == '') {
           errorElement.className = 'error-enable';
         } else {

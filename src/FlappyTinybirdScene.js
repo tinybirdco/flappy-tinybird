@@ -8,7 +8,6 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
   pipes;
   bird;
   timer;
-  player = {};
   session = {
     email: '',
     name: '',
@@ -33,7 +32,6 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
   }
 
   create() {
-    console.log(this.player)
     this.bird = this.physics.add.sprite(100, 245, "bird");
 
     const spaceKey = this.input.keyboard.addKey(
@@ -82,7 +80,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
   }
 
   endGame() {
-    this.scene.start("MainMenu");
+    this.scene.start("EndGameScene", this.session);
   }
 
   addOnePipe(x, y) {
