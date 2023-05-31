@@ -31,22 +31,21 @@ export default class EndGameScene extends Phaser.Scene {
       .then(r => this.buildTopTen(r))
       .catch(e => e.toString())
 
-    const base_y = 155;
-
-    this.buildHomeButton(base_y);
-    this.buildRetryButton(base_y);
+    const button_height = 100;
+    this.buildHomeButton(button_height);
+    this.buildRetryButton(button_height);
   }
 
-  buildHomeButton(base_y) {
+  buildHomeButton(base_height) {
     const homeButton = this.add.graphics();
     homeButton.fillStyle(0x1fcc83, 1);
-    homeButton.fillRect(150, base_y, 100, 50);
+    homeButton.fillRect(85, base_height, 100, 50);
     homeButton.setInteractive(
-      new Phaser.Geom.Rectangle(150, base_y, 100, 50),
+      new Phaser.Geom.Rectangle(85, base_height, 100, 50),
       Phaser.Geom.Rectangle.Contains
     );
 
-    this.add.text(170, base_y + 12.5, "Home", {
+    this.add.text(107.5, base_height + 12.5, "Home", {
       fontSize: "24px",
       color: "#ffffff",
     });
@@ -60,16 +59,16 @@ export default class EndGameScene extends Phaser.Scene {
     );
   }
 
-  buildRetryButton(base_y) {
+  buildRetryButton(base_height) {
     const retryButton = this.add.graphics();
     retryButton.fillStyle(0x1fcc83, 1);
-    retryButton.fillRect(150, base_y + 55, 100, 50);
+    retryButton.fillRect(195, base_height, 100, 50);
     retryButton.setInteractive(
-      new Phaser.Geom.Rectangle(150, base_y + 55, 100, 50),
+      new Phaser.Geom.Rectangle(195, base_height, 100, 50),
       Phaser.Geom.Rectangle.Contains
     );
 
-    this.add.text(165, base_y + 55 + 12.5, "Retry", {
+    this.add.text(210, base_height + 12.5, "Retry", {
       fontSize: "24px",
       color: "#ffffff",
     });
@@ -87,7 +86,7 @@ export default class EndGameScene extends Phaser.Scene {
     let y = 300;
     let position = 1;
 
-    const leaderboard = this.add.dom(170, 277.5).createFromCache('leaderboard');
+    const leaderboard = this.add.dom(200, 350).createFromCache('leaderboard');
 
     top10_result.data.forEach(entry => {
       const score = leaderboard.getChildByID(`tr${position}-score`);
