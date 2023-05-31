@@ -12,6 +12,10 @@ export default class EndGameScene extends Phaser.Scene {
     super({ key: "EndGameScene" });
   }
 
+  preload() {
+    this.load.html('leaderboard', 'Leaderboard.html');
+  }
+
   init(session) {
     this.session = session;
   }
@@ -83,17 +87,13 @@ export default class EndGameScene extends Phaser.Scene {
     let y = 300;
     let position = 1;
 
-    this.add.text(120, y, 'Leaderboard', {
-      fontSize: "24px",
-      color: "#ffffff",
-    });
-    y += 46;
+    const leaderboard = this.add.dom(170, 277.5).createFromCache('leaderboard');
+
     top10_result.data.forEach(entry => {
-      this.add.text(120, y, `#${position < 10 ? '0' + position : position} | ${entry.score} | ${entry.name}`, {
-        fontSize: "18px",
-        color: "#ffffff",
-      });
-      y += 20;
+      const score = leaderboard.getChildByID(`tr${position}-score`);
+      const name = leaderboard.getChildByID(`tr${position}-name`);
+      score.innerHTML = entry.score;
+      name.innerHTML = entry.name;
       position++;
     });
 
