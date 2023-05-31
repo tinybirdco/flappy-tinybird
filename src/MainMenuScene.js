@@ -8,7 +8,7 @@ export default class MainMenuScene extends Phaser.Scene {
   }
 
   create() {
-    const userForm = this.add.dom(170, 277.5).createFromCache('userForm');
+    const userForm = this.add.dom(200, 250).createFromCache('userForm');
     const nameElement = userForm.getChildByID('name');
     const emailElement = userForm.getChildByID('email');
     const errorElement = userForm.getChildByID('error');
