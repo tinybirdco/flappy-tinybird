@@ -1,12 +1,16 @@
 <style>
   .login {
-    height: 257px;
-    width: 298px;
-    margin: auto;
+    height: 300px;
+    width: 300px;
+  }
+
+  form input {
+    width: 300px;
   }
 
   #error {
     color: red;
+    text-align: center;
   }
 
   .error-disable {
@@ -19,7 +23,12 @@
 </style>
 
 <div class="login">
-  <p id="error" class="error-disable">Please enter a username & email</p>
-  <input type="text" placeholder="email" id="email" name="email">
-  <input type="text" placeholder="name" id="name" name="name">
+  <h1 class="text-white text-center mb-1">Player info</h1>
+  <form>
+    <input autocomplete="off" type="text" placeholder="name" id="name" name="name"
+      class="block w-full mx-auto text-sm py-2 px-3 rounded my-2">
+    <input autocomplete="off" type="text" placeholder="email" id="email" name="email"
+      class="block w-full mx-auto text-sm py-2 px-3 rounded">
+  </form>
+  <p id="error" class="error-disable">Please enter a name & email</p>
 </div>
