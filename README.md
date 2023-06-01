@@ -58,18 +58,17 @@ Go to [https://ui.tinybird.co/tokens](https://ui.tinybird.co/tokens) and copy th
 
 5. Start the game!
 
+In the terminal, run the following command:
+
 ```bash
 npm run start
 ```
 
-* Clone this repository to your local machine using `git clone https://github.com/JoeKarlsson/flappy-birds-clone.git`
-* Navigate to the project directory using `cd flappy-birds-clone`
-* You'll need to start a local live server, I used the VS Code extension [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to do this.
-* Open your web browser and go to `http://localhost:3000`
+Then open your web browser and go to `http://localhost:3000`.
 
 ### Credits
 
-This game was built by Joe Karlsson based on the original game by Dong Nguyen.
+This game was built by [Joe Karlsson](https://github.com/JoeKarlsson) and [Alasdair Brown](https://github.com/sdairs) based on the original game by Dong Nguyen.
 
 ### License
 
