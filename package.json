@@ -1,5 +1,6 @@
 {
   "name": "flappy-tinybird",
+  "description": "This repository contains a clone of the popular game 'Flappy Bird'. It was built using the Phaser 3 game framework and JavaScript.",
   "private": false,
   "version": "0.0.1",
   "type": "module",
