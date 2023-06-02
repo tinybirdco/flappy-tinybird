@@ -7,7 +7,7 @@ export default class EndGameScene extends Phaser.Scene {
         name: '',
         id: ''
     };
-    top_10_url = new URL(`https://api.tinybird.co/v0/pipes/top_10_sessions.json`);
+    top_10_url = new URL(`https://api.tinybird.co/v0/pipes/game_stats.json`);
     TOP_10_READ_TOKEN = import.meta.env.VITE_TOP_10_READ_TOKEN;
 
     constructor() {
