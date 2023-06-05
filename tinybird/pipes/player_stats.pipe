@@ -1,0 +1,81 @@
+TOKEN "player_stats_endpoint_read_9571" READ
+
+TOKEN "all_pipes" READ
+
+NODE total_deaths_for_player
+DESCRIPTION >
+    Total deaths for a specific player:
+
+SQL >
+
+    %
+    SELECT COUNT(*) AS total_deaths
+    FROM deaths
+    WHERE email = {{ String(email, description="The email of the player you want to get game stats for", required=False, default='joe@tinybird.co') }}
+
+
+
+NODE total_pipes_created_for_player
+SQL >
+
+    %
+    SELECT COUNT(*) AS total_pipes
+    FROM scores
+    WHERE email = {{ String(email, description="The email of the player you want to get game stats for", required=False, default='joe@tinybird.co') }}
+
+
+
+NODE high_score_for_player
+SQL >
+
+    %
+    SELECT MAX(score) AS highest_death_score
+    FROM deaths 
+    WHERE email = {{ String(email, description="The email of the player you want to get game stats for", required=False, default='joe@tinybird.co') }}
+
+
+
+NODE total_sessions_for_player
+SQL >
+
+    %
+    SELECT COUNT(DISTINCT session_id) AS total_sessions
+    FROM scores
+    WHERE email = {{ String(email, description="The email of the player you want to get game stats for", required=False, default='joe@tinybird.co') }}
+
+
+
+NODE avg_score_for_player
+SQL >
+
+    %
+    SELECT AVG(score) AS average_score_per_session
+    FROM (SELECT session_id, SUM(score) AS score
+    FROM scores 
+    WHERE email = {{ String(email, description="The email of the player you want to get game stats for", required=False, default='joe@tinybird.co') }}
+    GROUP BY session_id)
+
+
+
+NODE endpoint
+SQL >
+
+    %
+    SELECT 
+        deaths.email, 
+        SUM(deaths.score) AS total_score, 
+        SUM(scores.score) AS total_scoring_score,
+        COUNT(DISTINCT scores.session_id) AS total_sessions,
+        MAX(deaths.score) AS high_score,
+        AVG(scores.score) AS average_score_per_session,
+        COUNT(scores.score) AS total_pipes
+    FROM 
+        deaths
+    INNER JOIN 
+        scores ON deaths.email = scores.email
+    WHERE
+        email = {{ String(email, description="The email of the player you want to get game stats for", required=False, default='joe@tinybird.co') }}
+    GROUP BY 
+        deaths.email
+
+

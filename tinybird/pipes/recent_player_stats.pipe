@@ -1,0 +1,22 @@
+TOKEN "recent_player_stats_endpoint_read_2445" READ
+
+TOKEN "all_pipes" READ
+
+NODE recent_player_stats_0
+SQL >
+
+    SELECT
+      deaths.email,
+      deaths.name,
+      COUNT(deaths.session_id) AS recent_deaths,
+      SUM(deaths.score) AS recent_death_score
+    FROM
+      deaths
+    WHERE
+      timestamp >= NOW() - INTERVAL 15 MINUTE
+    GROUP BY
+      email, name
+    LIMIT
+      10
+
+

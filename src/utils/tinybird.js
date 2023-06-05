@@ -6,6 +6,7 @@ export async function send_score(session, score) {
         name: session.name,
         email: session.email,
         score: score,
+        timestamp: Date.now(),
     }
     return send_data_to_tinybird('scores', payload)
 }
@@ -16,6 +17,7 @@ export async function send_death(session, score) {
         name: session.name,
         email: session.email,
         score: score,
+        timestamp: Date.now(),
     }
     return send_data_to_tinybird('deaths', payload)
 }
@@ -35,7 +37,7 @@ export async function send_data_to_tinybird(name, payload) {
 export async function get_data_from_tinybird(url, token) {
     return fetch(url, {
         headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${import.meta.env.VITE_TINYBIRD_TOKEN}`,
         }
     })
         .then(r => r.json())

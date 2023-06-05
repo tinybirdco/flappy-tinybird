@@ -1,5 +1,7 @@
 import Phaser from "phaser";
-import { send_score, send_death } from "../utils/tinybird";
+import { send_score, send_death, get_data_from_tinybird } from "../utils/tinybird";
+import { addDataToDOM } from "../utils/statBuilder";
+
 import { v4 as uuidv4 } from "uuid";
 
 export default class FlappyTinybirdScene extends Phaser.Scene {
@@ -13,6 +15,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         name: '',
         id: ''
     };
+    player_stats_url = new URL(`https://api.tinybird.co/v0/pipes/player_stats.json`);
 
     constructor() {
         super({ key: "FlappyTinybirdScene" });
@@ -32,6 +35,11 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     create() {
+        this.player_stats_url.searchParams.append('email', this.session.email);
+        get_data_from_tinybird(this.player_stats_url)
+            .then(data => addDataToDOM(data, "player_stats"))
+            .catch(e => e.toString())
+
         this.bird = this.physics.add.sprite(100, 245, "bird");
 
         const spaceKey = this.input.keyboard.addKey(

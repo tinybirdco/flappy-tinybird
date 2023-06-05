@@ -1,4 +1,5 @@
 import { get_data_from_tinybird } from "../utils/tinybird";
+import { addDataToDOM } from "../utils/statBuilder";
 
 export default class EndGameScene extends Phaser.Scene {
 
@@ -8,7 +9,7 @@ export default class EndGameScene extends Phaser.Scene {
         id: ''
     };
     top_10_url = new URL(`https://api.tinybird.co/v0/pipes/game_stats.json`);
-    TOP_10_READ_TOKEN = import.meta.env.VITE_TOP_10_READ_TOKEN;
+    TINYBIRD_TOKEN = import.meta.env.VITE_TINYBIRD_TOKEN;
 
     constructor() {
         super({ key: "EndGameScene" });
@@ -25,6 +26,7 @@ export default class EndGameScene extends Phaser.Scene {
     create() {
         get_data_from_tinybird(this.top_10_url, this.TOP_10_READ_TOKEN)
             .then(r => this.buildTopTen(r))
+            .then(data => addDataToDOM(data, "top_10_leaderboard"))
             .catch(e => e.toString())
 
         const button_height = 100;
@@ -102,6 +104,6 @@ export default class EndGameScene extends Phaser.Scene {
             name.innerHTML = entry.name;
             position++;
         });
-
+        return top10_result
     }
 }

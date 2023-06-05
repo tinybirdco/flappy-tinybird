@@ -1,4 +1,11 @@
+import { get_data_from_tinybird } from "../utils/tinybird";
+import { addDataToDOM } from "../utils/statBuilder";
+
 export default class MainMenuScene extends Phaser.Scene {
+    recent_player_stats_url = new URL(`https://api.tinybird.co/v0/pipes/game_stats.json`);
+    top_10_url = new URL(`https://api.tinybird.co/v0/pipes/game_stats.json`);
+    recent_player_stats = new URL(`https://api.tinybird.co/v0/pipes/recent_player_stats.json`)
+
     constructor() {
         super({ key: "MainMenuScene" });
     }
@@ -8,6 +15,15 @@ export default class MainMenuScene extends Phaser.Scene {
     }
 
     create() {
+        get_data_from_tinybird(this.top_10_url)
+            .then(data => addDataToDOM(data, "top_10_leaderboard"))
+            .catch(e => e.toString())
+
+        get_data_from_tinybird(this.recent_player_stats)
+            .then(data => addDataToDOM(data, "recent_player_stats"))
+            .catch(e => e.toString())
+
+
         const userForm = this.add.dom(200, 250).createFromCache('userForm');
         const nameElement = userForm.getChildByID('name');
         const emailElement = userForm.getChildByID('email');
