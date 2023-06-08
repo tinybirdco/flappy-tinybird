@@ -10,6 +10,7 @@ export default class EndGameScene extends Phaser.Scene {
         id: ''
     };
 
+
     constructor() {
         super({ key: "EndGameScene" });
     }
@@ -54,21 +55,24 @@ export default class EndGameScene extends Phaser.Scene {
             color: "#ffffff",
         });
 
-        homeButton.on(
-            "pointerup",
-            function () {
-                this.scene.start("MainMenuScene");
-            },
-            this
-        );
+        homeButton.on("pointerup", () => {
+            this.scene.start("MainMenuScene");
+        });
 
         const spaceKey = this.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
-
         spaceKey.on("down", () => {
             this.scene.start("FlappyTinybirdScene");
         });
+
+        const enterKey = this.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.ENTER
+        );
+        enterKey.on("down", () => {
+            this.scene.start("FlappyTinybirdScene");
+        });
+
         this.input.on('pointerdown', () => {
             this.scene.start("FlappyTinybirdScene");
         });

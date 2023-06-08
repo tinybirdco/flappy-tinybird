@@ -55,6 +55,10 @@ export default class MainMenuScene extends Phaser.Scene {
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
 
+        spaceKey.on("down", () => {
+            this.submitForm(nameElement, errorElement)
+        });
+
         const enterKey = this.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.ENTER
         );
@@ -63,9 +67,6 @@ export default class MainMenuScene extends Phaser.Scene {
             this.submitForm(nameElement, errorElement)
         });
 
-        spaceKey.on("down", () => {
-            this.submitForm(nameElement, errorElement)
-        });
 
         this.input.on('pointerdown', () => {
             this.submitForm(nameElement, errorElement)

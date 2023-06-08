@@ -104,8 +104,9 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     endGame() {
-        send_death(this.session, this.score);
-        this.scene.start("EndGameScene", this.session);
+        send_death(this.session, this.score)
+            .then(() => this.scene.start("EndGameScene", this.session))
+            .catch(e => e.toString())
     }
 
     addOnePipe(x, y) {
