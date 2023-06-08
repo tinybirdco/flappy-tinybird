@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { send_session_data, send_death, get_data_from_tinybird } from "../utils/tinybird";
 import { addDataToDOM } from "../analytics/statBuilder";
-
+import { endpoints } from "./../config";
 import { v4 as uuidv4 } from "uuid";
 
 export default class FlappyTinybirdScene extends Phaser.Scene {
@@ -11,11 +11,9 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     bird;
     timer;
     session = {
-        email: '',
         name: '',
         id: ''
     };
-    player_stats_url = new URL(`https://api.tinybird.co/v0/pipes/player_stats.json`);
 
     constructor() {
         super({ key: "FlappyTinybirdScene" });
@@ -23,7 +21,6 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     init(player) {
-        this.session.email = player.email;
         this.session.name = player.name;
         this.session.id = uuidv4();
     }
@@ -34,21 +31,40 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.canvas = this.sys.game.canvas;
     }
 
-    create() {
-        this.player_stats_url.searchParams.append('email', this.session.email);
-        get_data_from_tinybird(this.player_stats_url)
+    getStatsFromTinybird() {
+        endpoints.player_stats_url.searchParams.append('name', this.session.name);
+
+        get_data_from_tinybird(endpoints.player_stats_url)
             .then(data => addDataToDOM(data, "player_stats"))
             .catch(e => e.toString())
 
+        get_data_from_tinybird(endpoints.top_10_url)
+            .then(data => addDataToDOM(data, "top_10_leaderboard"))
+            .catch(e => e.toString())
+
+        get_data_from_tinybird(endpoints.recent_player_stats_url)
+            .then(data => addDataToDOM(data, "recent_player_stats"))
+            .catch(e => e.toString())
+    }
+
+    create() {
+        this.getStatsFromTinybird();
         this.bird = this.physics.add.sprite(100, 245, "bird");
 
         const spaceKey = this.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
-
         spaceKey.on("down", (key, event) => {
             this.jump();
         });
+
+        const enterKey = this.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.ENTER
+        );
+        enterKey.on("down", (key, event) => {
+            this.jump();
+        });
+
         this.input.on('pointerdown', (pointer) => {
             this.jump();
         });

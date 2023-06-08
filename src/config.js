@@ -1,6 +1,4 @@
-import Phaser from 'phaser';
-
-export default {
+export const config = {
     type: Phaser.AUTO,
     parent: "app",
     width: 400,
@@ -16,4 +14,10 @@ export default {
         createContainer: true
     },
     backgroundColor: "rgba(113, 197, 207,0)",
+}
+
+export const endpoints = {
+    top_10_url: new URL(`https://api.tinybird.co/v0/pipes/top_10_leaderboard.json`),
+    recent_player_stats_url: new URL(`https://api.tinybird.co/v0/pipes/recent_player_stats.json`),
+    player_stats_url: new URL(`https://api.tinybird.co/v0/pipes/player_stats.json`),
 }

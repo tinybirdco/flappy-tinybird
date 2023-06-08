@@ -1,12 +1,8 @@
-TOKEN "all_pipes" APPEND
-
 
 SCHEMA >
-    `email` String `json:$.email`,
     `name` String `json:$.name`,
-    `score` Int16 `json:$.score`,
     `session_id` String `json:$.session_id`,
     `timestamp` Int64 `json:$.timestamp`
 
 ENGINE "MergeTree"
-ENGINE_SORTING_KEY "email, session_id, timestamp"
+ENGINE_SORTING_KEY "name, session_id, timestamp"

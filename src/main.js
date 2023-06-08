@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import config from "./config";
+import { config } from "./config";
 
 import FlappyTinybirdScene from "./scenes/FlappyTinybirdScene";
 import MainMenuScene from "./scenes/MainMenuScene";

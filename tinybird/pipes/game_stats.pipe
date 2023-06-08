@@ -5,99 +5,13 @@ TOKEN "all_pipes" READ
 NODE endpoint
 SQL >
 
-    SELECT name, score FROM get_top_10_scores
-
-
-
-NODE get_top_10_scores
-SQL >
-
-    SELECT session_id, name, count() as score FROM scores
-    GROUP BY session_id, name
-    ORDER BY score DESC
-    LIMIT 10
-
-
-
-NODE total_deaths
-SQL >
-
     SELECT
-      COUNT(*) AS total_deaths
-    FROM
-      deaths
-
-
-
-NODE total_number_of_pipes_created
-SQL >
-
-    SELECT COUNT(*) AS total_pipes FROM scores
-
-
-
-NODE total_number_of_unique_players
-SQL >
-
-    SELECT
-      COUNT(DISTINCT email) AS total_unique_players
-    FROM
-      deaths
-
-
-
-NODE all_time_high_score
-SQL >
-
-    SELECT MAX(score) AS highest_death_score FROM deaths
-
-
-
-NODE all_time_average_score
-SQL >
-
-    SELECT AVG(score) AS average_death_score FROM deaths
-
-
-
-NODE average_deaths_per_session
-SQL >
-
-    SELECT AVG(c) FROM (SELECT session_id, COUNT(*) AS c FROM deaths GROUP BY session_id)
-
-
-
-NODE most_common_score
-SQL >
-
-    SELECT score, COUNT(score) AS count FROM deaths GROUP BY score ORDER BY count DESC LIMIT 1
-
-
-
-NODE player_with_the_most_plays
-SQL >
-
-    SELECT email, COUNT(email) AS count FROM scores GROUP BY email ORDER BY count DESC LIMIT 1
-
-
-
-NODE player_with_the_highest_average_score
-SQL >
-
-    SELECT email, AVG(score) AS average_score FROM scores GROUP BY email ORDER BY average_score DESC LIMIT 1
-
-
-
-NODE game_stats_11
-SQL >
-
-    %
-    SELECT
-      COUNT(DISTINCT email) AS unique_players_deaths,
-      COUNT(deaths.score) AS total_death
-    FROM 
-        deaths
-    INNER JOIN 
-        scores ON deaths.email = scores.email
+      COUNT() AS total_games_played,
+      countMerge(total_score) as combined_score,
+      COUNT(DISTINCT name) AS total_unique_players,
+    --   avgMerge(total_score) AS average_score
+      MAX(timestamp_end - timestamp_start) AS longest_game_seconds,
+      AVG(timestamp_end - timestamp_start) AS average_game_seconds
+    FROM scores_mv
 
 

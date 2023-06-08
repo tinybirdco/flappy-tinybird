@@ -1,10 +1,8 @@
 import { get_data_from_tinybird } from "../utils/tinybird";
 import { addDataToDOM } from "../analytics/statBuilder";
+import { endpoints } from "./../config";
 
 export default class MainMenuScene extends Phaser.Scene {
-    recent_player_stats_url = new URL(`https://api.tinybird.co/v0/pipes/game_stats.json`);
-    top_10_url = new URL(`https://api.tinybird.co/v0/pipes/game_stats.json`);
-    recent_player_stats = new URL(`https://api.tinybird.co/v0/pipes/recent_player_stats.json`)
 
     constructor() {
         super({ key: "MainMenuScene" });
@@ -14,18 +12,30 @@ export default class MainMenuScene extends Phaser.Scene {
         this.load.html('userForm', 'UserForm.html');
     }
 
-    create() {
-        get_data_from_tinybird(this.top_10_url)
+    submitForm(nameElement, errorElement) {
+        const name = nameElement.value;
+        if (name == '') {
+            errorElement.className = 'error-enable';
+        } else {
+            this.scene.start("FlappyTinybirdScene", { name: name });
+        }
+    }
+
+    getDataFromTinybird() {
+        get_data_from_tinybird(endpoints.top_10_url)
             .then(data => addDataToDOM(data, "top_10_leaderboard"))
             .catch(e => e.toString())
 
-        get_data_from_tinybird(this.recent_player_stats)
+        get_data_from_tinybird(endpoints.recent_player_stats_url)
             .then(data => addDataToDOM(data, "recent_player_stats"))
             .catch(e => e.toString())
+    }
+
+    create() {
+        this.getDataFromTinybird();
 
         const userForm = this.add.dom(200, 250).createFromCache('userForm');
         const nameElement = userForm.getChildByID('name');
-        const emailElement = userForm.getChildByID('email');
         const errorElement = userForm.getChildByID('error');
 
         const playButton = this.add.graphics();
@@ -41,18 +51,30 @@ export default class MainMenuScene extends Phaser.Scene {
             color: "#ffffff",
         });
 
+        const spaceKey = this.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.SPACE
+        );
+
+        const enterKey = this.input.keyboard.addKey(
+            Phaser.Input.Keyboard.KeyCodes.ENTER
+        );
+
+        enterKey.on("down", () => {
+            this.submitForm(nameElement, errorElement)
+        });
+
+        spaceKey.on("down", () => {
+            this.submitForm(nameElement, errorElement)
+        });
+
+        this.input.on('pointerdown', () => {
+            this.submitForm(nameElement, errorElement)
+        });
+
         playButton.on(
-            "pointerup",
-            function () {
-                const email = emailElement.value;
-                const name = nameElement.value;
-                if (email == '' || name == '') {
-                    errorElement.className = 'error-enable';
-                } else {
-                    this.scene.start("FlappyTinybirdScene", { email: email, name: name });
-                }
-            },
-            this
+            "pointerup", () => {
+                this.submitForm(nameElement, errorElement)
+            }
         );
     }
 }

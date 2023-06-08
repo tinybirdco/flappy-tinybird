@@ -1,0 +1,22 @@
+TOKEN "all_pipes" READ
+
+NODE scores_0
+SQL >
+
+    SELECT
+        name,
+        countState(session_id) AS total_score,
+        session_id,
+        MINSimpleState(toDateTime(timestamp / 1000)) AS timestamp_start,
+        MAXSimpleState(toDateTime(timestamp / 1000)) AS timestamp_end
+    FROM sessions
+    GROUP BY
+        session_id,
+        name
+    ORDER BY timestamp_end DESC
+
+TYPE materialized
+DATASOURCE scores_mv
+ENGINE "AggregatingMergeTree"
+ENGINE_SORTING_KEY "name, session_id"
+

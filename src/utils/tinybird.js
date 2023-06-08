@@ -4,7 +4,6 @@ export async function send_session_data(session) {
     const payload = {
         session_id: session.id,
         name: session.name,
-        email: session.email,
         timestamp: Date.now(),
     }
     return send_data_to_tinybird('sessions', payload)
@@ -14,7 +13,6 @@ export async function send_death(session, score) {
     const payload = {
         session_id: session.id,
         name: session.name,
-        email: session.email,
         score: score,
         timestamp: Date.now(),
     }

@@ -1,0 +1,15 @@
+TOKEN "all_pipes" READ
+
+TOKEN "top_10_leaderboard_endpoint_read_6624" READ
+
+NODE top_10_leaderboard_0
+SQL >
+
+    SELECT
+      name,
+      score
+    FROM deaths
+    ORDER BY score DESC
+    LIMIT 10
+
+

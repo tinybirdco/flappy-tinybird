@@ -1,0 +1,14 @@
+TOKEN "all_pipes" READ
+
+NODE game_stats_player_with_the_highest_average_score_0
+SQL >
+
+    SELECT
+      name,
+      AVG(score) AS average_score
+    FROM deaths
+    GROUP BY name
+    ORDER BY average_score DESC
+    LIMIT 1
+
+
