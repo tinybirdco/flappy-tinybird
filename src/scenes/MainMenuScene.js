@@ -1,5 +1,5 @@
 import { get_data_from_tinybird } from "../utils/tinybird";
-import { addDataToDOM } from "../utils/statBuilder";
+import { addDataToDOM } from "../analytics/statBuilder";
 
 export default class MainMenuScene extends Phaser.Scene {
     recent_player_stats_url = new URL(`https://api.tinybird.co/v0/pipes/game_stats.json`);
@@ -22,7 +22,6 @@ export default class MainMenuScene extends Phaser.Scene {
         get_data_from_tinybird(this.recent_player_stats)
             .then(data => addDataToDOM(data, "recent_player_stats"))
             .catch(e => e.toString())
-
 
         const userForm = this.add.dom(200, 250).createFromCache('userForm');
         const nameElement = userForm.getChildByID('name');

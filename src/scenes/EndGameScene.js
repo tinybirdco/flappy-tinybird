@@ -1,5 +1,5 @@
 import { get_data_from_tinybird } from "../utils/tinybird";
-import { addDataToDOM } from "../utils/statBuilder";
+import { addDataToDOM } from "../analytics/statBuilder";
 
 export default class EndGameScene extends Phaser.Scene {
 
@@ -24,7 +24,7 @@ export default class EndGameScene extends Phaser.Scene {
     }
 
     create() {
-        get_data_from_tinybird(this.top_10_url, this.TOP_10_READ_TOKEN)
+        get_data_from_tinybird(this.top_10_url)
             .then(r => this.buildTopTen(r))
             .then(data => addDataToDOM(data, "top_10_leaderboard"))
             .catch(e => e.toString())

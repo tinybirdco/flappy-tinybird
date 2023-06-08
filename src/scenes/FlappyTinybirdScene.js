@@ -1,6 +1,6 @@
 import Phaser from "phaser";
-import { send_score, send_death, get_data_from_tinybird } from "../utils/tinybird";
-import { addDataToDOM } from "../utils/statBuilder";
+import { send_session_data, send_death, get_data_from_tinybird } from "../utils/tinybird";
+import { addDataToDOM } from "../analytics/statBuilder";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -113,7 +113,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         this.score += 1;
         this.scoreText.text = this.score;
-        send_score(this.session, this.score);
+        send_session_data(this.session);
     }
 
     getRandomInt(min, max) {

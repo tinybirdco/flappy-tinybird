@@ -9,6 +9,7 @@ export function addDataToDOM(data, divElement) {
 
         // Create a new table
         const table = document.createElement('table');
+        table.className = 'table-auto';
 
         // Create the header row
         const thead = document.createElement('thead');
