@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { send_session_data, send_death, get_data_from_tinybird } from "../utils/tinybird";
+import { send_session_data, get_data_from_tinybird } from "../utils/tinybird";
 import { addDataToDOM } from "../analytics/statBuilder";
 import { endpoints } from "./../config";
 import { v4 as uuidv4 } from "uuid";
@@ -104,9 +104,11 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     endGame() {
-        send_death(this.session, this.score)
-            .then(() => this.scene.start("EndGameScene", this.session))
-            .catch(e => e.toString())
+        const data = {
+            session: this.session,
+            score: this.score,
+        }
+        this.scene.start("EndGameScene", data);
     }
 
     addOnePipe(x, y) {

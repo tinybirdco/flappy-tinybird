@@ -1,4 +1,4 @@
-import { get_data_from_tinybird } from "../utils/tinybird";
+import { get_data_from_tinybird, send_death } from "../utils/tinybird";
 import { addDataToDOM } from "../analytics/statBuilder";
 import { endpoints } from "./../config";
 
@@ -9,6 +9,7 @@ export default class EndGameScene extends Phaser.Scene {
         name: '',
         id: ''
     };
+    score = 0;
 
 
     constructor() {
@@ -19,16 +20,21 @@ export default class EndGameScene extends Phaser.Scene {
         this.load.html('leaderboard', 'Leaderboard.html');
     }
 
-    init(session) {
-        this.session = session;
+    init(data) {
+        this.session = data.session;
+        this.score = data.score;
     }
 
     create() {
-        this.getDataFromTinybird();
+        send_death(this.session, this.score)
+            .then(() => this.getDataFromTinybird())
+            .catch(e => e.toString())
+
         const button_height = 100;
         this.buildHomeButton(button_height);
         this.buildRetryButton(button_height);
     }
+
 
     getDataFromTinybird() {
         get_data_from_tinybird(endpoints.top_10_url)
