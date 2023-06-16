@@ -1,0 +1,17 @@
+TOKEN "top_10_read" READ
+
+TOKEN "all_pipes" READ
+
+NODE endpoint
+SQL >
+
+    SELECT
+      COUNT() AS total_games_played,
+      countMerge(total_score) as combined_score,
+      COUNT(DISTINCT name) AS total_unique_players,
+    --   avgMerge(total_score) AS average_score
+      MAX(timestamp_end - timestamp_start) AS longest_game_seconds,
+      AVG(timestamp_end - timestamp_start) AS average_game_seconds
+    FROM scores_mv
+
+

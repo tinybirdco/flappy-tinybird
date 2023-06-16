@@ -1,8 +1,0 @@
-
-SCHEMA >
-    `email` String `json:$.email`,
-    `name` String `json:$.name`,
-    `session_id` String `json:$.session_id`
-
-ENGINE "MergeTree"
-ENGINE_SORTING_KEY "email, name, session_id"

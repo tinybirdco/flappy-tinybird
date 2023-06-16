@@ -61,7 +61,7 @@ Go to [https://ui.tinybird.co/tokens](https://ui.tinybird.co/tokens) and copy th
 In the terminal, run the following command:
 
 ```bash
-npm run start
+npm start
 ```
 
 Then open your web browser and go to `http://localhost:3000`.

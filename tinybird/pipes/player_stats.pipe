@@ -1,0 +1,19 @@
+TOKEN "player_stats_endpoint_read_9571" READ
+
+TOKEN "all_pipes" READ
+
+NODE endpoint
+SQL >
+
+    %
+    SELECT  
+        MAX(score) AS high_score,
+        AVG(score) AS average_score,
+        SUM(score) AS combined_score, 
+        COUNT(DISTINCT session_id) AS total_games
+    FROM 
+        deaths
+    WHERE
+        name = {{ String(name, description="The name of the player you want to get game stats for", required=False, default='Joe') }}
+
+
