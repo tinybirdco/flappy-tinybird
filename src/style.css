@@ -1,27 +1,13 @@
 @tailwind base;
 
-.game {
-    display: flex;
-    
-}
-
-#app {
-    margin-right: 20px;
-}
-
-.analytics {
-    display: flex;
-    flex-direction: column;
-    justify-content: left;
-    align-items: left;
-}
-
 .analytics table {
     width: 100%;
     border-collapse: collapse;
 }
 
-.analytics table, .analytics th, .analytics td {
+.analytics table,
+.analytics th,
+.analytics td {
     border: 1px solid black;
     text-align: center;
     padding: 10px;
@@ -41,15 +27,4 @@
 
 .analytics tr:hover {
     background-color: #ddd;
-}
-
-.analytics .game_stats_container {
-    display: flex;
-    flex-direction: row;
-    justify-content: left;
-    align-items: left;
-}
-
-.analytics #top_10_leaderboard_container {
-    margin-right: 20px;
 }

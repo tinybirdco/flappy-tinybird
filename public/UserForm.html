@@ -1,40 +1,8 @@
-<style>
-    .login {
-        height: 300px;
-        width: 300px;
-    }
-
-    form input {
-        width: 300px;
-    }
-
-    #error {
-        color: red;
-        text-align: center;
-    }
-
-    .error-disable {
-        display: none;
-    }
-
-    .error-enable {
-        display: block;
-    }
-</style>
-
-<div class="login">
-    <h1 class="text-white text-center mb-1">Player info</h1>
+<div class="w-[300px] h-[300px]">
+    <h1 class="text-center mb-1 font-semibold">Enter your name</h1>
     <form>
-        <input
-            autocomplete="off"
-            type="text"
-            placeholder="name"
-            id="name"
-            name="name"
-            class="block w-full mx-auto text-sm py-2 px-3 rounded my-2"
-        />
-        <!-- <input autocomplete="off" type="text" placeholder="email" id="email" name="email"
-      class="block w-full mx-auto text-sm py-2 px-3 rounded"> -->
+        <input id="name" autocomplete="off" type="text" placeholder="name" name="name"
+            class="block w-full text-sm py-2 px-3 rounded my-2" />
     </form>
-    <p id="error" class="error-disable">Please enter a name.</p>
+    <p id="error" class="hidden data-[enabled]:block text-red-500 text-center">Please enter a name.</p>
 </div>

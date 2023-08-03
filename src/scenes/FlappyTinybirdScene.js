@@ -1,143 +1,178 @@
 import Phaser from "phaser";
-import { send_session_data, get_data_from_tinybird } from "../utils/tinybird";
-import { addDataToDOM } from "../analytics/statBuilder";
-import { endpoints } from "./../config";
 import { v4 as uuidv4 } from "uuid";
+import { addDataToDOM } from "../analytics/statBuilder";
+import { get_data_from_tinybird, send_session_data } from "../utils/tinybird";
+import { endpoints } from "./../config";
 
 export default class FlappyTinybirdScene extends Phaser.Scene {
-    scoreText;
-    score = 0;
-    pipes;
-    bird;
-    timer;
     session = {
-        name: '',
-        id: ''
+        name: "",
+        id: "",
     };
 
     constructor() {
         super({ key: "FlappyTinybirdScene" });
-
     }
 
     init(player) {
+        this.score = 0;
         this.session.name = player.name;
         this.session.id = uuidv4();
     }
 
     preload() {
-        this.load.image("bird", "bird.png");
-        this.load.image("pipe", "pipe.png");
+        this.load.image("bg", "/bg.png");
+        this.load.image("bird", "/bird.png");
+        this.load.spritesheet("pipe", "/pipe.png", {
+            frameWidth: 20,
+            frameHeight: 20,
+        });
         this.canvas = this.sys.game.canvas;
     }
 
     getStatsFromTinybird() {
-        endpoints.player_stats_url.searchParams.append('name', this.session.name);
+        endpoints.player_stats_url.searchParams.append(
+            "name",
+            this.session.name
+        );
 
         get_data_from_tinybird(endpoints.player_stats_url)
-            .then(data => addDataToDOM(data, "player_stats"))
-            .catch(e => e.toString())
+            .then((data) => addDataToDOM(data, "player_stats"))
+            .catch((e) => e.toString());
 
         get_data_from_tinybird(endpoints.top_10_url)
-            .then(data => addDataToDOM(data, "top_10_leaderboard"))
-            .catch(e => e.toString())
+            .then((data) => addDataToDOM(data, "top_10_leaderboard"))
+            .catch((e) => e.toString());
 
         get_data_from_tinybird(endpoints.recent_player_stats_url)
-            .then(data => addDataToDOM(data, "recent_player_stats"))
-            .catch(e => e.toString())
+            .then((data) => addDataToDOM(data, "recent_player_stats"))
+            .catch((e) => e.toString());
     }
 
     create() {
         this.getStatsFromTinybird();
-        this.bird = this.physics.add.sprite(100, 245, "bird");
 
-        const spaceKey = this.input.keyboard.addKey(
-            Phaser.Input.Keyboard.KeyCodes.SPACE
-        );
-        spaceKey.on("down", (key, event) => {
-            this.jump();
-        });
+        this.background = this.add
+            .tileSprite(0, 0, 400, 560, "bg")
+            .setOrigin(0, 0);
 
-        const enterKey = this.input.keyboard.addKey(
-            Phaser.Input.Keyboard.KeyCodes.ENTER
-        );
-        enterKey.on("down", (key, event) => {
-            this.jump();
-        });
+        this.scoreText = this.add
+            .text(20, 20, "0", {
+                font: "30px",
+            })
+            .setDepth(1);
 
-        this.input.on('pointerdown', (pointer) => {
-            this.jump();
-        });
+        this.addBird();
+        this.addEventListeners();
 
         this.pipes = this.physics.add.group({
             allowGravity: false,
         });
 
+        this.addRowOfPipes();
+
         this.timer = this.time.addEvent({
-            delay: 2000,
+            delay: 1250,
             callback: this.addRowOfPipes,
             callbackScope: this,
             repeat: -1,
         });
-
-        this.score = 0;
-        this.scoreText = this.add.text(20, 20, "0", {
-            font: "30px Arial",
-        });
-        this.scoreText.setDepth(1);
     }
 
     update() {
-        this.pipes.children.iterate((pipe) => {
-            if (pipe == undefined) return;
+        this.background.tilePositionX += 1;
 
-            if (pipe.x < -50) pipe.destroy();
-            else pipe.setVelocityX(-100);
-        });
-        if (this.bird.y > this.canvas.height) this.endGame();
-        if (this.bird.y < 35) this.bird.setY(35);
+        this.updateBird();
+
+        this.physics.overlap(this.bird, this.pipes, () => this.endGame());
+    }
+
+    updateBird() {
+        if (this.bird.angle < 30) {
+            this.bird.angle += 2;
+        }
+
+        if (
+            this.bird.y + this.bird.height > this.canvas.height ||
+            this.bird.y + this.bird.height < 0
+        ) {
+            this.endGame();
+        }
     }
 
     jump() {
-        if (this.bird.alive == false) return;
-        this.bird.body.velocity.y = -350;
+        this.bird.body.setVelocityY(-350);
+        this.bird.scene.tweens.add({
+            targets: this.bird,
+            props: { angle: -20 },
+            duration: 150,
+            ease: "Power0",
+        });
     }
 
     endGame() {
         const data = {
             session: this.session,
             score: this.score,
-        }
+        };
         this.scene.start("EndGameScene", data);
     }
 
-    addOnePipe(x, y) {
-        const pipe = this.physics.add.sprite(x, y, "pipe");
-        this.pipes.add(pipe);
-        this.physics.add.overlap(this.bird, pipe, this.endGame, null, this);
-        pipe.setActive(true);
+    addBird() {
+        this.bird = this.physics.add.sprite(100, 245, "bird");
+        this.bird.setOrigin(0, 0);
+        this.physics.world.enable(this.bird);
+        this.bird.body.setGravityY(1000);
+        this.bird.body.setSize(17, 12);
+    }
+
+    addEventListeners() {
+        this.input.keyboard
+            .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+            .on("down", (key, event) => {
+                this.jump();
+            });
+
+        this.input.keyboard
+            .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+            .on("down", (key, event) => {
+                this.jump();
+            });
+
+        this.input.on("pointerdown", (pointer) => {
+            this.jump();
+        });
     }
 
     addRowOfPipes() {
-        const middleGapStart = this.getRandomInt(2, 6);
+        const gap = Math.floor(Math.random() * 5) + 1;
 
-        for (let i = 0; i < 9; i++)
-            if (
-                i != middleGapStart &&
-                i != middleGapStart + 1 &&
-                i != middleGapStart - 1
-            ) {
-                this.addOnePipe(450, i * 60 + 35);
+        for (let i = 0; i < 10; i++) {
+            if (i !== gap && i !== gap + 1 && i !== gap + 2) {
+                if (i === gap - 1) {
+                    this.addPipe(400, i * 60, 0);
+                } else if (i === gap + 3) {
+                    this.addPipe(400, i * 60, 1);
+                } else {
+                    this.addPipe(400, i * 60, 2);
+                }
             }
+        }
 
         this.score += 1;
-        this.scoreText.text = this.score;
+        this.scoreText.text = this.score.toString();
         send_session_data(this.session);
     }
 
-    getRandomInt(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-        return Math.floor(Math.random() * (max - min + 1)) + min;
+    addPipe(x, y, frame) {
+        const pipe = this.physics.add.image(x, y, "pipe", frame);
+        this.pipes.add(pipe);
+        pipe.setOrigin(0, 0);
+        pipe.setScale(3);
+        this.physics.world.enable(pipe);
+        pipe.body.allowGravity = false;
+        pipe.body.setVelocityX(-200);
+        pipe.body.setSize(20, 20);
+        pipe.setActive(true);
     }
 }
