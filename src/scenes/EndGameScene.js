@@ -38,24 +38,28 @@ export default class EndGameScene extends Phaser.Scene {
             .image(200, 125, "RetryButton")
             .setInteractive({ cursor: "pointer" })
             .on("pointerup", () => {
-                this.scene.start("FlappyTinybirdScene", this.session);
+                this.retry();
             });
 
         this.input.keyboard
             .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
             .on("down", () => {
-                this.scene.start("FlappyTinybirdScene");
+                this.retry();
             });
 
         this.input.keyboard
             .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
             .on("down", () => {
-                this.scene.start("FlappyTinybirdScene");
+                this.retry();
             });
 
         this.input.on("pointerdown", () => {
-            this.scene.start("FlappyTinybirdScene");
+            this.retry();
         });
+    }
+
+    retry() {
+        this.scene?.start("FlappyTinybirdScene", this.session);
     }
 
     getDataFromTinybird() {
@@ -70,6 +74,8 @@ export default class EndGameScene extends Phaser.Scene {
     }
 
     buildTopTen(top10_result) {
+        if (!this.scene.isActive()) return;
+
         const leaderboard = this.add
             .dom(200, 350)
             .createFromCache("leaderboard");
