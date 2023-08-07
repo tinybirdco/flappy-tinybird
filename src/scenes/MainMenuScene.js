@@ -1,81 +1,68 @@
-import { get_data_from_tinybird } from "../utils/tinybird";
 import { addDataToDOM } from "../analytics/statBuilder";
+import { get_data_from_tinybird } from "../utils/tinybird";
 import { endpoints } from "./../config";
 
 export default class MainMenuScene extends Phaser.Scene {
-
     constructor() {
         super({ key: "MainMenuScene" });
     }
 
     preload() {
-        this.load.html('userForm', 'UserForm.html');
+        this.load.image("bg", "/bg.png");
+        this.load.image("PlayButton", "/PlayButton.png");
+        this.load.html("userForm", "/UserForm.html");
     }
 
     submitForm(nameElement, errorElement) {
         const name = nameElement.value;
-        if (name == '') {
-            errorElement.className = 'error-enable';
+
+        if (name === "") {
+            errorElement.setAttribute("data-enabled", true);
         } else {
-            this.scene.start("FlappyTinybirdScene", { name: name });
+            this.scene.start("FlappyTinybirdScene", { name });
         }
     }
 
     getDataFromTinybird() {
         get_data_from_tinybird(endpoints.top_10_url)
-            .then(data => addDataToDOM(data, "top_10_leaderboard"))
-            .catch(e => e.toString())
+            .then((data) => addDataToDOM(data, "top_10_leaderboard"))
+            .catch((e) => e.toString());
 
         get_data_from_tinybird(endpoints.recent_player_stats_url)
-            .then(data => addDataToDOM(data, "recent_player_stats"))
-            .catch(e => e.toString())
+            .then((data) => addDataToDOM(data, "recent_player_stats"))
+            .catch((e) => e.toString());
     }
 
     create() {
         this.getDataFromTinybird();
 
-        const userForm = this.add.dom(200, 250).createFromCache('userForm');
-        const nameElement = userForm.getChildByID('name');
-        const errorElement = userForm.getChildByID('error');
+        const userForm = this.add.dom(140, 175).createFromCache("userForm");
+        const nameElement = userForm.getChildByID("name");
+        const errorElement = userForm.getChildByID("error");
 
-        const playButton = this.add.graphics();
-        playButton.fillStyle(0x1fcc83, 1);
-        playButton.fillRect(150, 265, 100, 50);
-        playButton.setInteractive(
-            new Phaser.Geom.Rectangle(150, 265, 100, 50),
-            Phaser.Geom.Rectangle.Contains
-        );
+        this.add.tileSprite(0, 0, 400, 560, "bg").setOrigin(0, 0);
 
-        this.add.text(170, 277.5, "Play", {
-            fontSize: "24px",
-            color: "#ffffff",
+        this.add
+            .image(200, 290, "PlayButton")
+            .setInteractive({ cursor: "pointer" })
+            .on("pointerup", () => {
+                this.submitForm(nameElement, errorElement);
+            });
+
+        this.input.keyboard
+            .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+            .on("down", () => {
+                this.submitForm(nameElement, errorElement);
+            });
+
+        this.input.keyboard
+            .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+            .on("down", () => {
+                this.submitForm(nameElement, errorElement);
+            });
+
+        this.input.on("pointerdown", () => {
+            this.submitForm(nameElement, errorElement);
         });
-
-        const spaceKey = this.input.keyboard.addKey(
-            Phaser.Input.Keyboard.KeyCodes.SPACE
-        );
-
-        spaceKey.on("down", () => {
-            this.submitForm(nameElement, errorElement)
-        });
-
-        const enterKey = this.input.keyboard.addKey(
-            Phaser.Input.Keyboard.KeyCodes.ENTER
-        );
-
-        enterKey.on("down", () => {
-            this.submitForm(nameElement, errorElement)
-        });
-
-
-        this.input.on('pointerdown', () => {
-            this.submitForm(nameElement, errorElement)
-        });
-
-        playButton.on(
-            "pointerup", () => {
-                this.submitForm(nameElement, errorElement)
-            }
-        );
     }
 }
