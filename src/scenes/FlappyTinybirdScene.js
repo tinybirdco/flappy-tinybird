@@ -69,14 +69,36 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
             allowGravity: false,
         });
 
-        this.addRowOfPipes();
+        // Add a flag to check if the timer is already started
+        let timerStarted = false;
 
-        this.timer = this.time.addEvent({
-            delay: 1250,
-            callback: this.addRowOfPipes,
-            callbackScope: this,
-            repeat: -1,
-        });
+        // Function to start the timer
+        const startTimer = () => {
+            if (!timerStarted) {
+                this.bird.body.enable = true; // Enable physics when the timer starts
+                this.timer = this.time.addEvent({
+                    delay: 1250,
+                    callback: this.addRowOfPipes,
+                    callbackScope: this,
+                    repeat: -1,
+                });
+                timerStarted = true;
+            }
+        }
+
+        // Start the timer when the player hits space or enter or clicks
+        this.input.keyboard
+            .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+            .on("down", startTimer);
+
+        this.input.keyboard
+            .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+            .on("down", startTimer);
+
+        this.input.on("pointerdown", (pointer) => {
+            startTimer();
+        }); 
+        
     }
 
     update() {
@@ -88,15 +110,18 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     updateBird() {
-        if (this.bird.angle < 30) {
-            this.bird.angle += 2;
-        }
+        // Only update the bird if the timer has started
+        if (this.timer && this.timer.getProgress() > 0) {
+            if (this.bird.angle < 30) {
+                this.bird.angle += 2;
+            }
 
-        if (
-            this.bird.y + this.bird.height > this.canvas.height ||
-            this.bird.y + this.bird.height < 0
-        ) {
-            this.endGame();
+            if (
+                this.bird.y + this.bird.height > this.canvas.height ||
+                this.bird.y + this.bird.height < 0
+            ) {
+                this.endGame();
+            }
         }
     }
 
@@ -124,6 +149,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.physics.world.enable(this.bird);
         this.bird.body.setGravityY(1000);
         this.bird.body.setSize(17, 12);
+        this.bird.body.enable = false; // Disable physics initially
     }
 
     addEventListeners() {
