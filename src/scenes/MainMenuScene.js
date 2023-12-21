@@ -60,9 +60,5 @@ export default class MainMenuScene extends Phaser.Scene {
             .on("down", () => {
                 this.submitForm(nameElement, errorElement);
             });
-
-        this.input.on("pointerdown", () => {
-            this.submitForm(nameElement, errorElement);
-        });
     }
 }

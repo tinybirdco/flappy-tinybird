@@ -55,10 +55,6 @@ export default class EndGameScene extends Phaser.Scene {
                 this.retry();
             });
 
-        this.input.on("pointerdown", () => {
-            this.retry();
-        });
-
         const topLimit = 0;  // Set the top limit for scrolling
 
         // Enable vertical scrolling for the entire scene
