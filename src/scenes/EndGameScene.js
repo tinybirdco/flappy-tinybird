@@ -76,6 +76,16 @@ export default class EndGameScene extends Phaser.Scene {
     }
 
     getDataFromTinybird() {
+        endpoints.player_stats_url.searchParams.append(
+            "player_param",
+            this.session.name
+        );
+
+        endpoints.recent_player_stats_url.searchParams.append(
+            "player_param",
+            this.session.name
+        );
+        
         get_data_from_tinybird(endpoints.top_10_url)
             .then((r) => this.buildTopTen(r))
             .then((data) => addDataToDOM(data, "top_10_leaderboard"))

@@ -30,27 +30,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.canvas = this.sys.game.canvas;
     }
 
-    getStatsFromTinybird() {
-        endpoints.player_stats_url.searchParams.append(
-            "name",
-            this.session.name
-        );
-
-        get_data_from_tinybird(endpoints.player_stats_url)
-            .then((data) => addDataToDOM(data, "player_stats"))
-            .catch((e) => e.toString());
-
-        get_data_from_tinybird(endpoints.top_10_url)
-            .then((data) => addDataToDOM(data, "top_10_leaderboard"))
-            .catch((e) => e.toString());
-
-        get_data_from_tinybird(endpoints.recent_player_stats_url)
-            .then((data) => addDataToDOM(data, "recent_player_stats"))
-            .catch((e) => e.toString());
-    }
-
     create() {
-        this.getStatsFromTinybird();
 
         this.background = this.add
             .tileSprite(0, 0, 400, 560, "bg")
