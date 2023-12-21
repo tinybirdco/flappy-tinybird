@@ -83,8 +83,8 @@ export default class EndGameScene extends Phaser.Scene {
         top10_result.data.forEach((entry, index) => {
             const score = leaderboard.getChildByID(`tr${index + 1}-score`);
             const name = leaderboard.getChildByID(`tr${index + 1}-name`);
-            score.innerHTML = entry.score;
-            name.innerHTML = entry.name;
+            score.innerHTML = entry.total_score;
+            name.innerHTML = entry.player_id;
         });
 
         return top10_result;
