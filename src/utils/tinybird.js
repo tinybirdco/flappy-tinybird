@@ -6,21 +6,20 @@ export async function send_session_data(session) {
     const payload = {
         session_id: session.id,
         name: session.name,
-        timestamp: Date.now().toString(),
+        timestamp: new Date().toISOString(),
         type: "score",
 
     };
     return send_data_to_tinybird("events_api", payload);
 }
 
-export async function send_death(session, score) {
+export async function send_death(session) {
     if (!TINYBIRD_TOKEN) return;
 
     const payload_death = {
         session_id: session.id,
         name: session.name,
-        timestamp: Date.now().toString(),
-        score: score,
+        timestamp: new Date().toISOString(),
         type: "game_over",
     };
     return send_data_to_tinybird("events_api", payload_death);
