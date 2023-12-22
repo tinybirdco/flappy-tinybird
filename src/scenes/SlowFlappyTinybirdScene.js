@@ -1,8 +1,6 @@
 import Phaser from "phaser";
 import { v4 as uuidv4 } from "uuid";
-import { addDataToDOM } from "../analytics/statBuilder";
-import { get_data_from_tinybird, send_session_data} from "../utils/tinybird";
-import { endpoints } from "./../config";
+import { send_death, send_session_data } from "../utils/tinybird";
 
 export default class SlowFlappyTinybirdScene extends Phaser.Scene {
     session = {
@@ -30,27 +28,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
         this.canvas = this.sys.game.canvas;
     }
 
-    getStatsFromTinybird() {
-        endpoints.player_stats_url.searchParams.append(
-            "name",
-            this.session.name
-        );
-
-        get_data_from_tinybird(endpoints.player_stats_url)
-            .then((data) => addDataToDOM(data, "player_stats"))
-            .catch((e) => e.toString());
-
-        get_data_from_tinybird(endpoints.top_10_url)
-            .then((data) => addDataToDOM(data, "top_10_leaderboard"))
-            .catch((e) => e.toString());
-
-        get_data_from_tinybird(endpoints.recent_player_stats_url)
-            .then((data) => addDataToDOM(data, "recent_player_stats"))
-            .catch((e) => e.toString());
-    }
-
     create() {
-        this.getStatsFromTinybird();
 
         this.background = this.add
             .tileSprite(0, 0, 400, 560, "bg")
@@ -69,25 +47,50 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
             allowGravity: false,
         });
 
-        this.addRowOfPipes();
+        // Add a flag to check if the timer is already started
+        this.timerStarted = false;
 
-        this.timer = this.time.addEvent({
-            delay: 2000, // updated this var final 
-            callback: this.addRowOfPipes,
-            callbackScope: this,
-            repeat: -1,
+        // Function to start the timer
+        const startTimer = () => {
+            if (!this.timerStarted) {
+                this.bird.body.enable = true; // Enable physics when the timer starts
+                this.bird.angle = 0; // Set the bird's angle to 0 to start
+                this.timer = this.time.addEvent({
+                    delay: 2250,
+                    callback: this.addRowOfPipes,
+                    callbackScope: this,
+                    repeat: -1,
+                });
+                this.timerStarted = true;
+            }
+        }
+
+        // Start the timer when the player hits space or enter or clicks
+        this.input.keyboard
+            .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+            .on("down", startTimer);
+
+        this.input.keyboard
+            .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+            .on("down", startTimer);
+
+        this.input.on("pointerdown", (pointer) => {
+            startTimer();
         });
     }
 
     update() {
-        this.background.tilePositionX += .5 ; // Updated this var 
+        this.background.tilePositionX += .5; // Updated this var 
 
-        this.updateBird();
+        if (this.timerStarted) {
+            this.updateBird();
+        }
 
         this.physics.overlap(this.bird, this.pipes, () => this.endGame());
     }
 
     updateBird() {
+
         if (this.bird.angle < 30) {
             this.bird.angle += 2;
         }
@@ -116,7 +119,8 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
             score: this.score,
         };
 
-        console.log(this.session.name + " did not get a deal")
+        send_death(this.session);
+
         this.scene.start("EndGameScene", data);
 
     }
@@ -127,6 +131,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
         this.physics.world.enable(this.bird);
         this.bird.body.setGravityY(100); // Updated this var final 
         this.bird.body.setSize(17, 12);
+        this.bird.body.enable = false; // Disable physics initially
     }
 
     addEventListeners() {
