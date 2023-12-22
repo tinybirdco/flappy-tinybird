@@ -1,7 +1,3 @@
-import { addDataToDOM } from "../analytics/statBuilder";
-import { get_data_from_tinybird } from "../utils/tinybird";
-import { endpoints } from "./../config";
-
 export default class MainMenuScene extends Phaser.Scene {
     constructor() {
         super({ key: "MainMenuScene" });
@@ -23,18 +19,7 @@ export default class MainMenuScene extends Phaser.Scene {
         }
     }
 
-    getDataFromTinybird() {
-        get_data_from_tinybird(endpoints.top_10_url)
-            .then((data) => addDataToDOM(data, "top_10_leaderboard"))
-            .catch((e) => e.toString());
-
-        get_data_from_tinybird(endpoints.recent_player_stats_url)
-            .then((data) => addDataToDOM(data, "recent_player_stats"))
-            .catch((e) => e.toString());
-    }
-
     create() {
-        this.getDataFromTinybird();
 
         const userForm = this.add.dom(140, 175).createFromCache("userForm");
         const nameElement = userForm.getChildByID("name");
