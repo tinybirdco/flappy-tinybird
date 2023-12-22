@@ -58,7 +58,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
                 this.bird.body.enable = true; // Enable physics when the timer starts
                 this.bird.angle = 0; // Set the bird's angle to 0 to start
                 this.timer = this.time.addEvent({
-                    delay: 2000, //tweak this
+                    delay: 1250,
                     callback: this.addRowOfPipes,
                     callbackScope: this,
                     repeat: -1,
@@ -83,7 +83,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     update() {
-        this.background.tilePositionX += 0.5;
+        this.background.tilePositionX += 1;
 
         if (this.timerStarted) {
             this.updateBird();
@@ -147,7 +147,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.bird = this.physics.add.sprite(100, 245, "bird");
         this.bird.setOrigin(0, 0);
         this.physics.world.enable(this.bird);
-        this.bird.body.setGravityY(100); //tweak this
+        this.bird.body.setGravityY(1000);
         this.bird.body.setSize(17, 12);
         this.bird.body.enable = false; // Disable physics initially
     }
@@ -197,7 +197,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         pipe.setScale(3);
         this.physics.world.enable(pipe);
         pipe.body.allowGravity = false;
-        pipe.body.setVelocityX(-100); //tweak this
+        pipe.body.setVelocityX(-200);
         pipe.body.setSize(20, 20);
         pipe.setActive(true);
     }
