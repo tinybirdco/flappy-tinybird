@@ -1,17 +1,17 @@
 import Phaser from "phaser";
 import { v4 as uuidv4 } from "uuid";
 import { addDataToDOM } from "../analytics/statBuilder";
-import { get_data_from_tinybird, send_death, send_session_data } from "../utils/tinybird";
-import { endpoints, TINYBIRD_TOKEN } from "./../config";
+import { get_data_from_tinybird, send_session_data} from "../utils/tinybird";
+import { endpoints } from "./../config";
 
-export default class FlappyTinybirdScene extends Phaser.Scene {
+export default class SlowFlappyTinybirdScene extends Phaser.Scene {
     session = {
         name: "",
         id: "",
     };
 
     constructor() {
-        super({ key: "FlappyTinybirdScene" });
+        super({ key: "SlowFlappyTinybirdScene" });
     }
 
     init(player) {
@@ -30,7 +30,27 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.canvas = this.sys.game.canvas;
     }
 
+    getStatsFromTinybird() {
+        endpoints.player_stats_url.searchParams.append(
+            "name",
+            this.session.name
+        );
+
+        get_data_from_tinybird(endpoints.player_stats_url)
+            .then((data) => addDataToDOM(data, "player_stats"))
+            .catch((e) => e.toString());
+
+        get_data_from_tinybird(endpoints.top_10_url)
+            .then((data) => addDataToDOM(data, "top_10_leaderboard"))
+            .catch((e) => e.toString());
+
+        get_data_from_tinybird(endpoints.recent_player_stats_url)
+            .then((data) => addDataToDOM(data, "recent_player_stats"))
+            .catch((e) => e.toString());
+    }
+
     create() {
+        this.getStatsFromTinybird();
 
         this.background = this.add
             .tileSprite(0, 0, 400, 560, "bg")
@@ -49,51 +69,25 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
             allowGravity: false,
         });
 
-        // Add a flag to check if the timer is already started
-        this.timerStarted = false;
+        this.addRowOfPipes();
 
-        // Function to start the timer
-        const startTimer = () => {
-            if (!this.timerStarted) {
-                this.bird.body.enable = true; // Enable physics when the timer starts
-                this.bird.angle = 0; // Set the bird's angle to 0 to start
-                this.timer = this.time.addEvent({
-                    delay: 2000, //tweak this
-                    callback: this.addRowOfPipes,
-                    callbackScope: this,
-                    repeat: -1,
-                });
-                this.timerStarted = true;
-            }
-        }
-
-        // Start the timer when the player hits space or enter or clicks
-        this.input.keyboard
-            .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-            .on("down", startTimer);
-
-        this.input.keyboard
-            .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
-            .on("down", startTimer);
-
-        this.input.on("pointerdown", (pointer) => {
-            startTimer();
-        }); 
-        
+        this.timer = this.time.addEvent({
+            delay: 2000, // updated this var final 
+            callback: this.addRowOfPipes,
+            callbackScope: this,
+            repeat: -1,
+        });
     }
 
     update() {
-        this.background.tilePositionX += 0.5;
+        this.background.tilePositionX += .5 ; // Updated this var 
 
-        if (this.timerStarted) {
-            this.updateBird();
-        }
+        this.updateBird();
 
         this.physics.overlap(this.bird, this.pipes, () => this.endGame());
     }
 
     updateBird() {
-        
         if (this.bird.angle < 30) {
             this.bird.angle += 2;
         }
@@ -104,11 +98,10 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         ) {
             this.endGame();
         }
-
     }
 
     jump() {
-        this.bird.body.setVelocityY(-350);
+        this.bird.body.setVelocityY(-350); //Updated this var
         this.bird.scene.tweens.add({
             targets: this.bird,
             props: { angle: -20 },
@@ -120,36 +113,20 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     async endGame() {
         const data = {
             session: this.session,
-            score: this.score, // add score for the end score you score...
+            score: this.score,
         };
-        
-        send_death(this.session);
 
-        const response = await fetch(`https://api.us-east.tinybird.co/v0/pipes/api_segmentation.json?player_param=${this.session.name}&token=${TINYBIRD_TOKEN}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
-    
-        const apiResponse = await response.json();
-    
-        if (apiResponse.data[0].offer == 1) {
-            this.scene.start("DealScene", data);
-        } else {
-            console.log(apiResponse);
-            this.scene.start("EndGameScene", data);
-        }
+        console.log(this.session.name + " did not get a deal")
+        this.scene.start("EndGameScene", data);
+
     }
 
     addBird() {
         this.bird = this.physics.add.sprite(100, 245, "bird");
         this.bird.setOrigin(0, 0);
         this.physics.world.enable(this.bird);
-        this.bird.body.setGravityY(100); //tweak this
+        this.bird.body.setGravityY(100); // Updated this var final 
         this.bird.body.setSize(17, 12);
-        this.bird.body.enable = false; // Disable physics initially
     }
 
     addEventListeners() {
@@ -197,7 +174,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         pipe.setScale(3);
         this.physics.world.enable(pipe);
         pipe.body.allowGravity = false;
-        pipe.body.setVelocityX(-100); //tweak this
+        pipe.body.setVelocityX(-100); // Updated this var final 
         pipe.body.setSize(20, 20);
         pipe.setActive(true);
     }
