@@ -50,19 +50,20 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         });
 
         // Add a flag to check if the timer is already started
-        let timerStarted = false;
+        this.timerStarted = false;
 
         // Function to start the timer
         const startTimer = () => {
-            if (!timerStarted) {
+            if (!this.timerStarted) {
                 this.bird.body.enable = true; // Enable physics when the timer starts
+                this.bird.angle = 0; // Set the bird's angle to 0 to start
                 this.timer = this.time.addEvent({
                     delay: 1250,
                     callback: this.addRowOfPipes,
                     callbackScope: this,
                     repeat: -1,
                 });
-                timerStarted = true;
+                this.timerStarted = true;
             }
         }
 
@@ -84,25 +85,26 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     update() {
         this.background.tilePositionX += 1;
 
-        this.updateBird();
+        if (this.timerStarted) {
+            this.updateBird();
+        }
 
         this.physics.overlap(this.bird, this.pipes, () => this.endGame());
     }
 
     updateBird() {
-        // Only update the bird if the timer has started
-        if (this.timer && this.timer.getProgress() > 0) {
-            if (this.bird.angle < 30) {
-                this.bird.angle += 2;
-            }
-
-            if (
-                this.bird.y + this.bird.height > this.canvas.height ||
-                this.bird.y + this.bird.height < 0
-            ) {
-                this.endGame();
-            }
+        
+        if (this.bird.angle < 30) {
+            this.bird.angle += 2;
         }
+
+        if (
+            this.bird.y + this.bird.height > this.canvas.height ||
+            this.bird.y + this.bird.height < 0
+        ) {
+            this.endGame();
+        }
+
     }
 
     jump() {
