@@ -26,7 +26,7 @@ export const config = {
 };
 
 export const TINYBIRD_TOKEN = import.meta.env.VITE_TINYBIRD_TOKEN;
-export const TINYBIRD_HOST = 'api.us-east.tinybird.co'
+export const TINYBIRD_HOST = import.meta.env.VITE_TINYBIRD_HOST;
 
 export const EVENTS_URL = `https://${TINYBIRD_HOST}/v0/events`;
 
