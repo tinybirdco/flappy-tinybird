@@ -32,7 +32,7 @@ export default class DealScene extends Phaser.Scene {
         const text = this.add.text(
             this.cameras.main.width / 2,
             100,
-            "Flappy is tired of dying :(\n\nBuy this power-up to\nslow down the game!",
+            "Flappy is tired of dying :(\n\nPurchase this power-up to\nactivate slow-mo!",
             {
                 align: 'center',
             }
