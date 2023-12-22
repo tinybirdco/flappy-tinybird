@@ -21,7 +21,7 @@ export const config = {
         createContainer: true,
     },
     render: { pixelArt: true },
-    backgroundColor: "rgba(113, 197, 207,0)",
+    backgroundColor: "rgba(134, 182, 226,0)",
     scene: [MainMenuScene, EndGameScene, FlappyTinybirdScene, DealScene, SlowFlappyTinybirdScene],
 };
 
