@@ -25,8 +25,9 @@ export const config = {
     scene: [MainMenuScene, EndGameScene, FlappyTinybirdScene, DealScene, SlowFlappyTinybirdScene],
 };
 
-export const TINYBIRD_TOKEN = import.meta.env.VITE_TINYBIRD_TOKEN;
 export const TINYBIRD_HOST = import.meta.env.VITE_TINYBIRD_HOST;
+export const TINYBIRD_READ_TOKEN = import.meta.env.VITE_TINYBIRD_READ_TOKEN;
+export const TINYBIRD_APPEND_TOKEN = import.meta.env.VITE_TINYBIRD_APPEND_TOKEN;
 
 export const EVENTS_URL = `https://${TINYBIRD_HOST}/v0/events`;
 

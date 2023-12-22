@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { v4 as uuidv4 } from "uuid";
 import { addDataToDOM } from "../analytics/statBuilder";
 import { get_data_from_tinybird, send_death, send_session_data } from "../utils/tinybird";
-import { endpoints, TINYBIRD_TOKEN } from "./../config";
+import { endpoints, TINYBIRD_READ_TOKEN } from "./../config";
 
 export default class FlappyTinybirdScene extends Phaser.Scene {
     session = {
@@ -129,7 +129,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         // const response = await fetch(`https://api.us-east.tinybird.co/v0/pipes/api_segmentation.json?player_param=${this.session.name}`, {
         //     method: 'POST',
         //     headers: {
-        //         Authorization: `Bearer ${TINYBIRD_TOKEN}`,
+        //         Authorization: `Bearer ${TINYBIRD_READ_TOKEN}`,
         //     },
         //     body: JSON.stringify(data),
         // });
