@@ -1,24 +1,29 @@
 import { EVENTS_URL, TINYBIRD_TOKEN } from "../config";
 
 export async function send_session_data(session) {
-    const payload = {
-        session_id: session.id,
-        name: session.name,
-        timestamp: Date.now(),
-    };
-    return send_data_to_tinybird("sessions", payload);
-}
-
-export async function send_death(session, score) {
     if (!TINYBIRD_TOKEN) return;
 
     const payload = {
         session_id: session.id,
         name: session.name,
-        score: score,
-        timestamp: Date.now(),
+        timestamp: Date.now().toString(),
+        type: "score",
+
     };
-    return send_data_to_tinybird("deaths", payload);
+    return send_data_to_tinybird("events_api", payload);
+}
+
+export async function send_death(session, score) {
+    if (!TINYBIRD_TOKEN) return;
+
+    const payload_death = {
+        session_id: session.id,
+        name: session.name,
+        timestamp: Date.now().toString(),
+        score: score,
+        type: "game_over",
+    };
+    return send_data_to_tinybird("events_api", payload_death);
 }
 
 export async function send_data_to_tinybird(name, payload) {

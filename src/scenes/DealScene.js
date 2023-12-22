@@ -1,8 +1,8 @@
 import { addDataToDOM } from "../analytics/statBuilder";
-import { get_data_from_tinybird, send_death } from "../utils/tinybird";
+import { get_data_from_tinybird, send_data_to_tinybird } from "../utils/tinybird";
 import { endpoints } from "./../config";
 
-export default class EndGameScene extends Phaser.Scene {
+export default class DealScene extends Phaser.Scene {
     session = {
         name: "",
         id: "",
@@ -10,12 +10,13 @@ export default class EndGameScene extends Phaser.Scene {
     score = 0;
 
     constructor() {
-        super({ key: "EndGameScene" });
+        super({ key: "DealScene" });
     }
 
     preload() {
         this.load.html("leaderboard", "/Leaderboard.html");
         this.load.image("RetryButton", "/RetryButton.png");
+        this.load.image("OfferButton", "/buy_now.png"); // Load the image for the offer button
     }
 
     init(data) {
@@ -23,10 +24,18 @@ export default class EndGameScene extends Phaser.Scene {
         this.score = data.score;
     }
 
+
     create() {
-        send_death(this.session, this.score)
-            .then(() => this.getDataFromTinybird())
-            .catch((e) => e.toString());
+        // Position the offer button under the retry button
+        const offerButton = this.add.image(200, 200, 'OfferButton');
+        offerButton.setInteractive({ cursor: 'pointer' });
+        
+        // Set the scale of the offer button to match the retry button
+        offerButton.setScale(0.5); // Adjust this value as needed
+        
+        offerButton.on('pointerup', () => {
+            this.buyPowerUp();
+        });
 
         this.add.text(
             115,
@@ -52,10 +61,6 @@ export default class EndGameScene extends Phaser.Scene {
             .on("down", () => {
                 this.retry();
             });
-
-        this.input.on("pointerdown", () => {
-            this.retry();
-        });
     }
 
     retry() {
@@ -72,6 +77,21 @@ export default class EndGameScene extends Phaser.Scene {
             .then((data) => addDataToDOM(data, "recent_player_stats"))
             .catch((e) => e.toString());
     }
+
+    buyPowerUp() {    
+        console.log('Power up bought! Game speed has been reduced.');
+        console.log(this.session.name + ' bought a power up!'); // Log the event to the console
+        const payload_purchase = {
+            session_id: this.session.id,
+            name: this.session.name,
+            timestamp: Date.now().toString(),
+            type: "purchase",
+        }
+
+        send_data_to_tinybird("events_api", payload_purchase)
+        
+        this.scene.start("SlowFlappyTinybirdScene", this.session);
+        };
 
     buildTopTen(top10_result) {
         if (!this.scene.isActive()) return;
@@ -90,3 +110,5 @@ export default class EndGameScene extends Phaser.Scene {
         return top10_result;
     }
 }
+
+

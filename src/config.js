@@ -1,6 +1,8 @@
 import EndGameScene from "./scenes/EndGameScene";
 import FlappyTinybirdScene from "./scenes/FlappyTinybirdScene";
 import MainMenuScene from "./scenes/MainMenuScene";
+import DealScene from "./scenes/DealScene";
+import SlowFlappyTinybirdScene from "./scenes/SlowFlappyTinybirdScene";
 
 /** @type {import("phaser").Types.Core.GameConfig} */
 export const config = {
@@ -20,21 +22,24 @@ export const config = {
     },
     render: { pixelArt: true },
     backgroundColor: "rgba(113, 197, 207,0)",
-    scene: [MainMenuScene, EndGameScene, FlappyTinybirdScene],
+    scene: [MainMenuScene, EndGameScene, FlappyTinybirdScene, DealScene, SlowFlappyTinybirdScene],
 };
 
 export const TINYBIRD_TOKEN = import.meta.env.VITE_TINYBIRD_TOKEN;
 
-export const EVENTS_URL = "https://api.tinybird.co/v0/events";
+export const EVENTS_URL = "https://api.us-east.tinybird.co/v0/events";
 
 export const endpoints = {
     top_10_url: new URL(
-        `https://api.tinybird.co/v0/pipes/top_10_leaderboard.json`
+        `https://api.us-east.tinybird.co/v0/pipes/api_leaderboard.json`
     ),
     recent_player_stats_url: new URL(
-        `https://api.tinybird.co/v0/pipes/recent_player_stats.json`
+        `https://api.us-east.tinybird.co/v0/pipes/api_last_played_games.json`
     ),
     player_stats_url: new URL(
-        `https://api.tinybird.co/v0/pipes/player_stats.json`
+        `https://api.us-east.tinybird.co/v0/pipes/api_player_stats.json`
+    ),
+    segmentation_url: new URL(
+        `https://api.us-east.tinybird.co/v0/pipes/api_segmentation.json`
     ),
 };
