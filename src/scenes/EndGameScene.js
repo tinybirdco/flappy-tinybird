@@ -1,3 +1,4 @@
+import { addDataToDOM } from "../analytics/statBuilder";
 import { get_data_from_tinybird } from "../utils/tinybird";
 import { endpoints } from "./../config";
 
@@ -28,11 +29,17 @@ export default class EndGameScene extends Phaser.Scene {
 
         this.getDataFromTinybird()
 
-        this.add.text(
-            105,
-            50,
-            `You scored ${this.score} point${this.score !== 1 ? "s" : ""}!`
+        const text = this.add.text(
+            this.cameras.main.width / 2,
+            60,
+            `You scored ${this.score} point${this.score !== 1 ? "s" : ""}!`,
+            {
+                align: 'center',
+            }
         );
+
+        // Set origin to center for proper alignment
+        text.setOrigin(0.5);
 
         this.add
             .image(200, 125, "RetryButton")
@@ -84,25 +91,30 @@ export default class EndGameScene extends Phaser.Scene {
             this.session.name
         );
 
-        Promise.all([
-            get_data_from_tinybird(endpoints.top_10_url),
-            get_data_from_tinybird(endpoints.player_stats_url),
-            get_data_from_tinybird(endpoints.recent_player_stats_url),
-        ])
-            .then(([top10Result, playerStatsResult, lastPlayedResult]) => {
-                this.buildTopTen(top10Result);
-                this.buildPlayerStats(playerStatsResult);
-                this.buildLastPlayed(lastPlayedResult);
-            })
-            .catch((e) => console.error(e));
+        get_data_from_tinybird(endpoints.top_10_url)
+            .then((r) => this.buildTopTen(r))
+            .then((data) => addDataToDOM(data, "top_10_leaderboard"))
+            .catch((e) => e.toString());
+
+        get_data_from_tinybird(endpoints.player_stats_url)
+            .then((r) => this.buildPlayerStats(r))
+            .then((data) => addDataToDOM(data, "player_stats"))
+            .catch((e) => e.toString());
+
+        get_data_from_tinybird(endpoints.recent_player_stats_url)
+            .then((r) => this.buildLastPlayed(r))
+            .then((data) => addDataToDOM(data, "recent_player_stats"))
+            .catch((e) => e.toString());
     }
-    
+
 
     buildTopTen(top10_result) {
         if (!this.scene.isActive()) return;
 
+        console.log("Building TopTen");
+
         const leaderboard = this.add
-            .dom(200, 350)
+            .dom(200, 450)
             .createFromCache("leaderboard");
 
         top10_result.data.forEach((entry, index) => {
@@ -118,8 +130,10 @@ export default class EndGameScene extends Phaser.Scene {
     buildPlayerStats(playerStats_result) {
         if (!this.scene.isActive()) return;
 
+        console.log("Building PlayerStats");
+
         const playerStats = this.add
-            .dom(200, 610)
+            .dom(200, 710)
             .createFromCache("playerStats");
 
         playerStats_result.data.forEach((entry, index) => {
@@ -127,7 +141,7 @@ export default class EndGameScene extends Phaser.Scene {
             const total_score = playerStats.getChildByID('total_score');
             const avg_score = playerStats.getChildByID('avg_score');
             const seconds_played = playerStats.getChildByID('seconds_played');
-            
+
             n_games.innerHTML = entry.n_games;
             total_score.innerHTML = entry.total_score;
             avg_score.innerHTML = entry.avg_score;
@@ -140,8 +154,10 @@ export default class EndGameScene extends Phaser.Scene {
     buildLastPlayed(lastPlayed_result) {
         if (!this.scene.isActive()) return;
 
+        console.log("Building LastStats");
+
         const lastPlayed = this.add
-            .dom(200, 860)
+            .dom(200, 960)
             .createFromCache("lastPlayed");
 
         lastPlayed_result.data.forEach((entry, index) => {
