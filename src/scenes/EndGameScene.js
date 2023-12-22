@@ -1,5 +1,4 @@
-import { addDataToDOM } from "../analytics/statBuilder";
-import { get_data_from_tinybird, send_death } from "../utils/tinybird";
+import { get_data_from_tinybird } from "../utils/tinybird";
 import { endpoints } from "./../config";
 
 export default class EndGameScene extends Phaser.Scene {
@@ -26,14 +25,13 @@ export default class EndGameScene extends Phaser.Scene {
     }
 
     create() {
-        send_death(this.session, this.score)
-            .then(() => this.getDataFromTinybird())
-            .catch((e) => e.toString());
+
+        this.getDataFromTinybird()
 
         this.add.text(
-            110,
+            105,
             50,
-            `You scored ${this.score} point${this.score > 1 ? "s" : ""}!`
+            `You scored ${this.score} point${this.score !== 1 ? "s" : ""}!`
         );
 
         this.add
@@ -85,22 +83,20 @@ export default class EndGameScene extends Phaser.Scene {
             "player_param",
             this.session.name
         );
-        
-        get_data_from_tinybird(endpoints.top_10_url)
-            .then((r) => this.buildTopTen(r))
-            .then((data) => addDataToDOM(data, "top_10_leaderboard"))
-            .catch((e) => e.toString());
-        
-        get_data_from_tinybird(endpoints.player_stats_url)
-            .then((r) => this.buildPlayerStats(r))
-            .then((data) => addDataToDOM(data, "player_stats"))
-            .catch((e) => e.toString());
-        
-        get_data_from_tinybird(endpoints.recent_player_stats_url)
-            .then((r) => this.buildLastPlayed(r))
-            .then((data) => addDataToDOM(data, "recent_player_stats"))
-            .catch((e) => e.toString());
+
+        Promise.all([
+            get_data_from_tinybird(endpoints.top_10_url),
+            get_data_from_tinybird(endpoints.player_stats_url),
+            get_data_from_tinybird(endpoints.recent_player_stats_url),
+        ])
+            .then(([top10Result, playerStatsResult, lastPlayedResult]) => {
+                this.buildTopTen(top10Result);
+                this.buildPlayerStats(playerStatsResult);
+                this.buildLastPlayed(lastPlayedResult);
+            })
+            .catch((e) => console.error(e));
     }
+    
 
     buildTopTen(top10_result) {
         if (!this.scene.isActive()) return;
