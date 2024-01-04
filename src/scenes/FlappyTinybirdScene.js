@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import { v4 as uuidv4 } from "uuid";
 import { addDataToDOM } from "../analytics/statBuilder";
 import { get_data_from_tinybird, send_death, send_session_data } from "../utils/tinybird";
-import { endpoints, TINYBIRD_TOKEN } from "./../config";
+import { endpoints, TINYBIRD_READ_TOKEN } from "./../config";
 
 export default class FlappyTinybirdScene extends Phaser.Scene {
     session = {
@@ -118,6 +118,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     async endGame() {
+
         const data = {
             session: this.session,
             score: this.score, // add score for the end score you score...
@@ -125,22 +126,24 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         
         send_death(this.session);
 
-        const response = await fetch(`https://api.us-east.tinybird.co/v0/pipes/api_segmentation.json?player_param=${this.session.name}&token=${TINYBIRD_TOKEN}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        });
+        // const response = await fetch(`https://api.us-east.tinybird.co/v0/pipes/api_segmentation.json?player_param=${this.session.name}`, {
+        //     method: 'POST',
+        //     headers: {
+        //         Authorization: `Bearer ${TINYBIRD_READ_TOKEN}`,
+        //     },
+        //     body: JSON.stringify(data),
+        // });
     
-        const apiResponse = await response.json();
+        // const apiResponse = await response.json();
     
-        if (apiResponse.data[0].offer == 1) {
-            this.scene.start("DealScene", data);
-        } else {
-            console.log(apiResponse);
-            this.scene.start("EndGameScene", data);
-        }
+        // if (apiResponse.data[0].offer == 1) {
+        //     this.scene.start("DealScene", data);
+        // } else {
+        //     console.log(apiResponse);
+        //     this.scene.start("EndGameScene", data);
+        // }
+
+        this.scene.start("DealScene", data);
     }
 
     addBird() {
