@@ -59,7 +59,7 @@ export async function sendToKafka(payload) {
             method: "POST",
             body: JSON.stringify(payload),
             headers: {
-                'Content-Type': 'application/vnd.kafka.binary.v2+json',
+                'Content-Type': 'application/json',
             },
         });
 
