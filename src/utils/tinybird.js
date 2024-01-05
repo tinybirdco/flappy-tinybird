@@ -1,4 +1,4 @@
-import { EVENTS_URL, TINYBIRD_READ_TOKEN, TINYBIRD_APPEND_TOKEN } from "../config";
+import { EVENTS_URL, TINYBIRD_READ_TOKEN, TINYBIRD_APPEND_TOKEN, KAFKA_API_SECRET, KAFKA_API_KEY } from "../config";
 
 export async function send_session_data(session) {
     if (!TINYBIRD_APPEND_TOKEN) return;
@@ -10,7 +10,7 @@ export async function send_session_data(session) {
         type: "score",
 
     };
-    return send_data_to_tinybird("events_api", payload);
+    return sendToKafka(payload);
 }
 
 export async function send_death(session) {
@@ -22,7 +22,7 @@ export async function send_death(session) {
         timestamp: new Date().toISOString(),
         type: "game_over",
     };
-    return send_data_to_tinybird("events_api", payload);
+    return sendToKafka(payload);
 }
 
 export async function send_purchase(session) {
@@ -34,7 +34,7 @@ export async function send_purchase(session) {
         timestamp: new Date().toISOString(),
         type: "purchase",
     };
-    return send_data_to_tinybird("events_api", payload);
+    return sendToKafka(payload);
 }
 
 export async function send_data_to_tinybird(name, payload) {
@@ -49,6 +49,25 @@ export async function send_data_to_tinybird(name, payload) {
     })
         .then((res) => res.json())
         .catch((error) => console.log(error));
+}
+
+export async function sendToKafka(payload) {
+    console.log('Sending data to Kafka:', payload);
+
+    try {
+        const response = await fetch('http://localhost:3000/sendToKafka', {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: {
+                'Content-Type': 'application/vnd.kafka.binary.v2+json',
+            },
+        });
+
+        const responseData = await response.json();
+        console.log('Data sent to Kafka:', responseData);
+    } catch (error) {
+        console.error('Error sending data to Kafka:', error.message);
+    }
 }
 
 export async function get_data_from_tinybird(url) {

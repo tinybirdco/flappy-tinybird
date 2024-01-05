@@ -8,9 +8,12 @@
     "start": "vite",
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "proxy": "node src/utils/proxy.js"
   },
   "dependencies": {
+    "dotenv": "^16.3.1",
+    "kafkajs": "^2.2.4",
     "phaser": "^3.60.0",
     "uuid": "^9.0.0"
   },
