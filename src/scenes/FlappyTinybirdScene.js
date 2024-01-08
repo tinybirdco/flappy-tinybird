@@ -18,6 +18,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.score = 0;
         this.session.name = player.name;
         this.session.id = uuidv4();
+        this.gameOver = false;
     }
 
     preload() {
@@ -118,32 +119,35 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     async endGame() {
-
+        if (this.gameOver) {
+            return; 
+        }
+    
+        this.gameOver = true; 
+    
         const data = {
             session: this.session,
-            score: this.score, // add score for the end score you score...
+            score: this.score,
         };
         
         send_death(this.session);
-
-        // const response = await fetch(`https://api.us-east.tinybird.co/v0/pipes/api_segmentation.json?player_param=${this.session.name}`, {
-        //     method: 'POST',
-        //     headers: {
-        //         Authorization: `Bearer ${TINYBIRD_READ_TOKEN}`,
-        //     },
-        //     body: JSON.stringify(data),
-        // });
     
-        // const apiResponse = await response.json();
+        const response = await fetch(`https://api.us-east.tinybird.co/v0/pipes/api_segmentation.json?player_param=${this.session.name}`, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${TINYBIRD_READ_TOKEN}`,
+            },
+            body: JSON.stringify(data),
+        });
     
-        // if (apiResponse.data[0].offer == 1) {
-        //     this.scene.start("DealScene", data);
-        // } else {
-        //     console.log(apiResponse);
-        //     this.scene.start("EndGameScene", data);
-        // }
-
-        this.scene.start("DealScene", data);
+        const apiResponse = await response.json();
+    
+        if (apiResponse.data[0].offer == 1) {
+            this.scene.start("DealScene", data);
+        } else {
+            console.log(apiResponse);
+            this.scene.start("EndGameScene", data);
+        }
     }
 
     addBird() {
