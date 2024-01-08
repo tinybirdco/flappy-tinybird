@@ -14,9 +14,7 @@ export default class DealScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.html("leaderboard", "/chartLeaderboard.html");
-        this.load.html("playerStats", "/chartPlayerStats.html");
-        this.load.html("lastPlayed", "/chartLastPlayed.html");
+        this.load.html("charts", "/charts.html");
         this.load.image("OfferButton", "/OfferButton.png"); // Load the image for the offer button
     }
 
@@ -26,15 +24,14 @@ export default class DealScene extends Phaser.Scene {
     }
 
     create() {
-
-        this.getDataFromTinybird()
+        this.getDataFromTinybird();
 
         const text = this.add.text(
             this.cameras.main.width / 2,
             100,
             "Flappy is tired of dying :(\n\nPurchase this power-up to\nactivate slow-mo!",
             {
-                align: 'center',
+                align: "center",
             }
         );
 
@@ -60,29 +57,32 @@ export default class DealScene extends Phaser.Scene {
                 this.buyPowerUp();
             });
 
-        const topLimit = 0;  // Set the top limit for scrolling
+        const topLimit = 0; // Set the top limit for scrolling
 
         // Enable vertical scrolling for the entire scene
-        this.input.on('wheel', (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
-            // Prevent the default behavior to avoid conflicts
-            pointer.event.preventDefault();
+        this.input.on(
+            "wheel",
+            (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
+                // Prevent the default behavior to avoid conflicts
+                pointer.event.preventDefault();
 
-            // Adjust the scrolling speed as needed
-            this.cameras.main.scrollY = Phaser.Math.Clamp(
-                this.cameras.main.scrollY + deltaY * 0.5,
-                topLimit,
-                Number.MAX_SAFE_INTEGER  // Set a large positive value for the maximum scroll
-            );
-        });
+                // Adjust the scrolling speed as needed
+                this.cameras.main.scrollY = Phaser.Math.Clamp(
+                    this.cameras.main.scrollY + deltaY * 0.5,
+                    topLimit,
+                    Number.MAX_SAFE_INTEGER // Set a large positive value for the maximum scroll
+                );
+            }
+        );
     }
 
     buyPowerUp() {
-        console.log(this.session.name + ' bought a power up!'); // Log the event to the console
+        console.log(this.session.name + " bought a power up!"); // Log the event to the console
 
         send_purchase(this.session);
 
         this.scene.start("SlowFlappyTinybirdScene", this.session);
-    };
+    }
 
     getDataFromTinybird() {
         endpoints.player_stats_url.searchParams.append(
@@ -95,30 +95,26 @@ export default class DealScene extends Phaser.Scene {
             this.session.name
         );
 
+        const charts = this.add.dom(200, 450).createFromCache("charts");
+
         get_data_from_tinybird(endpoints.top_10_url)
-            .then((r) => this.buildTopTen(r))
-            .then((data) => addDataToDOM(data, "top_10_leaderboard"))
+            .then((r) => this.buildTopTen(charts, r))
             .catch((e) => e.toString());
 
         get_data_from_tinybird(endpoints.player_stats_url)
-            .then((r) => this.buildPlayerStats(r))
-            .then((data) => addDataToDOM(data, "player_stats"))
+            .then((r) => this.buildPlayerStats(charts, r))
             .catch((e) => e.toString());
 
         get_data_from_tinybird(endpoints.recent_player_stats_url)
-            .then((r) => this.buildLastPlayed(r))
-            .then((data) => addDataToDOM(data, "recent_player_stats"))
+            .then((r) => this.buildLastPlayed(charts, r))
             .catch((e) => e.toString());
     }
 
-    buildTopTen(top10_result) {
+    buildTopTen(charts, top10_result) {
         if (!this.scene.isActive()) return;
 
         console.log("Building TopTen");
-
-        const leaderboard = this.add
-            .dom(200, 450)
-            .createFromCache("leaderboard");
+        const leaderboard = charts.getChildByID("leaderboard");
 
         top10_result.data.forEach((entry, index) => {
             const score = leaderboard.getChildByID(`tr${index + 1}-score`);
@@ -130,20 +126,17 @@ export default class DealScene extends Phaser.Scene {
         return top10_result;
     }
 
-    buildPlayerStats(playerStats_result) {
+    buildPlayerStats(charts, playerStats_result) {
         if (!this.scene.isActive()) return;
 
         console.log("Building PlayerStats");
-
-        const playerStats = this.add
-            .dom(200, 710)
-            .createFromCache("playerStats");
+        const playerStats = charts.getChildByID("playerStats");
 
         playerStats_result.data.forEach((entry, index) => {
-            const n_games = playerStats.getChildByID('n_games');
-            const total_score = playerStats.getChildByID('total_score');
-            const avg_score = playerStats.getChildByID('avg_score');
-            const seconds_played = playerStats.getChildByID('seconds_played');
+            const n_games = playerStats.getChildByID("n_games");
+            const total_score = playerStats.getChildByID("total_score");
+            const avg_score = playerStats.getChildByID("avg_score");
+            const seconds_played = playerStats.getChildByID("seconds_played");
 
             n_games.innerHTML = entry.n_games;
             total_score.innerHTML = entry.total_score;
@@ -154,14 +147,11 @@ export default class DealScene extends Phaser.Scene {
         return playerStats_result;
     }
 
-    buildLastPlayed(lastPlayed_result) {
+    buildLastPlayed(charts, lastPlayed_result) {
         if (!this.scene.isActive()) return;
 
         console.log("Building LastStats");
-
-        const lastPlayed = this.add
-            .dom(200, 960)
-            .createFromCache("lastPlayed");
+        const lastPlayed = charts.getChildByID("lastPlayed");
 
         lastPlayed_result.data.forEach((entry, index) => {
             const time = lastPlayed.getChildByID(`tr${index + 1}-time`);
@@ -173,5 +163,3 @@ export default class DealScene extends Phaser.Scene {
         return lastPlayed_result;
     }
 }
-
-
