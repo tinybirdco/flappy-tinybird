@@ -1,6 +1,6 @@
-const express = require('express');
-const { Kafka } = require('kafkajs');
-const cors = require('cors');
+import express from 'express';
+import { Kafka } from 'kafkajs';
+import cors from 'cors';
 
 const kafka = new Kafka({
     clientId: process.env.KAFKA_CLIENT_ID,
@@ -19,7 +19,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());    
 
-app.post('/sendToKafka', async (req, res) => {
+app.post('/api/send-kafka', async (req, res) => {
     const payload = req.body;
     const topic = 'demo_flappy';
 
@@ -41,4 +41,4 @@ app.post('/sendToKafka', async (req, res) => {
     }
 });
 
-module.exports = app; // Export the app object
+export default app;
