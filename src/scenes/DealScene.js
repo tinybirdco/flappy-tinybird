@@ -43,18 +43,6 @@ export default class DealScene extends Phaser.Scene {
                     this.buyPowerUp();
                 });
 
-            this.input.keyboard
-                .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-                .on("down", () => {
-                    this.buyPowerUp();
-                });
-
-            this.input.keyboard
-                .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
-                .on("down", () => {
-                    this.buyPowerUp();
-                });
-
             const topLimit = 0; // Set the top limit for scrolling
 
             //Enable scrolling

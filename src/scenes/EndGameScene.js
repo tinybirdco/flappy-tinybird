@@ -43,18 +43,6 @@ export default class EndGameScene extends Phaser.Scene {
                     this.retry();
                 });
 
-            this.input.keyboard
-                .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-                .on("down", () => {
-                    this.retry();
-                });
-
-            this.input.keyboard
-                .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
-                .on("down", () => {
-                    this.retry();
-                });
-
             const topLimit = 0; // Set the top limit for scrolling
 
             //Enable scrolling
