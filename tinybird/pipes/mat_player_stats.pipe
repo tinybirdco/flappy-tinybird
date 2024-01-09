@@ -1,0 +1,23 @@
+DESCRIPTION >
+	Top scores across all emails
+
+
+NODE mv
+SQL >
+
+    SELECT
+        name AS player_id,
+        session_id,
+        countIfState(type = 'score') AS scores,
+        countIfState(type = 'purchase') AS purchases,
+        maxState(timestamp) AS game_ts
+    FROM confluent_events
+    GROUP BY
+        player_id,
+        session_id
+
+TYPE materialized
+DATASOURCE mv_player_stats
+ENGINE "AggregatingMergeTree"
+ENGINE_SORTING_KEY "player_id, session_id"
+

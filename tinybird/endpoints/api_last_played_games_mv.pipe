@@ -1,0 +1,28 @@
+TOKEN "app_read_token" READ
+
+TOKEN "api_last_played_games_from_mv_endpoint_read_9463" READ
+
+NODE endpoint
+SQL >
+
+    %
+    SELECT
+        session_id,
+        countMerge(scores) AS total_score,
+        toDateTime(argMaxMerge(game_ts)) AS t
+    FROM mv_player_stats
+    WHERE
+        player_id
+        = {{
+            String(
+                player_param,
+                'joe@',
+                description="Player to filter on",
+                required=True,
+            )
+        }}
+    GROUP BY session_id
+    ORDER BY t DESC
+    LIMIT 10
+
+

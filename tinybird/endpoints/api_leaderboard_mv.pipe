@@ -1,0 +1,16 @@
+TOKEN "app_read_token" READ
+
+TOKEN "api_leaderboard_from_mv_endpoint_read_8071" READ
+
+TOKEN "ops_dashboard_token" READ
+
+NODE endpoint
+SQL >
+
+    SELECT player_id, session_id, countMerge(scores) AS total_score
+    FROM mv_player_stats
+    GROUP BY player_id, session_id
+    ORDER BY total_score DESC
+    LIMIT 10
+
+

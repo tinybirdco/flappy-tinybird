@@ -1,0 +1,34 @@
+TOKEN "api_segmentation_endpoint_read_9861" READ
+
+TOKEN "app_read_token" READ
+
+NODE stats_by_player
+SQL >
+
+    %
+    SELECT
+        uniq(session_id) AS n_games,
+        countIf(type = 'score') AS total_score,
+        countIf(type = 'purchase') AS n_purchases
+    FROM confluent_events
+    WHERE
+        name
+        = {{
+            String(
+                player_param,
+                'dm',
+                description="Player to filter on",
+                required=True,
+            )
+        }}
+        AND timestamp >= now() - INTERVAL 1 HOUR
+
+
+
+NODE endpoint
+SQL >
+
+    SELECT if(n_games >= 3 AND total_score <= 15 AND n_purchases = 0, 1, 0) AS offer
+    FROM stats_by_player
+
+

@@ -1,9 +1,0 @@
-
-SCHEMA >
-    `name` String `json:$.name`,
-    `score` Int16 `json:$.score`,
-    `session_id` String `json:$.session_id`,
-    `timestamp` Int64 `json:$.timestamp`
-
-ENGINE "MergeTree"
-ENGINE_SORTING_KEY "name, score, session_id, timestamp"

@@ -1,0 +1,19 @@
+
+SCHEMA >
+    `name` String `json:$.name`,
+    `session_id` String `json:$.session_id`,
+    `timestamp` DateTime64(3) `json:$.timestamp`,
+    `type` LowCardinality(String) `json:$.type`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYYYYMM(__timestamp)"
+ENGINE_SORTING_KEY "__timestamp"
+
+KAFKA_CONNECTION_NAME 'tb_confluent'
+KAFKA_TOPIC 'demo_flappy'
+KAFKA_GROUP_ID 'demo_flappy_1704409094913'
+KAFKA_AUTO_OFFSET_RESET 'latest'
+KAFKA_STORE_RAW_VALUE 'False'
+KAFKA_STORE_HEADERS 'False'
+KAFKA_TARGET_PARTITIONS 'auto'
+KAFKA_KEY_AVRO_DESERIALIZATION ''

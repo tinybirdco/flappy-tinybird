@@ -1,0 +1,21 @@
+DESCRIPTION >
+	Top scores across all emails
+
+
+TOKEN "global_leaderboard_endpoint_read_1162" READ
+
+TOKEN "app_read_token" READ
+
+TOKEN "ops_dashboard_token" READ
+
+NODE endpoint
+SQL >
+
+    SELECT name AS player_id, session_id, count() AS total_score
+    FROM confluent_events
+    WHERE type = 'score'
+    GROUP BY player_id, session_id
+    ORDER BY total_score DESC
+    LIMIT 10
+
+

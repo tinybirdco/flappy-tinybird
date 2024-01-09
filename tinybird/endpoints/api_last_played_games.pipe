@@ -1,0 +1,30 @@
+DESCRIPTION >
+	Last 10 games played by email
+
+
+TOKEN "games_per_user_endpoint_read_8711" READ
+
+TOKEN "app_read_token" READ
+
+NODE endpoint
+SQL >
+
+    %
+    SELECT session_id, count() total_score, toDateTime(max(timestamp)) AS t
+    FROM confluent_events
+    WHERE
+        type = 'score'
+        AND name
+        = {{
+            String(
+                player_param,
+                'dm@test.2',
+                description="Player to filter on",
+                required=True,
+            )
+        }}
+    GROUP BY session_id
+    ORDER BY t desc
+    LIMIT 10
+
+
