@@ -24,56 +24,56 @@ export default class EndGameScene extends Phaser.Scene {
     }
 
     create() {
-        this.getDataFromTinybird();
+        this.getDataFromTinybird().then(() => {
+            const text = this.add.text(
+                this.cameras.main.width / 2,
+                60,
+                `You scored ${this.score} point${this.score !== 1 ? "s" : ""}!`,
+                {
+                    align: "center",
+                }
+            );
 
-        const text = this.add.text(
-            this.cameras.main.width / 2,
-            60,
-            `You scored ${this.score} point${this.score !== 1 ? "s" : ""}!`,
-            {
-                align: "center",
-            }
-        );
+            // Set origin to center for proper alignment
+            text.setOrigin(0.5);
 
-        // Set origin to center for proper alignment
-        text.setOrigin(0.5);
+            this.add
+                .image(200, 125, "RetryButton")
+                .setInteractive({ cursor: "pointer" })
+                .on("pointerup", () => {
+                    this.retry();
+                });
 
-        this.add
-            .image(200, 125, "RetryButton")
-            .setInteractive({ cursor: "pointer" })
-            .on("pointerup", () => {
-                this.retry();
-            });
+            this.input.keyboard
+                .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+                .on("down", () => {
+                    this.retry();
+                });
 
-        this.input.keyboard
-            .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-            .on("down", () => {
-                this.retry();
-            });
+            this.input.keyboard
+                .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+                .on("down", () => {
+                    this.retry();
+                });
 
-        this.input.keyboard
-            .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
-            .on("down", () => {
-                this.retry();
-            });
+            const topLimit = 0; // Set the top limit for scrolling
 
-        const topLimit = 0; // Set the top limit for scrolling
+            // Enable vertical scrolling for the entire scene
+            this.input.on(
+                "wheel",
+                (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
+                    // Prevent the default behavior to avoid conflicts
+                    pointer.event.preventDefault();
 
-        // Enable vertical scrolling for the entire scene
-        this.input.on(
-            "wheel",
-            (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
-                // Prevent the default behavior to avoid conflicts
-                pointer.event.preventDefault();
-
-                // Adjust the scrolling speed as needed
-                this.cameras.main.scrollY = Phaser.Math.Clamp(
-                    this.cameras.main.scrollY + deltaY * 0.5,
-                    topLimit,
-                    Number.MAX_SAFE_INTEGER // Set a large positive value for the maximum scroll
-                );
-            }
-        );
+                    // Adjust the scrolling speed as needed
+                    this.cameras.main.scrollY = Phaser.Math.Clamp(
+                        this.cameras.main.scrollY + deltaY * 0.5,
+                        topLimit,
+                        Number.MAX_SAFE_INTEGER // Set a large positive value for the maximum scroll
+                    );
+                }
+            );
+        });
     }
 
     retry() {
@@ -94,16 +94,17 @@ export default class EndGameScene extends Phaser.Scene {
             .dom(50, 300)
             .createFromCache("charts")
             .setOrigin(0, 0);
-        get_data_from_tinybird(endpoints.top_10_url)
-            .then((r) => this.buildTopTen(charts, r))
-            .catch((e) => e.toString());
-        get_data_from_tinybird(endpoints.player_stats_url)
-            .then((r) => this.buildPlayerStats(charts, r))
-            .catch((e) => e.toString());
-
-        get_data_from_tinybird(endpoints.recent_player_stats_url)
-            .then((r) => this.buildLastPlayed(charts, r))
-            .catch((e) => e.toString());
+        return Promise.all([
+            get_data_from_tinybird(endpoints.top_10_url)
+                .then((r) => this.buildTopTen(charts, r))
+                .catch((e) => e.toString()),
+            get_data_from_tinybird(endpoints.player_stats_url)
+                .then((r) => this.buildPlayerStats(charts, r))
+                .catch((e) => e.toString()),
+            get_data_from_tinybird(endpoints.recent_player_stats_url)
+                .then((r) => this.buildLastPlayed(charts, r))
+                .catch((e) => e.toString()),
+        ]);
     }
 
     buildTopTen(charts, top10_result) {
