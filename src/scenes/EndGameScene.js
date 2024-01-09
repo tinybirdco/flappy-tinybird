@@ -57,32 +57,28 @@ export default class EndGameScene extends Phaser.Scene {
 
             const topLimit = 0; // Set the top limit for scrolling
 
-            // Enable vertical scrolling for the entire scene
-            this.input.on(
-                "wheel",
-                (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
-                    // Prevent the default behavior to avoid conflicts
-                    pointer.event.preventDefault();
-
-                    // Adjust the scrolling speed as needed
-                    this.cameras.main.scrollY = Phaser.Math.Clamp(
-                        this.cameras.main.scrollY + (deltaY * 0.5),
-                        topLimit,
-                        Number.MAX_SAFE_INTEGER // Set a large positive value for the maximum scroll
-                    );
-                }
-            );
-
-            // Enable vertical scrolling for the entire scene using touchscreen
-            this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
-                // Adjust the scrolling speed as needed
+            //Enable scrolling
+            const handleScroll = (deltaY) => {
                 this.cameras.main.scrollY = Phaser.Math.Clamp(
-                    this.cameras.main.scrollY - (dragY * 0.5),
+                    this.cameras.main.scrollY + (deltaY * 0.5),
                     topLimit,
-                    Number.MAX_SAFE_INTEGER // Set a large positive value for the maximum scroll
+                    Number.MAX_SAFE_INTEGER
                 );
+            };
+
+            // Mouse wheel scrolling
+            this.input.on("wheel", (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
+                pointer.event.preventDefault();
+                handleScroll(deltaY);
+            });
+
+            // Touch scrolling
+            this.input.on("pointermove", (pointer) => {
+                if (pointer.isDown) {
+                    const deltaY = pointer.velocity.y * 0.5;
+                    handleScroll(deltaY);
                 }
-            );
+            });
         });
     }
 
