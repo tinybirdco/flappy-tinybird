@@ -156,55 +156,6 @@ Explore the rest of this repository to see how the entire project fits together.
 
 ---
 
-# Run the game locally
-
-## Setup
-
-To run the game locally, you'll need to have Node.js and npm installed on your computer. Then, follow these steps:
-
-1. Set up your Tinybird account as described above.
-
-2. Clone this repository locally.
-```bash
-git clone https://github.com/tinybirdco/flappy-tinybird.git
-cd flappy-tinybird
-```
-
-3. Install dependencies.
-```bash
-npm install
-```
-
-4. Install and configure the Tinybird CLI.
-
-To start working with data projects as if they were software projects, First, install the Tinybird CLI in a virtual environment. You'll need python3 installed.  
-
-Check the [Tinybird CLI documentation](https://docs.tinybird.co/cli.html) for other installation options and troubleshooting tips.
-
-```bash
-cd tinybird
-python3 -mvenv .e
-. .e/bin/activate
-pip install tinybird-cli
-tb auth --interactive
-```
-
-Choose your region: 1 for `us-east`, 2 for `eu`. A new `.tinyb` file will be created.
-
-Go to [https://ui.us-east.tinybird.co/tokens](https://ui.us-east.tinybird.co/tokens) and copy the token with admin rights into the `.env` file.
-
-⚠️Warning! The Admin token - the one you copied following this guide - is your admin token. Don't share it or publish it in your application. You can manage your tokens via API or using the Auth Tokens section in the UI. You can find more detailed info at [Auth Tokens management](https://www.tinybird.co/docs/api-reference/token-api.html).
-
-5. Start the game!
-
-In the terminal, run the following command:
-
-```bash
-npm start
-```
-
-Then open your web browser and go to `http://localhost:3000`.
-
 ## Game flow
 
 The flow of the game is as follows:
