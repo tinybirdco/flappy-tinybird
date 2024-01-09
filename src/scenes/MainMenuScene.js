@@ -12,7 +12,7 @@ export default class MainMenuScene extends Phaser.Scene {
     submitForm(nameElement, errorElement) {
         const name = nameElement.value;
 
-        if (name === "") {
+        if (name === "" || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(name)) {
             errorElement.setAttribute("data-enabled", true);
         } else {
             this.scene.start("FlappyTinybirdScene", { name });
