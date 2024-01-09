@@ -130,7 +130,7 @@ In the last hour, if a player played 3 or more games, scored less than or equal 
 > 
 > Use the `countIf()` function to perform a count with a conditional.  
 > 
-> If you need extra help, the answer can be found in `/tinybird/pipes/api_personalization.pipe`.  
+> If you need extra help, the answer can be found in `/tinybird/endpoints/api_personalization.pipe`.  
 
 4. Once you have completed the query, publish the desired node as an API Endpoint.
 
@@ -144,7 +144,7 @@ A powerful way to optimize your queries in Tinybird is through [Materialized Vie
 
 Put simply, Materialized Views shift computational load from query time to ingestion time, so your endpoints stay blazing fast.
 
-Check out the guide linked above and refactor your queries using Materialized Views. If you need help, the answer can be found in `/tinybird/pipes/mat_player_stats.pipe`, `/tinybird/pipes/api_leaderboard_mv.pipe`, and `/tinybird/pipes/api_personalization_mv.pipe`
+Check out the guide linked above and refactor your queries using Materialized Views. If you need help, the answer can be found in `/tinybird/pipes/mat_player_stats.pipe`, `/tinybird/endpoints/api_leaderboard_mv.pipe`, and `/tinybird/endpoints/api_personalization_mv.pipe`
 
 > _Note_: Materialized Views are often used to improve performance by reducing the size of a Data Source by an order of magnitude. In this workshop, the volume of data may not be great enough to make a significant difference in performance. See a detailed example [here](https://www.tinybird.co/docs/guides/materialized-views.html#creating-a-materialized-view-in-the-tinybird-ui).
 
