@@ -32,7 +32,7 @@ const schema = {
         ]
     },
     name: {
-        type: 'person.firstName'
+        type: 'internet.email'
     },
     timestamp: {
         type: 'mockingbird.timestampNow'
