@@ -57,21 +57,29 @@ export default class EndGameScene extends Phaser.Scene {
 
             const topLimit = 0; // Set the top limit for scrolling
 
-            // Enable vertical scrolling for the entire scene
-            this.input.on(
-                "wheel",
-                (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
-                    // Prevent the default behavior to avoid conflicts
-                    pointer.event.preventDefault();
+            //Enable scrolling
+            const handleScroll = (deltaY) => {
+                this.cameras.main.scrollY = Phaser.Math.Clamp(
+                    this.cameras.main.scrollY + (deltaY * 0.5),
+                    topLimit,
+                    Number.MAX_SAFE_INTEGER
+                );
+            };
 
-                    // Adjust the scrolling speed as needed
-                    this.cameras.main.scrollY = Phaser.Math.Clamp(
-                        this.cameras.main.scrollY + deltaY * 0.5,
-                        topLimit,
-                        Number.MAX_SAFE_INTEGER // Set a large positive value for the maximum scroll
-                    );
+            // Mouse wheel scrolling
+            this.input.on("wheel", (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
+                pointer.event.preventDefault();
+                handleScroll(deltaY);
+            });
+
+            // Touch scrolling
+            this.input.on("pointermove", (pointer) => {
+                pointer.event.preventDefault();
+                if (pointer.isDown) {
+                    const deltaY = pointer.velocity.y * 0.5;
+                    handleScroll(-deltaY);
                 }
-            );
+            });
         });
     }
 
