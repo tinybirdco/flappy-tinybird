@@ -91,7 +91,7 @@ export default class EndGameScene extends Phaser.Scene {
             this.session.name
         );
         const charts = this.add
-            .dom(50, 300)
+            .dom(50, 200)
             .createFromCache("charts")
             .setOrigin(0, 0);
         return Promise.all([
