@@ -1,11 +1,6 @@
 import Phaser from "phaser";
 import { v4 as uuidv4 } from "uuid";
-import { addDataToDOM } from "../analytics/statBuilder";
-import {
-    get_data_from_tinybird,
-    send_death,
-    send_session_data,
-} from "../utils/tinybird";
+import { get_data_from_tinybird, send_death, send_session_data } from "../utils/tinybird";
 import { endpoints, TINYBIRD_READ_TOKEN } from "./../config";
 
 export default class FlappyTinybirdScene extends Phaser.Scene {

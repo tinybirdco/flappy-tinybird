@@ -1,4 +1,3 @@
-import { addDataToDOM } from "../analytics/statBuilder";
 import { get_data_from_tinybird, send_purchase } from "../utils/tinybird";
 import { endpoints } from "./../config";
 
