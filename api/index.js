@@ -28,7 +28,7 @@ app.post('/sendToKafka', async (req, res) => {
         await producer.send({
             topic,
             messages: [
-                { key: 'dev_jk', value: JSON.stringify(payload) },
+                { key: 'vercel_edge', value: JSON.stringify(payload) },
             ],
         });
 
