@@ -12,8 +12,8 @@
     ],
     "rewrites": [
         {
-          "src": "/api/sendToKafka",
-          "dest": "/api/sendToKafka.js"
+          "source": "/api/sendToKafka",
+          "destination": "/api/sendToKafka.js"
         }
       ]
   }
