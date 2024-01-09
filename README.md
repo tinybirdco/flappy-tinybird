@@ -42,9 +42,13 @@ Next, you will connect to Confluent Cloud to ingest data from an existing Kafka 
 2. You will be prompted to enter the following details:  
 
 _Connection name_: Enter a unique name for the Confluent Cloud connection in Tinybird (e.g. tb_confluent).  
+
 _Bootstrap Server_: ??  
+
 _Key_: ??  
+
 _Secret_: ??  
+
 _Decode Avro messages with Schema Registry_: Leave it unchecked, as this topic does not contain encoded Avro messages.  
 
 3. Once you have entered the details, click **Next** to create the connection between Tinybird and Confluent Cloud.
@@ -101,7 +105,7 @@ BOOM! You just went from an existing Kafka topic to a production-ready API Endpo
 
 Copy the URL from the sample usage section and paste it into a new tab to make an API request. Go back to Tinybird and check out the usage metrics (you may need to wait a second or refresh the page).
 
-> _Note_: This query was split into two parts to demonstrate how to use nodes to compose modular queries. You can decide if you’d like to use one or multiple nodes; the pipe is still executed as a single query.
+> _Note_: This query was split into two nodes to demonstrate the notebook-style UX of Pipes, designed to simplify and accelerate your development. You can decide if you’d like to use one or multiple nodes; the Pipe is still executed as a single query.
 
 ### Real-time personalization
 
@@ -116,17 +120,17 @@ In the last hour, if a player played 3 or more games, scored less than or equal 
 
 3. Here are some tips:
 
-All queries in the UI are free, so explore your data! Create Playgrounds (on the left navigation) to avoid cluttering your Workspace with Pipes.  
-
-Split your logic into multiple nodes and follow the 5 rules of fast queries.  
-
-Dynamically filter on a specific player with a query parameter.  
-
-Use the `uniq()` function to mimic a distinct count.  
-
-Use the `countIf()` function to perform a count with a conditional.  
-
-If you need extra help, the answer can be found in `/tinybird/pipes/api_personalization.pipe`.  
+> All queries in the UI are free, so explore your data! Create Playgrounds (on the left navigation) to avoid cluttering your Workspace with Pipes.  
+> 
+> Split your logic into multiple nodes and follow the [5 rules of fast queries](https://www.tinybird.co/docs/guides/best-practices-for-faster-sql.html#the-5-rules-of-fast-queries).  
+> 
+> Dynamically filter on a specific player with a [query parameter](https://www.tinybird.co/docs/query/query-parameters.html).  
+> 
+> Use the `uniq()` function to mimic a distinct count.  
+> 
+> Use the `countIf()` function to perform a count with a conditional.  
+> 
+> If you need extra help, the answer can be found in `/tinybird/pipes/api_personalization.pipe`.  
 
 4. Once you have completed the query, publish the desired node as an API Endpoint.
 
@@ -136,7 +140,9 @@ Nice work! You developed another use case that can be used to drive the monetiza
 
 Both Pipes query the raw data from the `confluent_events` Data Source. This is not a problem with a few thousand rows, but as your data scales up to millions or billions of rows, query performance will likely suffer.
 
-A powerful way to optimize your queries in Tinybird is through [Materialized Views](https://www.tinybird.co/docs/guides/materialized-views.html), which let you pre-aggregate and pre-filter large Data Sources incrementally, adding simple logic using SQL to produce a more relevant Data Source with significantly fewer rows. Put simply, Materialized Views shift computational load from query time to ingestion time, so your endpoints stay blazing fast.
+A powerful way to optimize your queries in Tinybird is through [Materialized Views](https://www.tinybird.co/docs/guides/materialized-views.html), which let you pre-aggregate and pre-filter large Data Sources incrementally, adding simple logic using SQL to produce a more relevant Data Source with significantly fewer rows.
+
+Put simply, Materialized Views shift computational load from query time to ingestion time, so your endpoints stay blazing fast.
 
 Check out the guide linked above and refactor your queries using Materialized Views. If you need help, the answer can be found in `/tinybird/pipes/mat_player_stats.pipe`, `/tinybird/pipes/api_leaderboard_mv.pipe`, and `/tinybird/pipes/api_personalization_mv.pipe`
 
@@ -145,6 +151,10 @@ Check out the guide linked above and refactor your queries using Materialized Vi
 ## Workshop wrap-up
 
 With only a few clicks, you connected to an existing Kafka topic and streamed data into Tinybird. And with just a few lines of SQL, you built user-facing analytics to improve the player experience and real-time personalization to drive revenue.
+
+Explore the rest of this repository to see how the entire project fits together. Happy flapping!
+
+---
 
 # Run the game locally
 
@@ -183,7 +193,7 @@ Choose your region: 1 for `us-east`, 2 for `eu`. A new `.tinyb` file will be cre
 
 Go to [https://ui.us-east.tinybird.co/tokens](https://ui.us-east.tinybird.co/tokens) and copy the token with admin rights into the `.env` file.
 
-⚠️Warning! The Admin token - the one you copied following this guide - is your admin token. Don't share it or publish it in your application. You can manage your tokens via API or using the Auth Tokens section in the UI. You can find more detailed info at [Auth Tokens management](https://www.tinybird.co/docs/api-reference/token-api.html)
+⚠️Warning! The Admin token - the one you copied following this guide - is your admin token. Don't share it or publish it in your application. You can manage your tokens via API or using the Auth Tokens section in the UI. You can find more detailed info at [Auth Tokens management](https://www.tinybird.co/docs/api-reference/token-api.html).
 
 5. Start the game!
 
@@ -194,6 +204,25 @@ npm start
 ```
 
 Then open your web browser and go to `http://localhost:3000`.
+
+## Game flow
+
+The flow of the game is as follows:
+1. A player begins a standard game.
+
+2. When the player loses, the game makes an API request to Tinybird to determine if the player should receive a personalized offer.
+
+3. If the player does not get an offer, they are directed to the standard end scene and can retry.
+
+4. If the player does get an offer, they are directed to the "offer" end scene and can accept the offer and make the game easier.
+
+5. When the player loses the "easier" game, they are directed to the standard end scene - they cannot receive multiple offers within a certain time range.
+
+![Alt text](public/GameFlow.png)
+
+*API request to determine whether or not a player receives a personalized offer.
+
+**For purposes of the workshop, the player must accept the offer.
 
 ### Credits
 
