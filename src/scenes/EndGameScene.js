@@ -66,10 +66,21 @@ export default class EndGameScene extends Phaser.Scene {
 
                     // Adjust the scrolling speed as needed
                     this.cameras.main.scrollY = Phaser.Math.Clamp(
-                        this.cameras.main.scrollY + deltaY * 0.5,
+                        this.cameras.main.scrollY + (deltaY * 0.5),
                         topLimit,
                         Number.MAX_SAFE_INTEGER // Set a large positive value for the maximum scroll
                     );
+                }
+            );
+
+            // Enable vertical scrolling for the entire scene using touchscreen
+            this.input.on("drag", (pointer, gameObject, dragX, dragY) => {
+                // Adjust the scrolling speed as needed
+                this.cameras.main.scrollY = Phaser.Math.Clamp(
+                    this.cameras.main.scrollY - (dragY * 0.5),
+                    topLimit,
+                    Number.MAX_SAFE_INTEGER // Set a large positive value for the maximum scroll
+                );
                 }
             );
         });
