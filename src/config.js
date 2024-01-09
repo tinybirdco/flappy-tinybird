@@ -43,7 +43,7 @@ export const endpoints = {
     player_stats_url: new URL(
         `https://${TINYBIRD_HOST}/v0/pipes/api_player_stats.json`
     ),
-    segmentation_url: new URL(
+    personalization_url: new URL(
         `https://${TINYBIRD_HOST}/v0/pipes/api_personalization.json`
     ),
 };
