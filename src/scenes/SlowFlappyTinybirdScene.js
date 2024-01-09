@@ -56,7 +56,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
                 this.bird.body.enable = true; // Enable physics when the timer starts
                 this.bird.angle = 0; // Set the bird's angle to 0 to start
                 this.timer = this.time.addEvent({
-                    delay: 2250,
+                    delay: 1250,
                     callback: this.addRowOfPipes,
                     callbackScope: this,
                     repeat: -1,
@@ -80,7 +80,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
     }
 
     update() {
-        this.background.tilePositionX += .5; // Updated this var 
+        this.background.tilePositionX += 1;
 
         if (this.timerStarted) {
             this.updateBird();
@@ -129,7 +129,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
         this.bird = this.physics.add.sprite(100, 245, "bird");
         this.bird.setOrigin(0, 0);
         this.physics.world.enable(this.bird);
-        this.bird.body.setGravityY(100); // Updated this var final 
+        this.bird.body.setGravityY(1000);
         this.bird.body.setSize(17, 12);
         this.bird.body.enable = false; // Disable physics initially
     }
@@ -156,12 +156,17 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
         const gap = Math.floor(Math.random() * 5) + 1;
 
         for (let i = 0; i < 10; i++) {
-            if (i !== gap && i !== gap + 1 && i !== gap + 2) {
+            // Adjust the gap size to make it bigger
+            if (i !== gap && i !== gap + 1 && i !== gap + 2 && i !== gap + 3 && i !== gap + 4) {
+                // Check if the current index is not part of the gap range
                 if (i === gap - 1) {
+                    // Create the pipe just before the gap
                     this.addPipe(400, i * 60, 0);
-                } else if (i === gap + 3) {
+                } else if (i === gap + 5) {
+                    // Create the pipe just after the gap
                     this.addPipe(400, i * 60, 1);
                 } else {
+                    // Create regular pipes within the range
                     this.addPipe(400, i * 60, 2);
                 }
             }
@@ -179,7 +184,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
         pipe.setScale(3);
         this.physics.world.enable(pipe);
         pipe.body.allowGravity = false;
-        pipe.body.setVelocityX(-100); // Updated this var final 
+        pipe.body.setVelocityX(-200);
         pipe.body.setSize(20, 20);
         pipe.setActive(true);
     }
