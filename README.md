@@ -15,7 +15,7 @@ This repository contains a clone of Flappy Bird. It was built using the Phaser 3
 
 ## Play the game!
 
-Test your skills by playing [Flappy Tinybird](https://flappy-tinybird-tinybird.vercel.app/)!
+Test your skills by playing [Flappy Tinybird](https://confluent-flappy.tinybird.app/)!
 
 The goal of the game is to maneuver the bird through a challenging array of pipes, avoiding any collisions. The bird propels itself forward automatically, and the player controls its flight by either pressing the space bar or clicking on the screen to flap its wings. If you collide with a pipe, the ground, or the sky, it's game over!
 
