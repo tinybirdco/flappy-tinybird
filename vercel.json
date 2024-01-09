@@ -10,7 +10,7 @@
         ]
       }
     ],
-    "routes": [
+    "rewrites": [
         {
           "src": "/api/sendToKafka",
           "dest": "/api/sendToKafka.js"
