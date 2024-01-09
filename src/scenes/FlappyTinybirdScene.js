@@ -102,11 +102,9 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         }
 
         if (
-            (this.bird.y + this.bird.height > this.canvas.height ||
-                this.bird.y + this.bird.height < 0) &&
-            !this.ended
+            this.bird.y + this.bird.height > this.canvas.height ||
+            this.bird.y + this.bird.height < 0
         ) {
-            this.ended = true;
             this.endGame();
         }
     }
@@ -122,6 +120,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     async endGame() {
+        if (this.ended) return;
+        this.ended = true;
         const data = {
             session: this.session,
             score: this.score,
