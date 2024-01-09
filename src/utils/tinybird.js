@@ -55,7 +55,7 @@ export async function sendToKafka(payload) {
     console.log('Sending data to Kafka:', payload);
 
     try {
-        const response = await fetch('/api/sendToKafka', {
+        const response = await fetch('/api/send-kafka', {
             method: "POST",
             body: JSON.stringify(payload),
             headers: {
