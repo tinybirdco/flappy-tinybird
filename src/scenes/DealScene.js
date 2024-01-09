@@ -35,7 +35,6 @@ export default class DealScene extends Phaser.Scene {
 
             // Set origin to center for proper alignment
             text.setOrigin(0.5);
-
             this.add
                 .image(200, 220, "OfferButton")
                 .setInteractive({ cursor: "pointer" })

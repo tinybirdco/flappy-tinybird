@@ -35,7 +35,6 @@ export default class EndGameScene extends Phaser.Scene {
 
             // Set origin to center for proper alignment
             text.setOrigin(0.5);
-
             this.add
                 .image(200, 135, "RetryButton")
                 .setInteractive({ cursor: "pointer" })
