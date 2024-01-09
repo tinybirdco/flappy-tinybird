@@ -41,4 +41,4 @@ app.post('/api/send-kafka', async (req, res) => {
     }
 });
 
-module.exports = app; // Export the app object
+export default app;
