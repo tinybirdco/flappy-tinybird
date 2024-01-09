@@ -44,6 +44,6 @@ export const endpoints = {
         `https://${TINYBIRD_HOST}/v0/pipes/api_player_stats.json`
     ),
     segmentation_url: new URL(
-        `https://${TINYBIRD_HOST}/v0/pipes/api_segmentation.json`
+        `https://${TINYBIRD_HOST}/v0/pipes/api_personalization.json`
     ),
 };

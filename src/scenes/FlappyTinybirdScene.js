@@ -128,7 +128,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         if (!this.offer) {
             const response = await fetch(
-                `https://api.us-east.tinybird.co/v0/pipes/api_segmentation.json?player_param=${this.session.name}`,
+                `https://api.us-east.tinybird.co/v0/pipes/api_personalization.json?player_param=${this.session.name}`,
                 {
                     method: "POST",
                     headers: {
