@@ -76,7 +76,7 @@ export default class EndGameScene extends Phaser.Scene {
             this.input.on("pointermove", (pointer) => {
                 if (pointer.isDown) {
                     const deltaY = pointer.velocity.y * 0.5;
-                    handleScroll(deltaY);
+                    handleScroll(-deltaY);
                 }
             });
         });
