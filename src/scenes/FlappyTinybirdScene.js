@@ -92,8 +92,6 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         if (this.timerStarted) {
             this.updateBird();
         }
-
-        this.physics.overlap(this.bird, this.pipes, () => this.endGame());
     }
 
     updateBird() {
@@ -103,7 +101,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         if (
             this.bird.y + this.bird.height > this.canvas.height ||
-            this.bird.y + this.bird.height < 0
+            this.bird.y + this.bird.height < 0 ||
+            this.physics.overlap(this.bird, this.pipes)
         ) {
             this.endGame();
         }
