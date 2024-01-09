@@ -28,7 +28,7 @@ export default class DealScene extends Phaser.Scene {
             const text = this.add.text(
                 this.cameras.main.width / 2,
                 100,
-                "Flappy is tired of dying :(\n\nPurchase this power-up to\nactivate easy mode!",
+                `${this.session.name},\n\nFlappy is tired of dying :(\n\nPurchase this power-up to\nactivate easy mode!`,
                 {
                     align: "center",
                 }
@@ -38,7 +38,7 @@ export default class DealScene extends Phaser.Scene {
             text.setOrigin(0.5);
 
             this.add
-                .image(200, 200, "OfferButton")
+                .image(200, 220, "OfferButton")
                 .setInteractive({ cursor: "pointer" })
                 .on("pointerup", () => {
                     this.buyPowerUp();

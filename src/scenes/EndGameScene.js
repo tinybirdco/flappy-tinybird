@@ -28,7 +28,7 @@ export default class EndGameScene extends Phaser.Scene {
             const text = this.add.text(
                 this.cameras.main.width / 2,
                 60,
-                `You scored ${this.score} point${this.score !== 1 ? "s" : ""}!`,
+                `${this.session.name},\n\nyou scored ${this.score} point${this.score !== 1 ? "s" : ""}!`,
                 {
                     align: "center",
                 }
@@ -38,7 +38,7 @@ export default class EndGameScene extends Phaser.Scene {
             text.setOrigin(0.5);
 
             this.add
-                .image(200, 125, "RetryButton")
+                .image(200, 135, "RetryButton")
                 .setInteractive({ cursor: "pointer" })
                 .on("pointerup", () => {
                     this.retry();
