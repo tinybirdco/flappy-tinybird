@@ -109,13 +109,12 @@ export default class EndGameScene extends Phaser.Scene {
 
     buildTopTen(charts, top10_result) {
         if (!this.scene.isActive()) return;
-
         console.log("Building TopTen");
         const leaderboard = charts.getChildByID("leaderboard");
 
         top10_result.data.forEach((entry, index) => {
-            const score = leaderboard.getChildByID(`tr${index + 1}-score`);
-            const name = leaderboard.getChildByID(`tr${index + 1}-name`);
+            const score = leaderboard.querySelector(`#tr${index + 1}-score`);
+            const name = leaderboard.querySelector(`#tr${index + 1}-name`);
             score.innerHTML = entry.total_score;
             name.innerHTML = entry.player_id;
         });
@@ -130,10 +129,10 @@ export default class EndGameScene extends Phaser.Scene {
         const playerStats = charts.getChildByID("playerStats");
 
         playerStats_result.data.forEach((entry, index) => {
-            const n_games = playerStats.getChildByID("n_games");
-            const total_score = playerStats.getChildByID("total_score");
-            const avg_score = playerStats.getChildByID("avg_score");
-            const max_score = playerStats.getChildByID("max_score");
+            const n_games = playerStats.querySelector("#n_games");
+            const total_score = playerStats.querySelector("#total_score");
+            const avg_score = playerStats.querySelector("#avg_score");
+            const max_score = playerStats.querySelector("#max_score");
 
             n_games.innerHTML = entry.n_games;
             total_score.innerHTML = entry.total_score;
@@ -151,8 +150,8 @@ export default class EndGameScene extends Phaser.Scene {
         const lastPlayed = charts.getChildByID("lastPlayed");
 
         lastPlayed_result.data.forEach((entry, index) => {
-            const time = lastPlayed.getChildByID(`tr${index + 1}-time`);
-            const score = lastPlayed.getChildByID(`tr${index + 1}-score`);
+            const time = lastPlayed.querySelector(`#tr${index + 1}-time`);
+            const score = lastPlayed.querySelector(`#tr${index + 1}-score`);
             time.innerHTML = entry.t;
             score.innerHTML = entry.total_score;
         });
