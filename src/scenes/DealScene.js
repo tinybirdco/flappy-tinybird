@@ -74,6 +74,7 @@ export default class DealScene extends Phaser.Scene {
 
             // Touch scrolling
             this.input.on("pointermove", (pointer) => {
+                pointer.event.preventDefault();
                 if (pointer.isDown) {
                     const deltaY = pointer.velocity.y * 0.5;
                     handleScroll(-deltaY);
