@@ -90,7 +90,10 @@ export default class EndGameScene extends Phaser.Scene {
             "player_param",
             this.session.name
         );
-        const charts = this.add.dom(200, 450).createFromCache("charts");
+        const charts = this.add
+            .dom(50, 300)
+            .createFromCache("charts")
+            .setOrigin(0, 0);
         get_data_from_tinybird(endpoints.top_10_url)
             .then((r) => this.buildTopTen(charts, r))
             .catch((e) => e.toString());
