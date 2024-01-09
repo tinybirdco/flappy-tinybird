@@ -14,9 +14,7 @@ export default class EndGameScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.html("leaderboard", "/chartLeaderboard.html");
-        this.load.html("playerStats", "/chartPlayerStats.html");
-        this.load.html("lastPlayed", "/chartLastPlayed.html");
+        this.load.html("charts", "/charts.html");
         this.load.image("RetryButton", "/RetryButton.png");
     }
 
@@ -26,52 +24,54 @@ export default class EndGameScene extends Phaser.Scene {
     }
 
     create() {
+        this.getDataFromTinybird().then(() => {
+            const text = this.add.text(
+                this.cameras.main.width / 2,
+                60,
+                `You scored ${this.score} point${this.score !== 1 ? "s" : ""}!`,
+                {
+                    align: "center",
+                }
+            );
 
-        this.getDataFromTinybird()
+            // Set origin to center for proper alignment
+            text.setOrigin(0.5);
 
-        const text = this.add.text(
-            this.cameras.main.width / 2,
-            60,
-            `You scored ${this.score} point${this.score !== 1 ? "s" : ""}!`,
-            {
-                align: 'center',
-            }
-        );
+            this.add
+                .image(200, 125, "RetryButton")
+                .setInteractive({ cursor: "pointer" })
+                .on("pointerup", () => {
+                    this.retry();
+                });
 
-        // Set origin to center for proper alignment
-        text.setOrigin(0.5);
+            this.input.keyboard
+                .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+                .on("down", () => {
+                    this.retry();
+                });
 
-        this.add
-            .image(200, 125, "RetryButton")
-            .setInteractive({ cursor: "pointer" })
-            .on("pointerup", () => {
-                this.retry();
-            });
+            this.input.keyboard
+                .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+                .on("down", () => {
+                    this.retry();
+                });
 
-        this.input.keyboard
-            .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-            .on("down", () => {
-                this.retry();
-            });
+            const topLimit = 0; // Set the top limit for scrolling
 
-        this.input.keyboard
-            .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
-            .on("down", () => {
-                this.retry();
-            });
+            // Enable vertical scrolling for the entire scene
+            this.input.on(
+                "wheel",
+                (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
+                    // Prevent the default behavior to avoid conflicts
+                    pointer.event.preventDefault();
 
-        const topLimit = 0;  // Set the top limit for scrolling
-
-        // Enable vertical scrolling for the entire scene
-        this.input.on('wheel', (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
-            // Prevent the default behavior to avoid conflicts
-            pointer.event.preventDefault();
-
-            // Adjust the scrolling speed as needed
-            this.cameras.main.scrollY = Phaser.Math.Clamp(
-                this.cameras.main.scrollY + deltaY * 0.5,
-                topLimit,
-                Number.MAX_SAFE_INTEGER  // Set a large positive value for the maximum scroll
+                    // Adjust the scrolling speed as needed
+                    this.cameras.main.scrollY = Phaser.Math.Clamp(
+                        this.cameras.main.scrollY + deltaY * 0.5,
+                        topLimit,
+                        Number.MAX_SAFE_INTEGER // Set a large positive value for the maximum scroll
+                    );
+                }
             );
         });
     }
@@ -90,36 +90,31 @@ export default class EndGameScene extends Phaser.Scene {
             "player_param",
             this.session.name
         );
-
-        get_data_from_tinybird(endpoints.top_10_url)
-            .then((r) => this.buildTopTen(r))
-            .then((data) => addDataToDOM(data, "top_10_leaderboard"))
-            .catch((e) => e.toString());
-
-        get_data_from_tinybird(endpoints.player_stats_url)
-            .then((r) => this.buildPlayerStats(r))
-            .then((data) => addDataToDOM(data, "player_stats"))
-            .catch((e) => e.toString());
-
-        get_data_from_tinybird(endpoints.recent_player_stats_url)
-            .then((r) => this.buildLastPlayed(r))
-            .then((data) => addDataToDOM(data, "recent_player_stats"))
-            .catch((e) => e.toString());
+        const charts = this.add
+            .dom(50, 300)
+            .createFromCache("charts")
+            .setOrigin(0, 0);
+        return Promise.all([
+            get_data_from_tinybird(endpoints.top_10_url)
+                .then((r) => this.buildTopTen(charts, r))
+                .catch((e) => e.toString()),
+            get_data_from_tinybird(endpoints.player_stats_url)
+                .then((r) => this.buildPlayerStats(charts, r))
+                .catch((e) => e.toString()),
+            get_data_from_tinybird(endpoints.recent_player_stats_url)
+                .then((r) => this.buildLastPlayed(charts, r))
+                .catch((e) => e.toString()),
+        ]);
     }
 
-
-    buildTopTen(top10_result) {
+    buildTopTen(charts, top10_result) {
         if (!this.scene.isActive()) return;
-
         console.log("Building TopTen");
-
-        const leaderboard = this.add
-            .dom(200, 450)
-            .createFromCache("leaderboard");
+        const leaderboard = charts.getChildByID("leaderboard");
 
         top10_result.data.forEach((entry, index) => {
-            const score = leaderboard.getChildByID(`tr${index + 1}-score`);
-            const name = leaderboard.getChildByID(`tr${index + 1}-name`);
+            const score = leaderboard.querySelector(`#tr${index + 1}-score`);
+            const name = leaderboard.querySelector(`#tr${index + 1}-name`);
             score.innerHTML = entry.total_score;
             name.innerHTML = entry.player_id;
         });
@@ -127,42 +122,36 @@ export default class EndGameScene extends Phaser.Scene {
         return top10_result;
     }
 
-    buildPlayerStats(playerStats_result) {
+    buildPlayerStats(charts, playerStats_result) {
         if (!this.scene.isActive()) return;
 
         console.log("Building PlayerStats");
-
-        const playerStats = this.add
-            .dom(200, 710)
-            .createFromCache("playerStats");
+        const playerStats = charts.getChildByID("playerStats");
 
         playerStats_result.data.forEach((entry, index) => {
-            const n_games = playerStats.getChildByID('n_games');
-            const total_score = playerStats.getChildByID('total_score');
-            const avg_score = playerStats.getChildByID('avg_score');
-            const seconds_played = playerStats.getChildByID('seconds_played');
+            const n_games = playerStats.querySelector("#n_games");
+            const total_score = playerStats.querySelector("#total_score");
+            const avg_score = playerStats.querySelector("#avg_score");
+            const max_score = playerStats.querySelector("#max_score");
 
             n_games.innerHTML = entry.n_games;
             total_score.innerHTML = entry.total_score;
             avg_score.innerHTML = entry.avg_score;
-            seconds_played.innerHTML = entry.seconds_played;
+            max_score.innerHTML = entry.max_score;
         });
 
         return playerStats_result;
     }
 
-    buildLastPlayed(lastPlayed_result) {
+    buildLastPlayed(charts, lastPlayed_result) {
         if (!this.scene.isActive()) return;
 
         console.log("Building LastStats");
-
-        const lastPlayed = this.add
-            .dom(200, 960)
-            .createFromCache("lastPlayed");
+        const lastPlayed = charts.getChildByID("lastPlayed");
 
         lastPlayed_result.data.forEach((entry, index) => {
-            const time = lastPlayed.getChildByID(`tr${index + 1}-time`);
-            const score = lastPlayed.getChildByID(`tr${index + 1}-score`);
+            const time = lastPlayed.querySelector(`#tr${index + 1}-time`);
+            const score = lastPlayed.querySelector(`#tr${index + 1}-score`);
             time.innerHTML = entry.t;
             score.innerHTML = entry.total_score;
         });

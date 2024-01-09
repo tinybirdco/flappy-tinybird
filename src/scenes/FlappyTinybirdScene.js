@@ -1,7 +1,11 @@
 import Phaser from "phaser";
 import { v4 as uuidv4 } from "uuid";
 import { addDataToDOM } from "../analytics/statBuilder";
-import { get_data_from_tinybird, send_death, send_session_data } from "../utils/tinybird";
+import {
+    get_data_from_tinybird,
+    send_death,
+    send_session_data,
+} from "../utils/tinybird";
 import { endpoints, TINYBIRD_READ_TOKEN } from "./../config";
 
 export default class FlappyTinybirdScene extends Phaser.Scene {
@@ -18,7 +22,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.score = 0;
         this.session.name = player.name;
         this.session.id = uuidv4();
-        this.gameOver = false;
+        this.offer = null;
+        this.ended = false;
     }
 
     preload() {
@@ -32,7 +37,6 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     create() {
-
         this.background = this.add
             .tileSprite(0, 0, 400, 560, "bg")
             .setOrigin(0, 0);
@@ -66,7 +70,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
                 });
                 this.timerStarted = true;
             }
-        }
+        };
 
         // Start the timer when the player hits space or enter or clicks
         this.input.keyboard
@@ -79,8 +83,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         this.input.on("pointerdown", (pointer) => {
             startTimer();
-        }); 
-        
+        });
     }
 
     update() {
@@ -89,23 +92,20 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         if (this.timerStarted) {
             this.updateBird();
         }
-
-        this.physics.overlap(this.bird, this.pipes, () => this.endGame());
     }
 
     updateBird() {
-        
         if (this.bird.angle < 30) {
             this.bird.angle += 2;
         }
 
         if (
             this.bird.y + this.bird.height > this.canvas.height ||
-            this.bird.y + this.bird.height < 0
+            this.bird.y + this.bird.height < 0 ||
+            this.physics.overlap(this.bird, this.pipes)
         ) {
             this.endGame();
         }
-
     }
 
     jump() {
@@ -119,33 +119,34 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     async endGame() {
-        if (this.gameOver) {
-            return; 
-        }
-    
-        this.gameOver = true; 
-    
+        if (this.ended) return;
+        this.ended = true;
         const data = {
             session: this.session,
             score: this.score,
         };
-        
+
         send_death(this.session);
-    
-        const response = await fetch(`https://api.us-east.tinybird.co/v0/pipes/api_segmentation.json?player_param=${this.session.name}`, {
-            method: 'POST',
-            headers: {
-                Authorization: `Bearer ${TINYBIRD_READ_TOKEN}`,
-            },
-            body: JSON.stringify(data),
-        });
-    
-        const apiResponse = await response.json();
-    
-        if (apiResponse.data[0].offer == 1) {
+
+        if (this.offer === null) {
+            const response = await fetch(
+                `https://api.us-east.tinybird.co/v0/pipes/api_personalization.json?player_param=${this.session.name}`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${TINYBIRD_READ_TOKEN}`,
+                    },
+                    body: JSON.stringify(data),
+                }
+            );
+
+            const apiResponse = await response.json();
+            this.offer = apiResponse.data?.[0].offer || 0;
+        }
+
+        if (this.offer == 1) {
             this.scene.start("DealScene", data);
         } else {
-            console.log(apiResponse);
             this.scene.start("EndGameScene", data);
         }
     }
