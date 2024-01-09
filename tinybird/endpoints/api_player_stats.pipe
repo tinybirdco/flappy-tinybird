@@ -1,0 +1,42 @@
+DESCRIPTION >
+	stats per game per email
+
+
+TOKEN "player_stats_endpoint_read_4027" READ
+
+TOKEN "app_read_token" READ
+
+NODE game_scores
+SQL >
+
+    %
+    SELECT name AS player_id, session_id, count() AS score
+    FROM confluent_events
+    WHERE
+        type = 'score'
+        AND name
+        = {{
+            String(
+                player_param,
+                'dm@test.5',
+                description="Player to filter on",
+                required=True,
+            )
+        }}
+    GROUP BY player_id, session_id
+
+
+
+NODE endpoint
+SQL >
+
+    SELECT
+        player_id,
+        uniq(session_id) AS n_games,
+        sum(score) AS total_score,
+        round(total_score / n_games, 2) AS avg_score,
+        max(score) AS max_score
+    FROM game_scores
+    GROUP BY player_id
+
+
