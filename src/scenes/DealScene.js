@@ -136,12 +136,12 @@ export default class DealScene extends Phaser.Scene {
             const n_games = playerStats.getChildByID("n_games");
             const total_score = playerStats.getChildByID("total_score");
             const avg_score = playerStats.getChildByID("avg_score");
-            const seconds_played = playerStats.getChildByID("seconds_played");
+            const max_score = playerStats.getChildByID("max_score");
 
             n_games.innerHTML = entry.n_games;
             total_score.innerHTML = entry.total_score;
             avg_score.innerHTML = entry.avg_score;
-            seconds_played.innerHTML = entry.seconds_played;
+            max_score.innerHTML = entry.max_score;
         });
 
         return playerStats_result;
