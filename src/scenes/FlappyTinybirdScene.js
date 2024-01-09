@@ -22,7 +22,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.score = 0;
         this.session.name = player.name;
         this.session.id = uuidv4();
-        this.offer = 0;
+        this.offer = null;
+        this.ended = false;
     }
 
     preload() {
@@ -101,9 +102,11 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         }
 
         if (
-            this.bird.y + this.bird.height > this.canvas.height ||
-            this.bird.y + this.bird.height < 0
+            (this.bird.y + this.bird.height > this.canvas.height ||
+                this.bird.y + this.bird.height < 0) &&
+            !this.ended
         ) {
+            this.ended = true;
             this.endGame();
         }
     }
@@ -126,7 +129,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         send_death(this.session);
 
-        if (!this.offer) {
+        if (this.offer === null) {
             const response = await fetch(
                 `https://api.us-east.tinybird.co/v0/pipes/api_personalization.json?player_param=${this.session.name}`,
                 {
