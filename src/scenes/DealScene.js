@@ -54,10 +54,10 @@ export default class DealScene extends Phaser.Scene {
             };
 
             // Mouse wheel scrolling
-            this.input.on("wheel", (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
-                pointer.event.preventDefault();
-                handleScroll(deltaY);
-            });
+            window.addEventListener("wheel", (event) => {
+                event.preventDefault();
+                handleScroll(event.deltaY);
+            }, { passive: false });
 
             // Touch scrolling
             this.input.on("pointermove", (pointer) => {
