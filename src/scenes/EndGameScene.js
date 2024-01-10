@@ -35,6 +35,7 @@ export default class EndGameScene extends Phaser.Scene {
 
             // Set origin to center for proper alignment
             text.setOrigin(0.5);
+
             this.add
                 .image(200, 135, "RetryButton")
                 .setInteractive({ cursor: "pointer" })
@@ -54,19 +55,17 @@ export default class EndGameScene extends Phaser.Scene {
             };
 
             // Mouse wheel scrolling
-            this.input.on("wheel", (pointer, currentlyOver, deltaX, deltaY, deltaZ) => {
-                pointer.event.preventDefault();
-                handleScroll(deltaY);
-            });
+            window.addEventListener("wheel", (event) => {
+                event.preventDefault();
+                handleScroll(event.deltaY);
+            }, { passive: false });
 
             // Touch scrolling
-            this.input.on("pointermove", (pointer) => {
-                pointer.event.preventDefault();
-                if (pointer.isDown) {
-                    const deltaY = pointer.velocity.y * 0.5;
-                    handleScroll(-deltaY);
-                }
-            });
+            window.addEventListener("touchmove", (event) => {
+                event.preventDefault();
+                const deltaY = event.touches[0].clientY - event.touches[1].clientY;
+                handleScroll(deltaY);
+            }, { passive: false });
         });
     }
 
