@@ -16,6 +16,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
         this.score = 0;
         this.session.name = player.name;
         this.session.id = uuidv4();
+        this.ended = false;
     }
 
     preload() {
@@ -114,6 +115,8 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
     }
 
     async endGame() {
+        if (this.ended) return;
+        this.ended = true;
         const data = {
             session: this.session,
             score: this.score,
