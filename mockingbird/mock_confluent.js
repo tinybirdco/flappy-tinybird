@@ -34,7 +34,18 @@ const schema = {
         ]
     },
     name: {
-        type: 'internet.email'
+        type: 'mockingbird.pick',
+        params: [
+            {
+                values: [
+                    'dummy_1@tinybird.co',
+                    'dummy_2@tinybird.co',
+                    'dummy_3@tinybird.co',
+                    'dummy_4@tinybird.co',
+                    'dummy_5@tinybird.co',
+                ]
+            }
+        ]
     },
     timestamp: {
         type: 'mockingbird.timestampNow'
