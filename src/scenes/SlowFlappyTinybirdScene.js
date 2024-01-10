@@ -119,9 +119,24 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
             score: this.score,
         };
 
+        // Display "GAME OVER" text
+        const gameOverText = this.add.text(
+            this.canvas.width / 2,
+            this.canvas.height / 2,
+            'GAME OVER',
+            {
+                font: '40px',
+                color: '#ff0000',
+                align: 'center'
+            }
+        );
+        gameOverText.setOrigin(0.5);
+
         send_death(this.session);
 
-        this.scene.start("EndGameScene", data);
+        setTimeout(() => {
+            this.scene.start("EndGameScene", data);
+        }, 700);
 
     }
 

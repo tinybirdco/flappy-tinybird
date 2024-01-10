@@ -121,6 +121,19 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
             score: this.score,
         };
 
+        // Display "GAME OVER" text
+        const gameOverText = this.add.text(
+            this.canvas.width / 2,
+            this.canvas.height / 2,
+            'GAME OVER',
+            {
+                font: '40px',
+                color: '#ff0000',
+                align: 'center'
+            }
+        );
+        gameOverText.setOrigin(0.5);
+
         send_death(this.session);
 
         if (this.offer === null) {
@@ -140,9 +153,14 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         }
 
         if (this.offer == 1) {
-            this.scene.start("DealScene", data);
+            // Using setTimeout to add a delay before starting the new scene
+            setTimeout(() => {
+                this.scene.start("DealScene", data);
+            }, 700);
         } else {
-            this.scene.start("EndGameScene", data);
+            setTimeout(() => {
+                this.scene.start("EndGameScene", data);
+            }, 700);
         }
     }
 
