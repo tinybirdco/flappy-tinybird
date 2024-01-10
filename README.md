@@ -64,6 +64,9 @@ _Decode Avro messages with Schema Registry_: Leave it unchecked, as this topic d
   `type` LowCardinality(String),
   `timestamp` DateTime64(3)
   ```
+
+> _Note_: When modifying the data types, you may get an alert that 'Some rows could end up in quarantine'. You can safely disregard it if you are certain about your changes.
+
 8. Click on **Advanced Settings**, **Sorting Key** and select `name`.
 
 9. Once you have adjusted the schema, rename the Data Source to `confluent_events` and click **Create Data Source**.
@@ -72,7 +75,7 @@ Tinybird will begin consuming messages from the Kafka topic and loading them int
 
 ## Build your API Endpoints
 
-Now that data from Confluent is flowing into Tinybird, the next step is to developer over that data using SQL and publish API Endpoints. You do that in Pipes.
+Now that data from Confluent is flowing into Tinybird, the next step is to develop over that data using SQL and publish API Endpoints. You do that in Pipes.
 
 ### User-facing analytics
 
@@ -83,7 +86,7 @@ Click the **+** icon next to the Data Project section on the left navigation and
 
 2. In the first node (SQL editor), copy and paste this query:
 ```
-SELECT name, session_id FROM confluent_events WHERE type = 'score'
+SELECT name AS player_id, session_id FROM confluent_events WHERE type = 'score'
 ```
 
 3. Run the query and rename the node to `filter_data`.
