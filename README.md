@@ -41,15 +41,14 @@ Next, you will connect to Confluent Cloud to ingest data from an existing Kafka 
 
 2. You will be prompted to enter the following details:  
 
-_Connection name_: Enter a unique name for the Confluent Cloud connection in Tinybird (e.g. tb_confluent).  
+| Field | Value |
+| --- | --- |
+| _Connection name_ | Enter a unique name for the Confluent Cloud connection in Tinybird (e.g. tb_confluent). |
+| _Bootstrap Server_ | {Instructor will share} |
+| _Key_ | {Instructor will share} |
+| _Secret_ | {Instructor will share} |
+| _Decode Avro messages with Schema Registry_ | Leave it unchecked, as this topic does not contain encoded Avro messages. |
 
-_Bootstrap Server_: ??  
-
-_Key_: ??  
-
-_Secret_: ??  
-
-_Decode Avro messages with Schema Registry_: Leave it unchecked, as this topic does not contain encoded Avro messages.  
 
 3. Once you have entered the details, click **Next** to create the connection between Tinybird and Confluent Cloud.
 
