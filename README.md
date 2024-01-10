@@ -61,7 +61,7 @@ Next, you will connect to Confluent Cloud to ingest data from an existing Kafka 
 8. Tinybird will consume a sample of messages from the topic and display the schema. Click **...** in the column headers to adjust the schema as follows:
   ```
   `type` LowCardinality(String),
-  `timestamp` DateTime64(3)
+  `timestamp` DateTime64
   ```
 
 > _Note_: When modifying the data types, you may get an alert that 'Some rows could end up in quarantine'. You can safely disregard it if you are certain about your changes.
@@ -94,6 +94,7 @@ SELECT name AS player_id, session_id FROM confluent_events WHERE type = 'score'
 ```
 SELECT player_id, session_id, count() AS score
 FROM filter_data
+WHERE player_id like '%confluent%'  -- filter on Confluent players
 GROUP BY player_id, session_id
 ORDER BY score DESC
 LIMIT 10
