@@ -94,6 +94,7 @@ SELECT name AS player_id, session_id FROM confluent_events WHERE type = 'score'
 ```
 SELECT player_id, session_id, count() AS score
 FROM filter_data
+WHERE player_id like '%confluent%'  -- filter on Confluent players
 GROUP BY player_id, session_id
 ORDER BY score DESC
 LIMIT 10
