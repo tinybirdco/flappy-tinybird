@@ -1,30 +1,10 @@
 @tailwind base;
 
-.analytics table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.analytics table,
-.analytics th,
-.analytics td {
-    border: 1px solid black;
-    text-align: center;
-    padding: 10px;
-}
-
-.analytics th {
-    background-color: #f2f2f2;
-}
-
-.analytics tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-
-.analytics tr:nth-child(odd) {
-    background-color: #ffffff;
-}
-
-.analytics tr:hover {
-    background-color: #ddd;
+body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #25283d
 }
