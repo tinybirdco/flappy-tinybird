@@ -59,10 +59,18 @@ export default class DealScene extends Phaser.Scene {
                 handleScroll(event.deltaY);
             }, { passive: false });
 
+            // Enable scrolling
+            let touchStartY = 0;
+
+            // Touch start
+            window.addEventListener("touchstart", (event) => {
+                touchStartY = event.touches[0].clientY;
+            }, { passive: false });
+
             // Touch scrolling
             window.addEventListener("touchmove", (event) => {
                 event.preventDefault();
-                const deltaY = event.touches[0].clientY - event.touches[1].clientY;
+                const deltaY = event.touches[0].clientY - touchStartY;
                 handleScroll(deltaY);
             }, { passive: false });
         });
