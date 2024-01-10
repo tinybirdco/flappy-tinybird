@@ -1,12 +1,7 @@
 DESCRIPTION >
 	Top scores across all emails
 
-
-TOKEN "global_leaderboard_endpoint_read_1162" READ
-
 TOKEN "app_read_token" READ
-
-TOKEN "ops_dashboard_token" READ
 
 NODE endpoint
 SQL >

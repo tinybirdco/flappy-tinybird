@@ -1,5 +1,3 @@
-TOKEN "ops_stats_endpoint_read_4392" READ
-
 TOKEN "ops_dashboard_token" READ
 
 NODE endpoint

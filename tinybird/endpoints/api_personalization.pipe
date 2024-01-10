@@ -1,5 +1,3 @@
-TOKEN "api_segmentation_endpoint_read_9861" READ
-
 TOKEN "app_read_token" READ
 
 NODE stats_by_player

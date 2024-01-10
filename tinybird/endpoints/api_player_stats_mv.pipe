@@ -1,7 +1,5 @@
 TOKEN "app_read_token" READ
 
-TOKEN "api_player_stats_from_mv_endpoint_read_2623" READ
-
 NODE agg
 SQL >
 

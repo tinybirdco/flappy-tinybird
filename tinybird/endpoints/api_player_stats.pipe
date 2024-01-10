@@ -1,9 +1,6 @@
 DESCRIPTION >
 	stats per game per email
 
-
-TOKEN "player_stats_endpoint_read_4027" READ
-
 TOKEN "app_read_token" READ
 
 NODE game_scores

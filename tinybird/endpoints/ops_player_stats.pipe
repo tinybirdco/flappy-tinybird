@@ -1,7 +1,5 @@
 TOKEN "ops_dashboard_token" READ
 
-TOKEN "ops_player_stats_endpoint_read_7353" READ
-
 NODE agg
 SQL >
 

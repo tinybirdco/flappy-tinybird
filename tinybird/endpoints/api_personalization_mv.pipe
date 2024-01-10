@@ -1,7 +1,5 @@
 TOKEN "app_read_token" READ
 
-TOKEN "api_segmentation_from_mv_endpoint_read_7528" READ
-
 NODE agg
 SQL >
 

@@ -1,7 +1,5 @@
 TOKEN "app_read_token" READ
 
-TOKEN "api_last_played_games_from_mv_endpoint_read_9463" READ
-
 NODE endpoint
 SQL >
 

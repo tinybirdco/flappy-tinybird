@@ -1,7 +1,5 @@
 TOKEN "ops_dashboard_token" READ
 
-TOKEN "ops_trend_endpoint_read_0253" READ
-
 NODE endpoint
 SQL >
 

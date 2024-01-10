@@ -1,9 +1,5 @@
 TOKEN "app_read_token" READ
 
-TOKEN "api_leaderboard_from_mv_endpoint_read_8071" READ
-
-TOKEN "ops_dashboard_token" READ
-
 NODE endpoint
 SQL >
 
