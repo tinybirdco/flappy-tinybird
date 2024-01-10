@@ -54,11 +54,11 @@ Next, you will connect to Confluent Cloud to ingest data from an existing Kafka 
 
 4. You will see a list of the existing topics. Select `demo_flappy`.
 
-5. Tinybird will create a Group ID that specifies the name of the consumer group this Kafka consumer belongs to. You can customize the Group ID, but ensure that it has the prefix `demo_flappy` to gain read permissions to the topic. Click **Next**.
+5. Tinybird will create a default Group ID that specifies the name of the consumer group this Kafka consumer belongs to. **To ensure uniqueness, use `demo_flappy_{your name}`**. It must have the prefix `demo_flappy` to gain read permissions to the topic. Click **Next**.
 
-6. Once you have chosen a topic, you can select the starting offset to consume from. Choose **Earliest** to consume all messages from the beginning of the topic. Click **Next**.
+7. Once you have chosen a topic, you can select the starting offset to consume from. Choose **Earliest** to consume all messages from the beginning of the topic. Click **Next**.
 
-7. Tinybird will consume a sample of messages from the topic and display the schema. Click **...** in the column headers to adjust the schema as follows:
+8. Tinybird will consume a sample of messages from the topic and display the schema. Click **...** in the column headers to adjust the schema as follows:
   ```
   `type` LowCardinality(String),
   `timestamp` DateTime64(3)
