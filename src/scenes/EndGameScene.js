@@ -81,11 +81,6 @@ export default class EndGameScene extends Phaser.Scene {
             "player_param",
             this.session.name
         );
-
-        endpoints.top_10_url.searchParams.append(
-            "session_param",
-            this.session.id
-        );
         
         endpoints.player_stats_url.searchParams.append(
             "player_param",
