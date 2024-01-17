@@ -21,14 +21,17 @@ export default class MainMenuScene extends Phaser.Scene {
 
     create() {
 
-        const userForm = this.add.dom(140, 175).createFromCache("userForm");
+        const centerX = this.cameras.main.width / 2;
+        const centerY = this.cameras.main.height / 2;
+        
+        const userForm = this.add.dom(centerX, centerY - 100).createFromCache("userForm");
         const nameElement = userForm.getChildByID("name");
         const errorElement = userForm.getChildByID("error");
 
         this.add.tileSprite(0, 0, 400, 560, "bg").setOrigin(0, 0);
 
         this.add
-            .image(200, 290, "PlayButton")
+            .image(centerX, centerY, "PlayButton")
             .setInteractive({ cursor: "pointer" })
             .on("pointerup", () => {
                 this.submitForm(nameElement, errorElement);
