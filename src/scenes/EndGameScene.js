@@ -77,6 +77,16 @@ export default class EndGameScene extends Phaser.Scene {
     }
 
     getDataFromTinybird() {
+        endpoints.top_10_url.searchParams.append(
+            "player_param",
+            this.session.name
+        );
+
+        endpoints.top_10_url.searchParams.append(
+            "session_param",
+            this.session.id
+        );
+        
         endpoints.player_stats_url.searchParams.append(
             "player_param",
             this.session.name
@@ -112,6 +122,15 @@ export default class EndGameScene extends Phaser.Scene {
             const score = leaderboard.querySelector(`#tr${index + 1}-score`);
             const name = leaderboard.querySelector(`#tr${index + 1}-name`);
             const rank = leaderboard.querySelector(`#tr${index + 1}-rank`);
+            
+            // Check if the current row's player_id matches this.session.name
+            if (entry.player_id === this.session.name) {
+                // Set font style to bold for the matched row
+                name.style.fontWeight = 'bold';
+                score.style.fontWeight = 'bold';
+                rank.style.fontWeight = 'bold';
+            }
+
             score.innerHTML = entry.total_score;
             name.innerHTML = entry.player_id;
             rank.innerHTML = entry.rank;
