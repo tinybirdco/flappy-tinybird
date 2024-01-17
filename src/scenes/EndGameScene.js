@@ -111,8 +111,10 @@ export default class EndGameScene extends Phaser.Scene {
         top10_result.data.forEach((entry, index) => {
             const score = leaderboard.querySelector(`#tr${index + 1}-score`);
             const name = leaderboard.querySelector(`#tr${index + 1}-name`);
+            const rank = leaderboard.querySelector(`#tr${index + 1}-rank`);
             score.innerHTML = entry.total_score;
             name.innerHTML = entry.player_id;
+            rank.innerHTML = entry.rank;
         });
 
         return top10_result;
