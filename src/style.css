@@ -8,3 +8,10 @@ body {
     min-height: 100vh;
     background-color: #25283d
 }
+
+.truncate {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
