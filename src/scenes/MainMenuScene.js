@@ -32,7 +32,7 @@ export default class MainMenuScene extends Phaser.Scene {
         this.add.tileSprite(0, 0, 400, 560, "bg").setOrigin(0, 0);
 
         this.add
-            .image(centerX - 20, centerY + 230, "Logo").setScale(0.025)
+            .image(centerX, centerY + 230, "Logo").setScale(0.025)
             .setInteractive({ cursor: "pointer" })
             .on("pointerup", () => {
                 window.open('https://www.tinybird.co/', '_blank');
