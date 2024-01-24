@@ -38,7 +38,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         this.scoreText = this.add
             .text(20, 20, "0", {
-                font: "30px",
+                fontFamily: 'Pixel Operator',
+                fontSize: 30,
             })
             .setDepth(1);
 
@@ -127,7 +128,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
             this.canvas.height / 2,
             'GAME OVER',
             {
-                font: '40px',
+                fontFamily: 'Pixel Operator',
+                fontSize: 40,
                 color: '#ff0000',
                 align: 'center'
             }

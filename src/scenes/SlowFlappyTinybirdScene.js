@@ -128,7 +128,8 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
             this.canvas.height / 2,
             'GAME OVER',
             {
-                font: '40px',
+                fontFamily: 'Pixel Operator',
+                fontSize: 40,
                 color: '#ff0000',
                 align: 'center'
             }
