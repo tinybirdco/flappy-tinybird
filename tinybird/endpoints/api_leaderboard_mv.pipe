@@ -1,12 +1,75 @@
+DESCRIPTION >
+	Returns a leaderboard with the top scores globally, in addition to each player's last game.
+
+
 TOKEN "app_read_token" READ
 
-NODE endpoint
+NODE rank_games
+DESCRIPTION >
+    Select from the MV to rank each game by total score.
+
 SQL >
 
-    SELECT player_id, session_id, countMerge(scores) AS total_score
+    SELECT
+        ROW_NUMBER() OVER (ORDER BY total_score DESC, t) AS rank,
+        player_id,
+        session_id,
+        countMerge(scores) AS total_score,
+        maxMerge(game_ts) AS t
     FROM mv_player_stats
+    WHERE player_id not like 'dummy%'
     GROUP BY player_id, session_id
     ORDER BY total_score DESC
-    LIMIT 10
+
+
+
+NODE last_game
+DESCRIPTION >
+    Find a given player's latest game.
+
+SQL >
+
+    %
+    SELECT
+        argMax(rank, t) AS rank,
+        player_id,
+        argMax(session_id, t) AS session_id,
+        argMax(total_score, t) AS total_score
+    FROM rank_games
+    WHERE
+        player_id = {{ String(player_param, 'dm@test.1', description="Player to filter on", required=True) }}
+    GROUP BY player_id
+
+
+
+NODE endpoint
+DESCRIPTION >
+    Select the top 9 games (excluding the player's most recent game), then union with the player's most recent game to return a personalized leaderboard.
+
+SQL >
+
+    SELECT *
+    FROM
+        (
+            SELECT rank, player_id, session_id, total_score
+            FROM rank_games
+            WHERE
+                (player_id, session_id)
+                NOT IN (SELECT player_id, session_id FROM last_game)
+            LIMIT 9
+
+            UNION ALL
+
+            SELECT rank, player_id, session_id, total_score
+            FROM last_game
+        )
+    ORDER BY rank
+
+
+
+NODE api_leaderboard_mv_3
+SQL >
+
+    SELECT * FROM rank_games WHERE total_score = 5 ORDER BY rank
 
 

@@ -1,16 +1,64 @@
 DESCRIPTION >
 	Top scores across all emails
 
+
 TOKEN "app_read_token" READ
+
+NODE rank_games
+SQL >
+
+    SELECT
+        ROW_NUMBER() OVER (ORDER BY total_score DESC, t) AS rank,
+        name AS player_id,
+        session_id,
+        count() AS total_score,
+        max(timestamp) AS t
+    FROM confluent_events
+    WHERE type = 'score' AND name not like 'dummy%'
+    GROUP BY player_id, session_id
+
+
+
+NODE last_game
+SQL >
+
+    %
+    SELECT
+        argMax(rank, t) AS rank,
+        player_id,
+        argMax(session_id, t) AS session_id,
+        argMax(total_score, t) AS total_score
+    FROM rank_games
+    WHERE
+        player_id
+        = {{
+            String(
+                player_param,
+                'dm@test.1',
+                description="Player to filter on",
+                required=True,
+            )
+        }}
+    GROUP BY player_id
+
+
 
 NODE endpoint
 SQL >
 
-    SELECT name AS player_id, session_id, count() AS total_score
-    FROM confluent_events
-    WHERE type = 'score'
-    GROUP BY player_id, session_id
-    ORDER BY total_score DESC
-    LIMIT 10
+    SELECT *
+    FROM
+        (
+            SELECT rank, player_id, session_id, total_score
+            FROM rank_games
+            WHERE
+                (player_id, session_id)
+                NOT IN (SELECT player_id, session_id FROM last_game)
+            LIMIT 9
+            UNION ALL
+            SELECT rank, player_id, session_id, total_score
+            FROM last_game
+        )
+    ORDER BY rank
 
 

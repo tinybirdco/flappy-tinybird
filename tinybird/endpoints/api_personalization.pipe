@@ -14,7 +14,7 @@ SQL >
         = {{
             String(
                 player_param,
-                'dm',
+                'dm@test.1',
                 description="Player to filter on",
                 required=True,
             )
