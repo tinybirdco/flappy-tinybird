@@ -142,7 +142,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
                 session: this.session,
                 score: this.score,
             };
-            this.scene.start("EndGameScene", this.data);
+            this.scene.start("EndGameScene", data);
         });
     }
 
