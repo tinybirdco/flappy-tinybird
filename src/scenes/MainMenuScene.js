@@ -40,6 +40,7 @@ export default class MainMenuScene extends Phaser.Scene {
 
         this.add
             .image(centerX, centerY, "PlayButton")
+            .setScale(.5)
             .setInteractive({ cursor: "pointer" })
             .on("pointerup", () => {
                 this.submitForm(nameElement, errorElement);
