@@ -138,9 +138,8 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
         continueButton.on('pointerdown', () => {
             this.ad.destroy();
             this.ad = null;
-            
+            this.scene.start("EndGameScene", this.data);
         });
-        this.scene.start("EndGameScene", this.data);
     }
 
     async endGame() {
