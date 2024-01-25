@@ -11,6 +11,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
     constructor() {
         super({ key: "FlappyTinybirdScene" });
+        this.currentAdIndex = 0;
     }
 
     init(player) {
@@ -23,7 +24,12 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
     preload() {
         this.load.image("bg", "/bg.png");
+        this.load.image("ad1","/1message.png");
+        this.load.image("ad2","/2message.png");
+        this.load.image("ad3","/3message.png");
+        this.load.image("ad4","/4message.png");
         this.load.image("bird", "/bird.png");
+        this.load.image("continue_button", "ContinueButton.png");
         this.load.spritesheet("pipe", "/pipe.png", {
             frameWidth: 20,
             frameHeight: 20,
@@ -32,6 +38,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     create() {
+        this.ads = ['ad1', 'ad2', 'ad3', 'ad4'];
         this.background = this.add
             .tileSprite(0, 0, 400, 560, "bg")
             .setOrigin(0, 0);
@@ -114,30 +121,33 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         });
     }
 
-    async endGame() {
-        if (this.ended) return;
-        this.ended = true;
-        const data = {
-            session: this.session,
-            score: this.score,
-        };
+    showAd() {
+        if (this.ad) {
+            this.ad.destroy();
+        }
+    
+        this.ad = this.add.image(0, 0, this.ads[this.currentAdIndex]);
+        this.ad.setOrigin(0, 0);
+        this.ad.setDisplaySize(Number(this.sys.game.config.width), Number(this.sys.game.config.height));
 
-        // Display "GAME OVER" text
-        const gameOverText = this.add.text(
-            this.canvas.width / 2,
-            this.canvas.height / 2,
-            'GAME OVER',
-            {
-                fontFamily: 'Pixel Operator',
-                fontSize: 40,
-                color: '#ff0000',
-                align: 'center'
+        this.currentAdIndex = (this.currentAdIndex + 1) % this.ads.length;
+        console.log(`Current ad index after increment: ${this.currentAdIndex}`);
+    
+        const continueButton = this.add.image(this.canvas.width / 2, this.canvas.height - 50, 'continue_button');
+        continueButton.setInteractive();
+        continueButton.setScale(0.5);
+        continueButton.on('pointerdown', () => {
+            this.ad.destroy();
+            this.ad = null;
+            if (this.offer == 1) {
+                this.scene.start("DealScene", this.data);
+            } else {
+                this.scene.start("EndGameScene", this.data);
             }
-        );
-        gameOverText.setOrigin(0.5);
+        });
+    }
 
-        send_death(this.session);
-
+    async handleOffer(data) {
         if (this.offer === null) {
             const response = await fetch(
                 `https://api.us-east.tinybird.co/v0/pipes/api_personalization_mv.json?player_param=${this.session.name}`,
@@ -149,21 +159,29 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
                     body: JSON.stringify(data),
                 }
             );
-
+    
             const apiResponse = await response.json();
             this.offer = apiResponse.data?.[0].offer || 0;
         }
+    
+        this.data = data;
+    }
 
-        if (this.offer == 1) {
-            // Using setTimeout to add a delay before starting the new scene
-            setTimeout(() => {
-                this.scene.start("DealScene", data);
-            }, 700);
-        } else {
-            setTimeout(() => {
-                this.scene.start("EndGameScene", data);
-            }, 700);
-        }
+    async endGame() {
+        if (this.ended) return;
+        this.ended = true;
+
+        this.timer.remove();
+    
+        const data = {
+            session: this.session,
+            score: this.score,
+        };
+    
+        send_death(this.session);
+        
+        this.showAd();
+        await this.handleOffer(data);
     }
 
     addBird() {
