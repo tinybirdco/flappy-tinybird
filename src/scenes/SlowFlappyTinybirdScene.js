@@ -167,7 +167,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
         );
         gameOverText.setOrigin(0.5);
 
-        send_death(this.session);
+        await send_death(this.session);
         this.showAd();
     }
 
