@@ -10,6 +10,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
 
     constructor() {
         super({ key: "SlowFlappyTinybirdScene" });
+        this.currentAdIndex = 0;
     }
 
     init(player) {
@@ -21,7 +22,12 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
 
     preload() {
         this.load.image("bg", "/bg.png");
+        this.load.image("ad1","/1message.png");
+        this.load.image("ad2","/2message.png");
+        this.load.image("ad3","/3message.png");
+        this.load.image("ad4","/4message.png");
         this.load.image("bird", "/bird.png");
+        this.load.image("continue_button", "ContinueButton.png");
         this.load.spritesheet("pipe", "/pipe.png", {
             frameWidth: 20,
             frameHeight: 20,
@@ -30,7 +36,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
     }
 
     create() {
-
+        this.ads = ['ad1', 'ad2', 'ad3', 'ad4'];
         this.background = this.add
             .tileSprite(0, 0, 400, 560, "bg")
             .setOrigin(0, 0);
@@ -114,9 +120,38 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
         });
     }
 
+    showAd() {
+        if (this.ad) {
+            this.ad.destroy();
+        }
+    
+        this.ad = this.add.image(0, 0, this.ads[this.currentAdIndex]);
+        this.ad.setOrigin(0, 0);
+        this.ad.setDisplaySize(Number(this.sys.game.config.width), Number(this.sys.game.config.height));
+
+        this.currentAdIndex = (this.currentAdIndex + 1) % this.ads.length;
+        console.log(`Current ad index after increment: ${this.currentAdIndex}`);
+    
+        const continueButton = this.add.image(this.canvas.width / 2, this.canvas.height - 50, 'continue_button');
+        continueButton.setInteractive();
+        continueButton.setScale(0.5);
+        continueButton.on('pointerdown', () => {
+            this.ad.destroy();
+            this.ad = null;
+            const data = {
+                session: this.session,
+                score: this.score,
+            };
+            this.scene.start("EndGameScene", data);
+        });
+    }
+
     async endGame() {
         if (this.ended) return;
         this.ended = true;
+
+        this.timer.remove();
+
         const data = {
             session: this.session,
             score: this.score,
@@ -137,11 +172,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
         gameOverText.setOrigin(0.5);
 
         send_death(this.session);
-
-        setTimeout(() => {
-            this.scene.start("EndGameScene", data);
-        }, 700);
-
+        this.showAd();
     }
 
     addBird() {
