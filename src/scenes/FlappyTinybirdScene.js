@@ -134,6 +134,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     
         const continueButton = this.add.image(this.canvas.width / 2, this.canvas.height - 50, 'continue_button');
         continueButton.setInteractive();
+        continueButton.setScale(0.5);
         continueButton.on('pointerdown', () => {
             this.ad.destroy();
             this.ad = null;
