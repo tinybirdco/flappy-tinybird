@@ -180,8 +180,24 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     
         send_death(this.session);
         
-        this.showAd();
-        await this.handleOffer(data);
+        // Display game over text
+        const gameOverText = this.add.text(
+            this.canvas.width / 2,
+            this.canvas.height / 2,
+            'GAME OVER',
+            {
+                font: '40px',
+                color: '#ff0000',
+                align: 'center'
+            }).setOrigin(0.5);
+
+        // Use a timer event to wait for 2 seconds
+        this.time.delayedCall(2000, async () => {
+            gameOverText.destroy();
+
+            this.showAd();
+            await this.handleOffer(data);
+        });
     }
 
     addBird() {

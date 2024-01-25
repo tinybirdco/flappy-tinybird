@@ -157,6 +157,8 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
             score: this.score,
         };
 
+        send_death(this.session);
+
         // Display "GAME OVER" text
         const gameOverText = this.add.text(
             this.canvas.width / 2,
@@ -167,12 +169,13 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
                 fontSize: 40,
                 color: '#ff0000',
                 align: 'center'
-            }
-        );
-        gameOverText.setOrigin(0.5);
+            }).setOrigin(0.5);
 
-        send_death(this.session);
-        this.showAd();
+        // Use a timer event to wait for 2 seconds
+        this.time.delayedCall(2000, async () => {
+            gameOverText.destroy();
+            this.showAd();
+        });
     }
 
     addBird() {
