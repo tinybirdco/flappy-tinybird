@@ -1,5 +1,5 @@
 DESCRIPTION >
-	Top scores across all emails
+	Pre-aggregate scores and purchases by player and session.
 
 
 NODE mv
