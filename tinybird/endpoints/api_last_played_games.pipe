@@ -1,6 +1,7 @@
 DESCRIPTION >
 	Last 10 games played by email
 
+
 TOKEN "app_read_token" READ
 
 NODE endpoint
