@@ -37,6 +37,7 @@ export default class DealScene extends Phaser.Scene {
             text.setOrigin(0.5);
             this.add
                 .image(200, 220, "OfferButton")
+                .setScale(.5)
                 .setInteractive({ cursor: "pointer" })
                 .on("pointerup", () => {
                     this.buyPowerUp();

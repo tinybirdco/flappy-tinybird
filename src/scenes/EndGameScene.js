@@ -39,6 +39,7 @@ export default class EndGameScene extends Phaser.Scene {
 
             this.add
                 .image(200, 135, "RetryButton")
+                .setScale(.5)
                 .setInteractive({ cursor: "pointer" })
                 .on("pointerup", () => {
                     this.retry();
