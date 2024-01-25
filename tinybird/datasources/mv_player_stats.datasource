@@ -1,4 +1,6 @@
 # Data Source created from Pipe 'mat_player_stats'
+DESCRIPTION >
+    Pre-aggregated scores and purchases by player and session.
 
 SCHEMA >
     `player_id` String,

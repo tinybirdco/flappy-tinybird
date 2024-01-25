@@ -45,7 +45,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         this.scoreText = this.add
             .text(20, 20, "0", {
-                font: "30px",
+                fontFamily: 'Pixel Operator',
+                fontSize: 30,
             })
             .setDepth(1);
 
@@ -148,7 +149,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     async handleOffer(data) {
         if (this.offer === null) {
             const response = await fetch(
-                `https://api.us-east.tinybird.co/v0/pipes/api_personalization.json?player_param=${this.session.name}`,
+                `https://api.us-east.tinybird.co/v0/pipes/api_personalization_mv.json?player_param=${this.session.name}`,
                 {
                     method: "POST",
                     headers: {

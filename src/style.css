@@ -1,12 +1,24 @@
 @tailwind base;
 
+@font-face {
+    font-family: "Pixel Operator";
+    src: url("../assets/fonts/PixelOperator.eot?") format("eot"),
+      url("../assets/fonts/PixelOperator.woff") format("woff"),
+      url("../assets/fonts/PixelOperator.ttf") format("truetype"),
+      url("../assets/fonts/PixelOperator.svg#PixelOperator") format("svg");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+
 body {
     margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    background-color: #25283d
+    background-color: #25283d;
+    font-family: 'Pixel Operator', sans-serif;
 }
 
 .truncate {

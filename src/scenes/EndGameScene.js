@@ -30,6 +30,7 @@ export default class EndGameScene extends Phaser.Scene {
                 `${this.session.name},\n\nyou scored ${this.score} point${this.score !== 1 ? "s" : ""}!`,
                 {
                     align: "center",
+                    fontFamily: 'Pixel Operator',
                 }
             );
 

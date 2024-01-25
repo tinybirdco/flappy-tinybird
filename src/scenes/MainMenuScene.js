@@ -25,7 +25,7 @@ export default class MainMenuScene extends Phaser.Scene {
         const centerX = this.cameras.main.width / 2;
         const centerY = this.cameras.main.height / 2;
         
-        const userForm = this.add.dom(centerX, centerY - 70).createFromCache("userForm");
+        const userForm = this.add.dom(centerX, centerY - 80).createFromCache("userForm");
         const nameElement = userForm.getChildByID("name");
         const errorElement = userForm.getChildByID("error");
 
