@@ -18,11 +18,8 @@ export default class DealScene extends Phaser.Scene {
     }
 
     init(data) {
-        this.session = {
-            name: 'julia',
-            id: '123'
-        };
-        this.score = 999;
+        this.session = data.session;
+        this.score = data.score;
     }
 
     create() {
