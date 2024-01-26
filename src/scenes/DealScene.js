@@ -23,71 +23,7 @@ export default class DealScene extends Phaser.Scene {
     }
 
     create() {
-        this.getDataFromTinybird().then(() => {
-            
-            const landingPageText = this.add.text(
-                this.cameras.main.width / 2,
-                60,
-                'Want to see consumption soar? Click here.',
-                {
-                    align: "center",
-                    fontFamily: 'Pixel Operator',
-                    fontStyle: 'underline',
-                    color: '#00c1ff'
-                }
-            )
-
-            landingPageText
-                .setOrigin(0.5)
-                .setInteractive({ cursor: "pointer" })
-                .on("pointerup", () => {
-                    window.open('https://www.tinybird.co/', '_blank');
-                });
-            
-            const scoreText = this.add.text(
-                this.cameras.main.width / 2,
-                150,
-                `${this.session.name},\n\nFlappy is tired of dying :(\n\nPurchase this power-up to\nactivate easy mode!`,
-                {
-                    align: "center",
-                }
-            );
-
-            scoreText.setOrigin(0.5);
-            this.add
-                .image(200, 270, "OfferButton")
-                .setScale(.5)
-                .setInteractive({ cursor: "pointer" })
-                .on("pointerup", () => {
-                    this.buyPowerUp();
-                });
-
-            const topLimit = 0; // Set the top limit for scrolling
-
-            //Enable scrolling
-            const handleScroll = (deltaY) => {
-                this.cameras.main.scrollY = Phaser.Math.Clamp(
-                    this.cameras.main.scrollY + (deltaY * 0.5),
-                    topLimit,
-                    Number.MAX_SAFE_INTEGER
-                );
-            };
-
-            // Mouse wheel scrolling
-            window.addEventListener("wheel", (event) => {
-                event.preventDefault();
-                handleScroll(event.deltaY);
-            }, { passive: false });
-
-            // Touch scrolling
-            this.input.on("pointermove", (pointer) => {
-                pointer.event.preventDefault();
-                if (pointer.isDown) {
-                    const deltaY = pointer.velocity.y * 0.5;
-                    handleScroll(-deltaY);
-                }
-            });
-        });
+        this.getDataFromTinybird();
     }
 
     buyPowerUp() {
@@ -115,9 +51,21 @@ export default class DealScene extends Phaser.Scene {
         );
 
         const charts = this.add
-            .dom(50, 300)
+            .dom(0, 0)
             .createFromCache("charts")
             .setOrigin(0, 0);
+
+        // Set title
+        charts.getChildByID('title').innerHTML = `${this.session.name},<br/><br/>Flappy is tired of dying :(<br/><br/>Purchase this power-up to<br/>activate easy mode!`
+        
+        // Add event to DOM button
+        charts.getChildByID("offer-button").addEventListener("click", () => {
+            this.buyPowerUp();
+        });
+
+        charts.getChildByID("retry-button").remove();
+
+        
         return Promise.all([
             get_data_from_tinybird(endpoints.top_10_url)
                 .then((r) => this.buildTopTen(charts, r))
