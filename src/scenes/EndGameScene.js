@@ -23,55 +23,7 @@ export default class EndGameScene extends Phaser.Scene {
     }
 
     create() {
-        this.getDataFromTinybird().then(() => {
-            const text = this.add.text(
-                this.cameras.main.width / 2,
-                60,
-                `${this.session.name},\n\nyou scored ${this.score} point${this.score !== 1 ? "s" : ""}!`,
-                {
-                    align: "center",
-                    fontFamily: 'Pixel Operator',
-                }
-            );
-
-            // Set origin to center for proper alignment
-            text.setOrigin(0.5);
-
-            this.add
-                .image(200, 135, "RetryButton")
-                .setScale(.5)
-                .setInteractive({ cursor: "pointer" })
-                .on("pointerup", () => {
-                    this.retry();
-                });
-
-            const topLimit = 0; // Set the top limit for scrolling
-
-            //Enable scrolling
-            const handleScroll = (deltaY) => {
-                this.cameras.main.scrollY = Phaser.Math.Clamp(
-                    this.cameras.main.scrollY + (deltaY * 0.5),
-                    topLimit,
-                    Number.MAX_SAFE_INTEGER
-                );
-            };
-
-            // Mouse wheel scrolling
-            window.addEventListener("wheel", (event) => {
-                event.preventDefault();
-                handleScroll(event.deltaY);
-            }, { passive: false });
-
-            // Touch scrolling
-            this.input.on("pointermove", (pointer) => {
-                pointer.event.preventDefault();
-                if (pointer.isDown) {
-                    const deltaY = pointer.velocity.y * 0.5;
-                    handleScroll(-deltaY);
-                }
-            });
-
-        });
+        this.getDataFromTinybird();
     }
 
     retry() {
@@ -94,9 +46,20 @@ export default class EndGameScene extends Phaser.Scene {
             this.session.name
         );
         const charts = this.add
-            .dom(50, 200)
+            .dom(0, 0)
             .createFromCache("charts")
             .setOrigin(0, 0);
+        
+        // Set name and score
+        charts.getChildByID("name").innerHTML = `${
+            this.session.name
+        },<br/>you scored ${this.score} point${this.score !== 1 ? "s" : ""}!`;
+
+        // Add event to DOM button
+        charts.getChildByID("retry").addEventListener("click", () => {
+            this.retry();
+        });
+
         return Promise.all([
             get_data_from_tinybird(endpoints.top_10_url)
                 .then((r) => this.buildTopTen(charts, r))

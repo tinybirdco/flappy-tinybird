@@ -27,3 +27,13 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+/* Hide scrollbar for end scene */
+#charts::-webkit-scrollbar {
+  display: none;
+}
+
+#charts {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
