@@ -60,9 +60,19 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         // Add a flag to check if the timer is already started
         this.timerStarted = false;
 
+        const instructionText = this.add.text(
+            this.cameras.main.width / 2,
+            460,
+            "Fly through the pipes to score!\n\nPress space, enter, or click\nto flap your wings.", {
+            fontFamily: 'Pixel Operator',
+            fontSize: 25,
+            align: 'center'
+        }).setOrigin(0.5);
+
         // Function to start the timer
         const startTimer = () => {
             if (!this.timerStarted) {
+                instructionText.destroy();
                 this.bird.body.enable = true; // Enable physics when the timer starts
                 this.bird.angle = 0; // Set the bird's angle to 0 to start
                 this.timer = this.time.addEvent({
@@ -133,7 +143,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.currentAdIndex = (this.currentAdIndex + 1) % this.ads.length;
         console.log(`Current ad index after increment: ${this.currentAdIndex}`);
     
-        const continueButton = this.add.image(this.canvas.width / 2, this.canvas.height - 50, 'continue_button');
+        const continueButton = this.add.image(this.canvas.width / 2, this.canvas.height - 90, 'continue_button');
         continueButton.setInteractive();
         continueButton.setScale(0.5);
         continueButton.on('pointerdown', () => {
@@ -161,7 +171,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
             );
     
             const apiResponse = await response.json();
-            this.offer = apiResponse.data?.[0].offer || 0;
+            this.offer = apiResponse.data?.[0]?.offer ?? 0;
         }
     
         this.data = data;
@@ -186,7 +196,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
             this.canvas.height / 2,
             'GAME OVER',
             {
-                font: '40px',
+                fontFamily: 'Pixel Operator',
+                fontSize: 40,
                 color: '#ff0000',
                 align: 'center'
             }).setOrigin(0.5);
@@ -194,7 +205,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         // Use a timer event to wait for 2 seconds
         this.time.delayedCall(2000, async () => {
             gameOverText.destroy();
-
+            this.scoreText.destroy();
             this.showAd();
             await this.handleOffer(data);
         });
