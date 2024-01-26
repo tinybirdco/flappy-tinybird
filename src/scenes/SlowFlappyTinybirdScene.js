@@ -56,10 +56,20 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
 
         // Add a flag to check if the timer is already started
         this.timerStarted = false;
+        
+        const instructionText = this.add.text(
+            this.cameras.main.width / 2,
+            455,
+            "Fly through the pipes to score!\n\nPress space, enter, or click\nto flap your wings.", {
+            fontFamily: 'Pixel Operator',
+            fontSize: 25,
+            align: 'center'
+        }).setOrigin(0.5);
 
         // Function to start the timer
         const startTimer = () => {
             if (!this.timerStarted) {
+                instructionText.destroy();
                 this.bird.body.enable = true; // Enable physics when the timer starts
                 this.bird.angle = 0; // Set the bird's angle to 0 to start
                 this.timer = this.time.addEvent({
