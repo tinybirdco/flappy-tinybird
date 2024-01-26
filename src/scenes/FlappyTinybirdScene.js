@@ -133,7 +133,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.currentAdIndex = (this.currentAdIndex + 1) % this.ads.length;
         console.log(`Current ad index after increment: ${this.currentAdIndex}`);
     
-        const continueButton = this.add.image(this.canvas.width / 2, this.canvas.height - 50, 'continue_button');
+        const continueButton = this.add.image(this.canvas.width / 2, this.canvas.height - 90, 'continue_button');
         continueButton.setInteractive();
         continueButton.setScale(0.5);
         continueButton.on('pointerdown', () => {
@@ -186,7 +186,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
             this.canvas.height / 2,
             'GAME OVER',
             {
-                font: '40px',
+                fontFamily: 'Pixel Operator',
+                fontSize: 40,
                 color: '#ff0000',
                 align: 'center'
             }).setOrigin(0.5);
@@ -194,7 +195,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         // Use a timer event to wait for 2 seconds
         this.time.delayedCall(2000, async () => {
             gameOverText.destroy();
-
+            this.scoreText.destroy();
             this.showAd();
             await this.handleOffer(data);
         });

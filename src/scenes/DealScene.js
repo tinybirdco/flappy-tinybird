@@ -24,19 +24,38 @@ export default class DealScene extends Phaser.Scene {
 
     create() {
         this.getDataFromTinybird().then(() => {
-            const text = this.add.text(
+            
+            const landingPageText = this.add.text(
                 this.cameras.main.width / 2,
-                100,
+                60,
+                'Want to see consumption soar? Click here.',
+                {
+                    align: "center",
+                    fontFamily: 'Pixel Operator',
+                    fontStyle: 'underline',
+                    color: '#00c1ff'
+                }
+            )
+
+            landingPageText
+                .setOrigin(0.5)
+                .setInteractive({ cursor: "pointer" })
+                .on("pointerup", () => {
+                    window.open('https://www.tinybird.co/', '_blank');
+                });
+            
+            const scoreText = this.add.text(
+                this.cameras.main.width / 2,
+                150,
                 `${this.session.name},\n\nFlappy is tired of dying :(\n\nPurchase this power-up to\nactivate easy mode!`,
                 {
                     align: "center",
                 }
             );
 
-            // Set origin to center for proper alignment
-            text.setOrigin(0.5);
+            scoreText.setOrigin(0.5);
             this.add
-                .image(200, 220, "OfferButton")
+                .image(200, 270, "OfferButton")
                 .setScale(.5)
                 .setInteractive({ cursor: "pointer" })
                 .on("pointerup", () => {

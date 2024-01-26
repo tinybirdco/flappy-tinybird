@@ -24,9 +24,29 @@ export default class EndGameScene extends Phaser.Scene {
 
     create() {
         this.getDataFromTinybird().then(() => {
-            const text = this.add.text(
+            
+            const landingPageText = this.add.text(
                 this.cameras.main.width / 2,
                 60,
+                'Want to see consumption soar? Click here.',
+                {
+                    align: "center",
+                    fontFamily: 'Pixel Operator',
+                    fontStyle: 'underline',
+                    color: '#00c1ff'
+                }
+            )
+
+            landingPageText
+                .setOrigin(0.5)
+                .setInteractive({ cursor: "pointer" })
+                .on("pointerup", () => {
+                    window.open('https://www.tinybird.co/', '_blank');
+                });
+            
+            const scoreText = this.add.text(
+                this.cameras.main.width / 2,
+                70,
                 `${this.session.name},\n\nyou scored ${this.score} point${this.score !== 1 ? "s" : ""}!`,
                 {
                     align: "center",
@@ -34,11 +54,10 @@ export default class EndGameScene extends Phaser.Scene {
                 }
             );
 
-            // Set origin to center for proper alignment
-            text.setOrigin(0.5);
+            scoreText.setOrigin(0.5);
 
             this.add
-                .image(200, 135, "RetryButton")
+                .image(200, 145, "RetryButton")
                 .setScale(.5)
                 .setInteractive({ cursor: "pointer" })
                 .on("pointerup", () => {
