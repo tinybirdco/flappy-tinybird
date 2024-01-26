@@ -51,14 +51,16 @@ export default class EndGameScene extends Phaser.Scene {
             .setOrigin(0, 0);
         
         // Set name and score
-        charts.getChildByID("name").innerHTML = `${
+        charts.getChildByID("title").innerHTML = `${
             this.session.name
-        },<br/>you scored ${this.score} point${this.score !== 1 ? "s" : ""}!`;
+        },<br/><br/>you scored ${this.score} point${this.score !== 1 ? "s" : ""}!`;
 
         // Add event to DOM button
-        charts.getChildByID("retry").addEventListener("click", () => {
+        charts.getChildByID("retry-button").addEventListener("click", () => {
             this.retry();
         });
+
+        charts.getChildByID("offer-button").remove();
 
         return Promise.all([
             get_data_from_tinybird(endpoints.top_10_url)
