@@ -59,7 +59,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
         
         const instructionText = this.add.text(
             this.cameras.main.width / 2,
-            455,
+            460,
             "Fly through the pipes to score!\n\nPress space, enter, or click\nto flap your wings.", {
             fontFamily: 'Pixel Operator',
             fontSize: 25,
