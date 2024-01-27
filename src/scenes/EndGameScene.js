@@ -56,7 +56,7 @@ export default class EndGameScene extends Phaser.Scene {
         // Set name and score
         charts.getChildByID("title").innerHTML = `${
             this.session.name
-        },<br/><br/>you scored ${this.score} point${this.score !== 1 ? "s" : ""}!`;
+        },<br/>you scored ${this.score} point${this.score !== 1 ? "s" : ""}!`;
 
         // Add event to DOM button
         charts.getChildByID("retry-button").addEventListener("click", () => {
