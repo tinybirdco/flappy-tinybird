@@ -36,7 +36,7 @@ export default class SlowFlappyTinybirdScene extends Phaser.Scene {
     }
 
     create() {
-        this.ads = ['ad1', 'ad2', 'ad3', 'ad4'];
+        this.ads = ['ad4', 'ad3', 'ad2', 'ad1'];
         this.background = this.add
             .tileSprite(0, 0, 400, 560, "bg")
             .setOrigin(0, 0);
