@@ -1,4 +1,4 @@
-import { EVENTS_URL, TINYBIRD_READ_TOKEN, TINYBIRD_APPEND_TOKEN, KAFKA_API_SECRET, KAFKA_API_KEY } from "../config";
+import { EVENTS_URL, TINYBIRD_READ_TOKEN, TINYBIRD_APPEND_TOKEN } from "../config";
 
 export async function send_session_data(session) {
     if (!TINYBIRD_APPEND_TOKEN) return;
@@ -37,10 +37,10 @@ export async function send_purchase(session) {
     return send_data_to_tinybird(payload);
 }
 
-export async function send_data_to_tinybird(name, payload) {
+export async function send_data_to_tinybird(payload) {
     if (!TINYBIRD_READ_TOKEN) return;
 
-    return fetch(`${EVENTS_URL}?name=${name}`, {
+    return fetch(`${EVENTS_URL}?name=events_api`, {
         method: "POST",
         body: JSON.stringify(payload),
         headers: {
@@ -50,25 +50,6 @@ export async function send_data_to_tinybird(name, payload) {
         .then((res) => res.json())
         .catch((error) => console.log(error));
 }
-
-// export async function sendToKafka(payload) {
-//     console.log('Sending data to Kafka:', payload);
-
-//     try {
-//         const response = await fetch('/api/send-kafka', {
-//             method: "POST",
-//             body: JSON.stringify(payload),
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//         });
-
-//         const responseData = await response.json();
-//         console.log('Data sent to Kafka:', responseData);
-//     } catch (error) {
-//         console.error('Error sending data to Kafka:', error.message);
-//     }
-// }
 
 export async function get_data_from_tinybird(url) {
     if (!TINYBIRD_READ_TOKEN) return;
