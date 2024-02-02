@@ -22,10 +22,9 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
 
     preload() {
         this.load.image("bg", "/bg.png");
-        this.load.image("ad1","/1message.png");
-        this.load.image("ad2","/2message.png");
-        this.load.image("ad3","/3message.png");
-        this.load.image("ad4","/4message.png");
+        this.load.image("ad1","/1 ⎯ Message.png");
+        this.load.image("ad2","/2 ⎯ Message.png");
+        this.load.image("ad3","/3 ⎯ Message.png");
         this.load.image("bird", "/bird.png");
         this.load.image("continue_button", "ContinueButton.png");
         this.load.spritesheet("pipe", "/pipe.png", {
@@ -36,7 +35,7 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
     }
 
     create() {
-        this.ads = ['ad4', 'ad3', 'ad2', 'ad1'];
+        this.ads = ['ad1', 'ad2', 'ad3'];
         this.background = this.add
             .tileSprite(0, 0, 400, 560, "bg")
             .setOrigin(0, 0);
