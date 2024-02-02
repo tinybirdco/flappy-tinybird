@@ -35,7 +35,7 @@ export default class MainMenuScene extends Phaser.Scene {
             .image(centerX, centerY + 230, "Logo").setScale(0.025)
             .setInteractive({ cursor: "pointer" })
             .on("pointerup", () => {
-                window.open('https://faster.tinybird.co/flappybird-gko', '_blank');
+                window.open('https://www.tinybird.co/', '_blank');
             });
 
         this.add

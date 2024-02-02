@@ -50,9 +50,6 @@ export default class EndGameScene extends Phaser.Scene {
             .createFromCache("charts")
             .setOrigin(0, 0);
         
-        // Add link to landing page
-        charts.getChildByID("landing-text");
-        
         // Set name and score
         charts.getChildByID("title").innerHTML = `${
             this.session.name
