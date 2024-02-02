@@ -2,7 +2,7 @@ import EndGameScene from "./scenes/EndGameScene";
 import FlappyTinybirdScene from "./scenes/FlappyTinybirdScene";
 import MainMenuScene from "./scenes/MainMenuScene";
 import DealScene from "./scenes/DealScene";
-import SlowFlappyTinybirdScene from "./scenes/SlowFlappyTinybirdScene";
+import DealFlappyTinybirdScene from "./scenes/DealFlappyTinybirdScene";
 
 /** @type {import("phaser").Types.Core.GameConfig} */
 export const config = {
@@ -22,7 +22,7 @@ export const config = {
     },
     render: { pixelArt: true },
     backgroundColor: "rgba(134, 182, 226,0)",
-    scene: [MainMenuScene, EndGameScene, FlappyTinybirdScene, DealScene, SlowFlappyTinybirdScene],
+    scene: [MainMenuScene, EndGameScene, FlappyTinybirdScene, DealScene, DealFlappyTinybirdScene],
 };
 
 export const TINYBIRD_HOST = import.meta.env.VITE_TINYBIRD_HOST;

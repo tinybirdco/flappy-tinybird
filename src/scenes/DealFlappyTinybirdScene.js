@@ -2,14 +2,14 @@ import Phaser from "phaser";
 import { v4 as uuidv4 } from "uuid";
 import { send_death, send_session_data } from "../utils/tinybird";
 
-export default class SlowFlappyTinybirdScene extends Phaser.Scene {
+export default class DealFlappyTinybirdScene extends Phaser.Scene {
     session = {
         name: "",
         id: "",
     };
 
     constructor() {
-        super({ key: "SlowFlappyTinybirdScene" });
+        super({ key: "DealFlappyTinybirdScene" });
         this.currentAdIndex = 0;
     }
 

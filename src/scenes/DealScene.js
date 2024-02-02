@@ -31,7 +31,7 @@ export default class DealScene extends Phaser.Scene {
 
         send_purchase(this.session);
 
-        this.scene.start("SlowFlappyTinybirdScene", this.session);
+        this.scene.start("DealFlappyTinybirdScene", this.session);
     }
 
     getDataFromTinybird() {
