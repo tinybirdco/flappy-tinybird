@@ -55,6 +55,9 @@ export default class DealScene extends Phaser.Scene {
             .createFromCache("charts")
             .setOrigin(0, 0);
 
+        // Add link to landing page
+        charts.getChildByID("landing-text");
+        
         // Set title
         charts.getChildByID('title').innerHTML = `${this.session.name},<br/><br/>Flappy is tired of dying :(<br/><br/>Purchase this power-up to<br/>activate easy mode!`
         
