@@ -36,6 +36,75 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.canvas = this.sys.game.canvas;
     }
 
+    addBird() {
+        this.bird = this.physics.add.sprite(100, 245, "bird");
+        this.bird.setOrigin(0, 0);
+        this.physics.world.enable(this.bird);
+        this.bird.body.setGravityY(1000);
+        this.bird.body.setSize(17, 12);
+        this.bird.body.enable = false; // Disable physics initially
+    }
+
+    jump() {
+        this.bird.body.setVelocityY(-350);
+        this.bird.scene.tweens.add({
+            targets: this.bird,
+            props: { angle: -20 },
+            duration: 150,
+            ease: "Power0",
+        });
+    }
+
+    addEventListeners() {
+        this.input.keyboard
+            .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+            .on("down", (key, event) => {
+                this.jump();
+            });
+
+        this.input.keyboard
+            .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
+            .on("down", (key, event) => {
+                this.jump();
+            });
+
+        this.input.on("pointerdown", (pointer) => {
+            this.jump();
+        });
+    }
+
+    addPipe(x, y, frame) {
+        const pipe = this.physics.add.image(x, y, "pipe", frame);
+        this.pipes.add(pipe);
+        pipe.setOrigin(0, 0);
+        pipe.setScale(3);
+        this.physics.world.enable(pipe);
+        pipe.body.allowGravity = false;
+        pipe.body.setVelocityX(-350);
+        pipe.body.setSize(20, 20);
+        pipe.setActive(true);
+    }
+
+    addRowOfPipes() {
+        const gap = Math.floor(Math.random() * 5) + 1;
+
+        for (let i = 0; i < 10; i++) {
+            if (i !== gap && i !== gap + 1 && i !== gap + 2) {
+                if (i === gap - 1) {
+                    this.addPipe(400, i * 60, 0);
+                } else if (i === gap + 3) {
+                    this.addPipe(400, i * 60, 1);
+                } else {
+                    this.addPipe(400, i * 60, 2);
+                }
+            }
+        }
+
+        this.score += 1;
+        this.scoreText.text = this.score.toString();
+        send_session_data(this.session);
+    }
+
     create() {
         this.ads = ['ad1', 'ad2', 'ad3'];
         this.background = this.add
@@ -106,28 +175,24 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         }
     }
 
-    updateBird() {
-        if (this.bird.angle < 30) {
-            this.bird.angle += 2;
+    async handleOffer(data) {
+        if (this.offer === null) {
+            const response = await fetch(
+                `https://api.us-east.tinybird.co/v0/pipes/api_personalization.json?player_param=${this.session.name}`,
+                {
+                    method: "POST",
+                    headers: {
+                        Authorization: `Bearer ${TINYBIRD_READ_TOKEN}`,
+                    },
+                    body: JSON.stringify(data),
+                }
+            );
+    
+            const apiResponse = await response.json();
+            this.offer = apiResponse.data?.[0]?.offer ?? 0;
         }
-
-        if (
-            this.bird.y + this.bird.height > this.canvas.height ||
-            this.bird.y + this.bird.height < 0 ||
-            this.physics.overlap(this.bird, this.pipes)
-        ) {
-            this.endGame();
-        }
-    }
-
-    jump() {
-        this.bird.body.setVelocityY(-350);
-        this.bird.scene.tweens.add({
-            targets: this.bird,
-            props: { angle: -20 },
-            duration: 150,
-            ease: "Power0",
-        });
+    
+        this.data = data;
     }
 
     showAd() {
@@ -154,26 +219,6 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
                 this.scene.start("EndGameScene", this.data);
             }
         });
-    }
-
-    async handleOffer(data) {
-        if (this.offer === null) {
-            const response = await fetch(
-                `https://api.us-east.tinybird.co/v0/pipes/api_personalization.json?player_param=${this.session.name}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${TINYBIRD_READ_TOKEN}`,
-                    },
-                    body: JSON.stringify(data),
-                }
-            );
-    
-            const apiResponse = await response.json();
-            this.offer = apiResponse.data?.[0]?.offer ?? 0;
-        }
-    
-        this.data = data;
     }
 
     async endGame() {
@@ -210,62 +255,17 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         });
     }
 
-    addBird() {
-        this.bird = this.physics.add.sprite(100, 245, "bird");
-        this.bird.setOrigin(0, 0);
-        this.physics.world.enable(this.bird);
-        this.bird.body.setGravityY(1000);
-        this.bird.body.setSize(17, 12);
-        this.bird.body.enable = false; // Disable physics initially
-    }
-
-    addEventListeners() {
-        this.input.keyboard
-            .addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
-            .on("down", (key, event) => {
-                this.jump();
-            });
-
-        this.input.keyboard
-            .addKey(Phaser.Input.Keyboard.KeyCodes.ENTER)
-            .on("down", (key, event) => {
-                this.jump();
-            });
-
-        this.input.on("pointerdown", (pointer) => {
-            this.jump();
-        });
-    }
-
-    addRowOfPipes() {
-        const gap = Math.floor(Math.random() * 5) + 1;
-
-        for (let i = 0; i < 10; i++) {
-            if (i !== gap && i !== gap + 1 && i !== gap + 2) {
-                if (i === gap - 1) {
-                    this.addPipe(400, i * 60, 0);
-                } else if (i === gap + 3) {
-                    this.addPipe(400, i * 60, 1);
-                } else {
-                    this.addPipe(400, i * 60, 2);
-                }
-            }
+    updateBird() {
+        if (this.bird.angle < 30) {
+            this.bird.angle += 2;
         }
 
-        this.score += 1;
-        this.scoreText.text = this.score.toString();
-        send_session_data(this.session);
-    }
-
-    addPipe(x, y, frame) {
-        const pipe = this.physics.add.image(x, y, "pipe", frame);
-        this.pipes.add(pipe);
-        pipe.setOrigin(0, 0);
-        pipe.setScale(3);
-        this.physics.world.enable(pipe);
-        pipe.body.allowGravity = false;
-        pipe.body.setVelocityX(-350);
-        pipe.body.setSize(20, 20);
-        pipe.setActive(true);
+        if (
+            this.bird.y + this.bird.height > this.canvas.height ||
+            this.bird.y + this.bird.height < 0 ||
+            this.physics.overlap(this.bird, this.pipes)
+        ) {
+            this.endGame();
+        }
     }
 }
