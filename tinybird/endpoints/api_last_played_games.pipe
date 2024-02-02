@@ -1,28 +1,21 @@
-DESCRIPTION >
-	Last 10 games played by email
-
-
 TOKEN "app_read_token" READ
 
 NODE endpoint
+DESCRIPTION >
+    Select from the MV and filter on a given player's last 10 games.
+
 SQL >
 
     %
-    SELECT session_id, count() total_score, toDateTime(max(timestamp)) AS t
-    FROM confluent_events
-    WHERE
-        type = 'score'
-        AND name
-        = {{
-            String(
-                player_param,
-                'dm@test.2',
-                description="Player to filter on",
-                required=True,
-            )
-        }}
-    GROUP BY session_id
-    ORDER BY t desc
-    LIMIT 10
+        SELECT
+            session_id,
+            countMerge(scores) AS total_score,
+            toDateTime(maxMerge(game_ts)) AS t
+        FROM mv_player_stats
+        WHERE
+            player_id = {{ String(player_param, 'dm@test.1', description="Player to filter on", required=True) }}
+        GROUP BY session_id
+        ORDER BY t DESC
+        LIMIT 10
 
 

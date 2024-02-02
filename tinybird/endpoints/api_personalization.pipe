@@ -1,32 +1,50 @@
 TOKEN "app_read_token" READ
 
-NODE stats_by_player
+NODE agg
+DESCRIPTION >
+    Select from the MV and filter on a given player's games.
+
 SQL >
 
     %
+        SELECT
+            player_id,
+            session_id,
+            countMerge(scores) AS score,
+            countMerge(purchases) AS purchases,
+            maxMerge(game_ts) AS t
+        FROM mv_player_stats
+        WHERE
+            player_id = {{ String(player_param, 'dm@test.60', description="Player to filter on", required=True) }}
+        GROUP BY player_id, session_id
+
+
+
+NODE stats
+DESCRIPTION >
+    Calculate stats per player.
+
+SQL >
+
     SELECT
-        uniq(session_id) AS n_games,
-        countIf(type = 'score') AS total_score,
-        countIf(type = 'purchase') AS n_purchases
-    FROM confluent_events
-    WHERE
-        name
-        = {{
-            String(
-                player_param,
-                'dm@test.1',
-                description="Player to filter on",
-                required=True,
-            )
-        }}
-        AND timestamp >= now() - INTERVAL 1 HOUR
+        player_id,
+        count() AS total_games,
+        sum(score) AS total_score,
+        round(total_score / total_games, 2) AS avg_score,
+        sum(purchases) AS purchases
+    FROM agg
+    WHERE t >= now() - INTERVAL 5 MINUTE
+    GROUP BY player_id
 
 
 
 NODE endpoint
+DESCRIPTION >
+    Check stats to determine if the player should get an offer or not.
+
 SQL >
 
-    SELECT if(n_games >= 3 AND total_score <= 15 AND n_purchases = 0, 1, 0) AS offer
-    FROM stats_by_player
+    SELECT if(total_games >= 3 AND total_score <= 30 AND purchases = 0, 1, 0) AS offer
+    FROM stats
 
 

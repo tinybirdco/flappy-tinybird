@@ -35,15 +35,15 @@ export const EVENTS_URL = `https://${TINYBIRD_HOST}/v0/events`;
 
 export const endpoints = {
     top_10_url: new URL(
-        `https://${TINYBIRD_HOST}/v0/pipes/api_leaderboard_mv.json`
+        `https://${TINYBIRD_HOST}/v0/pipes/api_leaderboard.json`
     ),
     recent_player_stats_url: new URL(
-        `https://${TINYBIRD_HOST}/v0/pipes/api_last_played_games_mv.json`
+        `https://${TINYBIRD_HOST}/v0/pipes/api_last_played_games.json`
     ),
     player_stats_url: new URL(
-        `https://${TINYBIRD_HOST}/v0/pipes/api_player_stats_mv.json`
+        `https://${TINYBIRD_HOST}/v0/pipes/api_player_stats.json`
     ),
     personalization_url: new URL(
-        `https://${TINYBIRD_HOST}/v0/pipes/api_personalization_mv.json`
+        `https://${TINYBIRD_HOST}/v0/pipes/api_personalization.json`
     ),
 };

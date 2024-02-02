@@ -2,11 +2,11 @@
 
 SCHEMA >
     `t` DateTime,
-    `n_players` AggregateFunction(uniq, String),
+    `player_id` String,
     `n_games` AggregateFunction(uniq, String),
     `scores` AggregateFunction(countIf, UInt8),
     `purchases` AggregateFunction(countIf, UInt8)
 
 ENGINE "AggregatingMergeTree"
 ENGINE_PARTITION_KEY "toYYYYMM(t)"
-ENGINE_SORTING_KEY "t"
+ENGINE_SORTING_KEY "player_id, t"

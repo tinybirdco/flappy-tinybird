@@ -1,0 +1,12 @@
+TOKEN "ops_dashboard_token" READ
+
+NODE endpoint
+SQL >
+
+    SELECT 'All' AS player_id
+    UNION ALL
+    SELECT distinct player_id
+    FROM mv_player_stats
+    ORDER BY player_id
+
+

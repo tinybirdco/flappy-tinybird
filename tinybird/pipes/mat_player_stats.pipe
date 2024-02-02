@@ -1,5 +1,5 @@
 DESCRIPTION >
-	Pre-aggregate scores and purchases by player and session.
+	Top scores across all emails
 
 
 NODE mv
@@ -11,7 +11,7 @@ SQL >
         countIfState(type = 'score') AS scores,
         countIfState(type = 'purchase') AS purchases,
         maxState(timestamp) AS game_ts
-    FROM confluent_events
+    FROM events_api
     GROUP BY
         player_id,
         session_id
