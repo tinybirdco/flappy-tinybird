@@ -71,14 +71,11 @@ export default class DealScene extends Phaser.Scene {
         
         return Promise.all([
             get_data_from_tinybird(endpoints.top_10_url)
-                .then((r) => this.buildTopTen(charts, r))
-                .catch((e) => e.toString()),
+                .then((r) => this.buildTopTen(charts, r)),
             get_data_from_tinybird(endpoints.player_stats_url)
-                .then((r) => this.buildPlayerStats(charts, r))
-                .catch((e) => e.toString()),
+                .then((r) => this.buildPlayerStats(charts, r)),
             get_data_from_tinybird(endpoints.recent_player_stats_url)
                 .then((r) => this.buildLastPlayed(charts, r))
-                .catch((e) => e.toString()),
         ]);
     }
 

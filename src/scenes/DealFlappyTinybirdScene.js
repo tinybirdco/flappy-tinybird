@@ -191,18 +191,19 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
         this.currentAdIndex = (this.currentAdIndex + 1) % this.ads.length;
         console.log(`Current ad index after increment: ${this.currentAdIndex}`);
     
-        const continueButton = this.add.image(this.canvas.width / 2, this.canvas.height - 90, 'continue_button');
-        continueButton.setInteractive();
-        continueButton.setScale(0.5);
-        continueButton.on('pointerdown', () => {
-            this.ad.destroy();
-            this.ad = null;
-            const data = {
-                session: this.session,
-                score: this.score,
-            };
-            this.scene.start("EndGameScene", data);
-        });
+        this.add
+            .image(this.canvas.width / 2, this.canvas.height - 90, 'continue_button')
+            .setInteractive()
+            .setScale(0.5)
+            .on('pointerdown', () => {
+                this.ad.destroy();
+                this.ad = null;
+                const data = {
+                    session: this.session,
+                    score: this.score,
+                };
+                this.scene.start("EndGameScene", data);
+            });
     }
 
     async endGame() {

@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { v4 as uuidv4 } from "uuid";
 import { get_data_from_tinybird, send_death, send_session_data } from "../utils/tinybird";
-import { endpoints, TINYBIRD_READ_TOKEN } from "./../config";
+import { endpoints } from "./../config";
 
 export default class FlappyTinybirdScene extends Phaser.Scene {
     session = {
@@ -24,9 +24,9 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
     preload() {
         this.load.image("bg", "/bg.png");
-        this.load.image("ad1","/1 ⎯ Message.png");
-        this.load.image("ad2","/2 ⎯ Message.png");
-        this.load.image("ad3","/3 ⎯ Message.png");
+        this.load.image("ad1", "/1 ⎯ Message.png");
+        this.load.image("ad2", "/2 ⎯ Message.png");
+        this.load.image("ad3", "/3 ⎯ Message.png");
         this.load.image("bird", "/bird.png");
         this.load.image("continue_button", "ContinueButton.png");
         this.load.spritesheet("pipe", "/pipe.png", {
@@ -175,50 +175,53 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         }
     }
 
-    async handleOffer(data) {
-        if (this.offer === null) {
-            const response = await fetch(
-                `https://api.us-east.tinybird.co/v0/pipes/api_personalization.json?player_param=${this.session.name}`,
-                {
-                    method: "POST",
-                    headers: {
-                        Authorization: `Bearer ${TINYBIRD_READ_TOKEN}`,
-                    },
-                    body: JSON.stringify(data),
-                }
-            );
-    
-            const apiResponse = await response.json();
-            this.offer = apiResponse.data?.[0]?.offer ?? 0;
-        }
-    
-        this.data = data;
+    handleOffer(r) {
+        this.offer = r?.data?.[0]?.offer ?? 0;
+    }
+
+    getDataFromTinybird() {
+        endpoints.personalization_url.searchParams.append(
+            "player_param",
+            this.session.name
+        );
+
+        return Promise.all([
+            get_data_from_tinybird(endpoints.personalization_url)
+                .then((r) => this.handleOffer(r))
+        ]);
     }
 
     showAd() {
         if (this.ad) {
             this.ad.destroy();
         }
-    
+
         this.ad = this.add.image(0, 0, this.ads[this.currentAdIndex]);
         this.ad.setOrigin(0, 0);
         this.ad.setDisplaySize(Number(this.sys.game.config.width), Number(this.sys.game.config.height));
 
         this.currentAdIndex = (this.currentAdIndex + 1) % this.ads.length;
         console.log(`Current ad index after increment: ${this.currentAdIndex}`);
-    
-        const continueButton = this.add.image(this.canvas.width / 2, this.canvas.height - 90, 'continue_button');
-        continueButton.setInteractive();
-        continueButton.setScale(0.5);
-        continueButton.on('pointerdown', () => {
-            this.ad.destroy();
-            this.ad = null;
-            if (this.offer == 1) {
-                this.scene.start("DealScene", this.data);
-            } else {
-                this.scene.start("EndGameScene", this.data);
-            }
-        });
+
+        this.getDataFromTinybird();
+
+        this.add
+            .image(this.canvas.width / 2, this.canvas.height - 90, 'continue_button')
+            .setInteractive()
+            .setScale(0.5)
+            .on('pointerdown', () => {
+                this.ad.destroy();
+                this.ad = null;
+                const data = {
+                    session: this.session,
+                    score: this.score,
+                };
+                if (this.offer == 1) {
+                    this.scene.start("DealScene", data);
+                } else {
+                    this.scene.start("EndGameScene", data);
+                }
+            });
     }
 
     async endGame() {
@@ -226,14 +229,9 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.ended = true;
 
         this.timer.remove();
-    
-        const data = {
-            session: this.session,
-            score: this.score,
-        };
-    
+
         send_death(this.session);
-        
+
         // Display game over text
         const gameOverText = this.add.text(
             this.canvas.width / 2,
@@ -251,7 +249,6 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
             gameOverText.destroy();
             this.scoreText.destroy();
             this.showAd();
-            await this.handleOffer(data);
         });
     }
 
