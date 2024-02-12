@@ -38,7 +38,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
     addBird() {
         this.bird = this.physics.add.sprite(100, 245, "bird");
-        this.bird.setOrigin(0, 0);
+        this.bird.setOrigin(0, 0).setScale(0.8);
         this.physics.world.enable(this.bird);
         this.bird.body.setGravityY(1000);
         this.bird.body.setSize(17, 12);
