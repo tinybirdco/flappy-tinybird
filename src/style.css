@@ -44,3 +44,17 @@ body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
 }
+
+/* Modify form input */
+input[type="text"] {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  text-align: center;
+}
+
+/* Modify form placeholder color */
+input[type="text"]::placeholder {
+  color: #25283D;
+  font-weight: bold;
+}

@@ -4,9 +4,8 @@ export default class MainMenuScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("bg", "/bg.png");
+        this.load.image("login", "/login.png");
         this.load.image("PlayButton", "/PlayButton.png");
-        this.load.image("Logo", "/Imagotype-Main.png");
         this.load.html("userForm", "/UserForm.html");
     }
 
@@ -25,21 +24,32 @@ export default class MainMenuScene extends Phaser.Scene {
         const centerX = this.cameras.main.width / 2;
         const centerY = this.cameras.main.height / 2;
         
-        const userForm = this.add.dom(centerX, centerY - 80).createFromCache("userForm");
+        const userForm = this.add.dom(centerX, centerY - 50).createFromCache("userForm");
         const nameElement = userForm.getChildByID("name");
         const errorElement = userForm.getChildByID("error");
 
-        this.add.tileSprite(0, 0, 400, 560, "bg").setOrigin(0, 0);
+        this.add
+            .image(0, 0, "login")
+            .setOrigin(0,0);
 
         this.add
-            .image(centerX, centerY + 230, "Logo").setScale(0.025)
+            .text(
+                this.cameras.main.width / 2,
+                470,
+                "tinybird.co", {
+                fontFamily: 'Pixel Operator',
+                fontSize: 18,
+                align: 'center',
+                color: '#b2e2f1'
+            })
+            .setOrigin(0.5)
             .setInteractive({ cursor: "pointer" })
             .on("pointerup", () => {
                 window.open('https://www.tinybird.co/', '_blank');
             });
 
         this.add
-            .image(centerX, centerY, "PlayButton")
+            .image(centerX, centerY + 45, "PlayButton")
             .setScale(.5)
             .setInteractive({ cursor: "pointer" })
             .on("pointerup", () => {
