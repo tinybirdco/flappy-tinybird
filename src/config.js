@@ -8,6 +8,10 @@ import DealFlappyTinybirdScene from "./scenes/DealFlappyTinybirdScene";
 export const config = {
     type: Phaser.AUTO,
     parent: "app",
+    autoCenter: Phaser.Scale.CENTER_BOTH,
+    scale: {
+        mode: Phaser.Scale.FIT,
+    },
     width: 400,
     height: 560,
     physics: {

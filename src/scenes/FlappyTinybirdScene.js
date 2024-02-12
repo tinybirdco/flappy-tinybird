@@ -180,7 +180,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     getDataFromTinybird() {
-        endpoints.personalization_url.searchParams.append(
+        endpoints.personalization_url.searchParams.set(
             "player_param",
             this.session.name
         );

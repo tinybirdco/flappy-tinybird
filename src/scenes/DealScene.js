@@ -35,17 +35,17 @@ export default class DealScene extends Phaser.Scene {
     }
 
     getDataFromTinybird() {
-        endpoints.top_10_url.searchParams.append(
+        endpoints.top_10_url.searchParams.set(
             "player_param",
             this.session.name
         );
         
-        endpoints.player_stats_url.searchParams.append(
+        endpoints.player_stats_url.searchParams.set(
             "player_param",
             this.session.name
         );
 
-        endpoints.recent_player_stats_url.searchParams.append(
+        endpoints.recent_player_stats_url.searchParams.set(
             "player_param",
             this.session.name
         );
