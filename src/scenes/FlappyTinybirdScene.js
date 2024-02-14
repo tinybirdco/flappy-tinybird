@@ -23,7 +23,9 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("bg", "/bg.png");
+        this.load.image("bg", "/Background.png");
+        this.load.image("clouds", "/Clouds.png");
+        this.load.image("bottomClouds", "/Bottom Clouds.png");
         this.load.image("instructions", "/Instructions.png");
         this.load.image("gameOver", "/GameOver.png");
         this.load.image("ad1", "/1 ⎯ Message.png");
@@ -40,10 +42,10 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
     addBird() {
         this.bird = this.physics.add.sprite(100, 245, "bird");
-        this.bird.setOrigin(0).setScale(0.45);
-        this.physics.world.enable(this.bird);
+        this.bird.setOrigin(0);
         this.bird.body.setGravityY(1000);
-        this.bird.body.setSize(this.bird.displayWidth, this.bird.displayHeight);
+        this.bird.body.setSize(this.bird.width * this.bird.scaleX, this.bird.height * this.bird.scaleY);
+        this.bird.setScale(0.2);
         this.bird.body.enable = false; // Disable physics initially
     }
 
@@ -110,8 +112,18 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     create() {
         this.ads = ['ad1', 'ad2', 'ad3'];
         this.background = this.add
-            .tileSprite(0, 0, this.cameras.main.width, this.cameras.main.height, "bg")
-            .setOrigin(0);
+            .tileSprite(0, 0, this.cameras.main.width * 2, this.cameras.main.height * 2, "bg")
+            .setOrigin(0)
+            .setScale(0.5);
+        this.clouds = this.add
+            .tileSprite(0, 0, this.cameras.main.width * 2, this.cameras.main.height * 2, "clouds")
+            .setOrigin(0)
+            .setScale(0.5);
+        this.bottomClouds = this.add
+            .tileSprite(0, 0, this.cameras.main.width * 2, this.cameras.main.height * 2, "bottomClouds")
+            .setOrigin(0)
+            .setScale(0.5)
+            .setDepth(1);
 
         this.scoreText = this.add
             .text(20, 20, "0", {
@@ -119,7 +131,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
                 fontSize: 30,
                 color: '#25283d'
             })
-            .setDepth(1);
+            .setDepth(2);
 
         this.scoreText.visible = false;
 
@@ -133,7 +145,11 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         // Add a flag to check if the timer is already started
         this.timerStarted = false;
 
-        const instructions = this.add.image(0, 0, "instructions").setOrigin(0)
+        const instructions = this.add
+            .image(0, 0, "instructions")
+            .setOrigin(0)
+            .setScale(0.5)
+            .setDepth(2)
 
         // Function to start the timer
         const startTimer = () => {
@@ -167,7 +183,9 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     update() {
-        this.background.tilePositionX += 2;
+        this.background.tilePositionX += 1;
+        this.clouds.tilePositionX += 2;
+        this.bottomClouds.tilePositionX += 3;
 
         if (this.timerStarted) {
             this.updateBird();
@@ -195,7 +213,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
             this.ad.destroy();
         }
 
-        this.ad = this.add.image(0, 0, this.ads[this.currentAdIndex]);
+        this.ad = this.add.image(0, 0, this.ads[this.currentAdIndex]).setDepth(2);
         this.ad.setOrigin(0);
         this.ad.setDisplaySize(Number(this.sys.game.config.width), Number(this.sys.game.config.height));
 
@@ -206,6 +224,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         this.add
             .image(this.canvas.width / 2, this.canvas.height - 90, 'continue_button')
+            .setDepth(3)
             .setInteractive()
             .setScale(0.5)
             .on('pointerdown', () => {
@@ -233,7 +252,11 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         this.scoreText.destroy();
 
-        const gameOver = this.add.image(0, 0, "gameOver").setOrigin(0);
+        const gameOver = this.add
+            .image(0, 0, "gameOver")
+            .setScale(0.5)
+            .setOrigin(0)
+            .setDepth(2);
 
         const gameOverScore = this.add
             .text(this.cameras.main.width / 2, 490, `Score: ${this.score}`, {
@@ -242,7 +265,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
                 align: 'center',
                 color: 'white'
             })
-            .setOrigin(0.5);
+            .setOrigin(0.5)
+            .setDepth(2);
 
         // Use a timer event to wait for 2 seconds
         this.time.delayedCall(2000, async () => {
@@ -256,17 +280,17 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         if (this.bird.angle < 30) {
             this.bird.angle += 2;
         }
-    
+
         // Check if the bird's top edge is above the top of the window
         if (this.bird.y <= 0) {
             this.endGame();
         }
-    
+
         // Check if the bird's bottom edge is below the bottom of the window
-        if (this.bird.y + this.bird.height/2 >= this.canvas.height) {
+        if (this.bird.y + (this.bird.height * this.bird.scaleX) >= this.cameras.main.height) {
             this.endGame();
         }
-    
+
         // Additionally, check for collision with pipes
         if (this.physics.overlap(this.bird, this.pipes)) {
             this.endGame();

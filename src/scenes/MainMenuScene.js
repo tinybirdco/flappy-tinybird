@@ -30,7 +30,8 @@ export default class MainMenuScene extends Phaser.Scene {
 
         this.add
             .image(0, 0, "login")
-            .setOrigin(0,0);
+            .setOrigin(0)
+            .setScale(0.5);
 
         this.add
             .text(
