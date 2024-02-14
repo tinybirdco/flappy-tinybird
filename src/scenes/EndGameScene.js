@@ -14,6 +14,7 @@ export default class EndGameScene extends Phaser.Scene {
 
     preload() {
         this.load.html("charts", "/charts.html");
+        this.load.image("retryBg", "/Retry.png");
         this.load.image("RetryButton", "/RetryButton.png");
     }
 
@@ -24,6 +25,7 @@ export default class EndGameScene extends Phaser.Scene {
 
     create() {
         this.getDataFromTinybird();
+        this.add.image(0, 0, "retryBg").setOrigin(0,0);
     }
 
     retry() {

@@ -27,7 +27,7 @@ export const config = {
     render: {
         pixelArt: false
     },
-    backgroundColor: "rgba(134, 182, 226,0)",
+    backgroundColor: "rgba(37, 40, 61,0)",
     scene: [MainMenuScene, EndGameScene, FlappyTinybirdScene, DealScene, DealFlappyTinybirdScene],
 };
 

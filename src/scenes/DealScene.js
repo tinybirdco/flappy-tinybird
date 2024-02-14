@@ -14,6 +14,7 @@ export default class DealScene extends Phaser.Scene {
 
     preload() {
         this.load.html("charts", "/charts.html");
+        this.load.image("retryBg", "/Retry.png");
         this.load.image("OfferButton", "/OfferButton.png"); // Load the image for the offer button
     }
 
@@ -24,6 +25,7 @@ export default class DealScene extends Phaser.Scene {
 
     create() {
         this.getDataFromTinybird();
+        this.add.image(0, 0, "retryBg").setOrigin(0,0);
     }
 
     buyPowerUp() {
@@ -59,7 +61,7 @@ export default class DealScene extends Phaser.Scene {
         charts.getChildByID("landing-text");
         
         // Set title
-        charts.getChildByID('title').innerHTML = `${this.session.name},<br/><br/>Flappy is tired of dying :(<br/><br/>Purchase this power-up to<br/>activate easy mode!`
+        charts.getChildByID('title').innerHTML = `Flappy is tired of dying :'(<br/>Purchase this power-up to activate easy mode!`
         
         // Add event to DOM button
         charts.getChildByID("offer-button").addEventListener("click", () => {
