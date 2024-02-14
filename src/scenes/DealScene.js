@@ -1,4 +1,4 @@
-import { get_data_from_tinybird, send_purchase } from "../utils/tinybird";
+import { get_data_from_tinybird } from "../utils/tinybird";
 import { endpoints } from "./../config";
 
 export default class DealScene extends Phaser.Scene {
@@ -30,8 +30,6 @@ export default class DealScene extends Phaser.Scene {
 
     buyPowerUp() {
         console.log(this.session.name + " bought a power up!"); // Log the event to the console
-
-        send_purchase(this.session);
 
         this.scene.start("DealFlappyTinybirdScene", this.session);
     }

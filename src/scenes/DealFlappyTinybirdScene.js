@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { v4 as uuidv4 } from "uuid";
-import { send_death, send_session_data } from "../utils/tinybird";
+import { send_death, send_session_data, send_purchase } from "../utils/tinybird";
 
 export default class DealFlappyTinybirdScene extends Phaser.Scene {
     session = {
@@ -140,6 +140,7 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
         // Function to start the timer
         const startTimer = () => {
             if (!this.timerStarted) {
+                send_purchase(this.session);
                 instructions.destroy();
                 this.scoreText.visible = true;
                 this.bird.body.enable = true; // Enable physics when the timer starts
