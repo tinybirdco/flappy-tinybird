@@ -25,7 +25,7 @@ export default class DealScene extends Phaser.Scene {
 
     create() {
         this.getDataFromTinybird();
-        this.add.image(0, 0, "retryBg").setOrigin(0,0);
+        this.add.image(0, 0, "retryBg").setOrigin(0);
     }
 
     buyPowerUp() {
@@ -53,7 +53,7 @@ export default class DealScene extends Phaser.Scene {
         const charts = this.add
             .dom(0, 0)
             .createFromCache("charts")
-            .setOrigin(0, 0);
+            .setOrigin(0);
 
         // Add link to landing page
         charts.getChildByID("landing-text");

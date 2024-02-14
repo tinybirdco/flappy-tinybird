@@ -42,10 +42,10 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
     addBird() {
         this.bird = this.physics.add.sprite(100, 245, "bird");
-        this.bird.setOrigin(0).setScale(0.45);
-        this.physics.world.enable(this.bird);
+        this.bird.setOrigin(0);
         this.bird.body.setGravityY(1000);
-        this.bird.body.setSize(this.bird.displayWidth, this.bird.displayHeight);
+        this.bird.body.setSize(this.bird.width * this.bird.scaleX, this.bird.height * this.bird.scaleY);
+        this.bird.setScale(0.2);
         this.bird.body.enable = false; // Disable physics initially
     }
 
@@ -271,17 +271,17 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         if (this.bird.angle < 30) {
             this.bird.angle += 2;
         }
-    
+
         // Check if the bird's top edge is above the top of the window
         if (this.bird.y <= 0) {
             this.endGame();
         }
-    
+
         // Check if the bird's bottom edge is below the bottom of the window
-        if (this.bird.y + this.bird.height/2 >= this.canvas.height) {
+        if (this.bird.y + (this.bird.height * this.bird.scaleX) >= this.cameras.main.height) {
             this.endGame();
         }
-    
+
         // Additionally, check for collision with pipes
         if (this.physics.overlap(this.bird, this.pipes)) {
             this.endGame();
