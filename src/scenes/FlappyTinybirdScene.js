@@ -215,12 +215,12 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
                     session: this.session,
                     score: this.score,
                 };
-                // if (this.offer == 1) {
-                //     this.scene.start("DealScene", data);
-                // } else {
-                //     this.scene.start("EndGameScene", data);
-                // }
-                this.scene.start("DealScene", data);
+                if (this.offer == 1) {
+                    this.scene.start("DealScene", data);
+                } else {
+                    this.scene.start("EndGameScene", data);
+                }
+                // this.scene.start("DealScene", data);
             });
     }
 
@@ -236,9 +236,19 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         const gameOver = this.add.image(0, 0, "gameOver").setOrigin(0);
 
+        const gameOverScore = this.add
+            .text(this.cameras.main.width / 2, 490, `Score: ${this.score}`, {
+                fontFamily: 'Pixel Operator',
+                fontSize: 18,
+                align: 'center',
+                color: 'white'
+            })
+            .setOrigin(0.5);
+
         // Use a timer event to wait for 2 seconds
         this.time.delayedCall(2000, async () => {
             gameOver.destroy();
+            gameOverScore.destroy();
             this.showAd();
         });
     }

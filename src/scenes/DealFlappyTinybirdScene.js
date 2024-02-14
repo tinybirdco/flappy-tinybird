@@ -222,9 +222,19 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
 
         const gameOver = this.add.image(0, 0, "gameOver").setOrigin(0);
 
+        const gameOverScore = this.add
+            .text(this.cameras.main.width / 2, 490, `Score: ${this.score}`, {
+                fontFamily: 'Pixel Operator',
+                fontSize: 18,
+                align: 'center',
+                color: 'white'
+            })
+            .setOrigin(0.5);
+
         // Use a timer event to wait for 2 seconds
         this.time.delayedCall(2000, async () => {
             gameOver.destroy();
+            gameOverScore.destroy();
             this.showAd();
         });
     }
