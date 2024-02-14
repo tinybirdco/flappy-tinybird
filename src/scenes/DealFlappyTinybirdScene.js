@@ -22,24 +22,26 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
 
     preload() {
         this.load.image("bg", "/bg.png");
+        this.load.image("instructions", "/Instructions.png");
+        this.load.image("gameOver", "/GameOver.png");
         this.load.image("ad1","/1 ⎯ Message.png");
         this.load.image("ad2","/2 ⎯ Message.png");
         this.load.image("ad3","/3 ⎯ Message.png");
         this.load.image("bird", "/bird.png");
         this.load.image("continue_button", "ContinueButton.png");
         this.load.spritesheet("pipe", "/pipe.png", {
-            frameWidth: 20,
-            frameHeight: 20,
+            frameWidth: 80,
+            frameHeight: 80,
         });
         this.canvas = this.sys.game.canvas;
     }
 
     addBird() {
         this.bird = this.physics.add.sprite(100, 245, "bird");
-        this.bird.setOrigin(0, 0);
+        this.bird.setOrigin(0).setScale(0.45);
         this.physics.world.enable(this.bird);
         this.bird.body.setGravityY(1000);
-        this.bird.body.setSize(17, 12);
+        this.bird.body.setSize(this.bird.displayWidth, this.bird.displayHeight);
         this.bird.body.enable = false; // Disable physics initially
     }
 
@@ -74,12 +76,12 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
     addPipe(x, y, frame) {
         const pipe = this.physics.add.image(x, y, "pipe", frame);
         this.pipes.add(pipe);
-        pipe.setOrigin(0, 0);
-        pipe.setScale(3);
+        pipe.setOrigin(0);
+        pipe.setScale(0.75);
         this.physics.world.enable(pipe);
         pipe.body.allowGravity = false;
         pipe.body.setVelocityX(-350);
-        pipe.body.setSize(20, 20);
+        pipe.body.setSize(80, 80);
         pipe.setActive(true);
     }
 
@@ -111,14 +113,17 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
     create() {
         this.ads = ['ad1', 'ad2', 'ad3'];
         this.background = this.add
-            .tileSprite(0, 0, 400, 560, "bg")
-            .setOrigin(0, 0);
+            .tileSprite(0, 0, this.cameras.main.width, this.cameras.main.height, "bg")
+            .setOrigin(0);
 
         this.scoreText = this.add
             .text(20, 20, "0", {
                 font: "30px",
+                color: '#25283d'
             })
             .setDepth(1);
+
+        this.scoreText.visible = false;
 
         this.addBird();
         this.addEventListeners();
@@ -130,19 +135,13 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
         // Add a flag to check if the timer is already started
         this.timerStarted = false;
         
-        const instructionText = this.add.text(
-            this.cameras.main.width / 2,
-            460,
-            "Fly through the pipes to score!\n\nPress space, enter, or click\nto flap your wings.", {
-            fontFamily: 'Pixel Operator',
-            fontSize: 25,
-            align: 'center'
-        }).setOrigin(0.5);
+        const instructions = this.add.image(0, 0, "instructions").setOrigin(0)
 
         // Function to start the timer
         const startTimer = () => {
             if (!this.timerStarted) {
-                instructionText.destroy();
+                instructions.destroy();
+                this.scoreText.visible = true;
                 this.bird.body.enable = true; // Enable physics when the timer starts
                 this.bird.angle = 0; // Set the bird's angle to 0 to start
                 this.timer = this.time.addEvent({
@@ -185,7 +184,7 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
         }
     
         this.ad = this.add.image(0, 0, this.ads[this.currentAdIndex]);
-        this.ad.setOrigin(0, 0);
+        this.ad.setOrigin(0);
         this.ad.setDisplaySize(Number(this.sys.game.config.width), Number(this.sys.game.config.height));
 
         this.currentAdIndex = (this.currentAdIndex + 1) % this.ads.length;
@@ -219,36 +218,44 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
 
         send_death(this.session);
 
-        // Display "GAME OVER" text
-        const gameOverText = this.add.text(
-            this.canvas.width / 2,
-            this.canvas.height / 2,
-            'GAME OVER',
-            {
+        this.scoreText.destroy();
+
+        const gameOver = this.add.image(0, 0, "gameOver").setOrigin(0);
+
+        const gameOverScore = this.add
+            .text(this.cameras.main.width / 2, 490, `Score: ${this.score}`, {
                 fontFamily: 'Pixel Operator',
-                fontSize: 40,
-                color: '#ff0000',
-                align: 'center'
-            }).setOrigin(0.5);
+                fontSize: 18,
+                align: 'center',
+                color: 'white'
+            })
+            .setOrigin(0.5);
 
         // Use a timer event to wait for 2 seconds
         this.time.delayedCall(2000, async () => {
-            gameOverText.destroy();
-            this.scoreText.destroy();
+            gameOver.destroy();
+            gameOverScore.destroy();
             this.showAd();
         });
     }
 
     updateBird() {
-
         if (this.bird.angle < 30) {
             this.bird.angle += 2;
         }
-
-        if (
-            this.bird.y + this.bird.height > this.canvas.height ||
-            this.bird.y + this.bird.height < 0
-        ) {
+    
+        // Check if the bird's top edge is above the top of the window
+        if (this.bird.y <= 0) {
+            this.endGame();
+        }
+    
+        // Check if the bird's bottom edge is below the bottom of the window
+        if (this.bird.y + this.bird.height/2 >= this.canvas.height) {
+            this.endGame();
+        }
+    
+        // Additionally, check for collision with pipes
+        if (this.physics.overlap(this.bird, this.pipes)) {
             this.endGame();
         }
     }
