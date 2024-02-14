@@ -10,7 +10,7 @@ export default class MainMenuScene extends Phaser.Scene {
     }
 
     submitForm(nameElement, errorElement) {
-        const name = nameElement.value;
+        const name = nameElement.value.toLowerCase();
 
         if (name === "") {
             errorElement.setAttribute("data-enabled", true);
