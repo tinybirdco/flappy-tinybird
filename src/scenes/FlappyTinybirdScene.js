@@ -145,7 +145,11 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         // Add a flag to check if the timer is already started
         this.timerStarted = false;
 
-        const instructions = this.add.image(0, 0, "instructions").setOrigin(0).setDepth(2)
+        const instructions = this.add
+            .image(0, 0, "instructions")
+            .setOrigin(0)
+            .setScale(0.5)
+            .setDepth(2)
 
         // Function to start the timer
         const startTimer = () => {
@@ -248,7 +252,11 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         this.scoreText.destroy();
 
-        const gameOver = this.add.image(0, 0, "gameOver").setOrigin(0).setDepth(2);
+        const gameOver = this.add
+            .image(0, 0, "gameOver")
+            .setScale(0.5)
+            .setOrigin(0)
+            .setDepth(2);
 
         const gameOverScore = this.add
             .text(this.cameras.main.width / 2, 490, `Score: ${this.score}`, {
@@ -257,7 +265,8 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
                 align: 'center',
                 color: 'white'
             })
-            .setOrigin(0.5);
+            .setOrigin(0.5)
+            .setDepth(2);
 
         // Use a timer event to wait for 2 seconds
         this.time.delayedCall(2000, async () => {

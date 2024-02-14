@@ -25,7 +25,10 @@ export default class EndGameScene extends Phaser.Scene {
 
     create() {
         this.getDataFromTinybird();
-        this.add.image(0, 0, "retryBg").setOrigin(0);
+        this.add
+            .image(0, 0, "retryBg")
+            .setOrigin(0)
+            .setScale(0.5);
     }
 
     retry() {
