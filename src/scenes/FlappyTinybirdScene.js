@@ -220,7 +220,6 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
                 } else {
                     this.scene.start("EndGameScene", data);
                 }
-                // this.scene.start("DealScene", data);
             });
     }
 
