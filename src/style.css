@@ -1,38 +1,38 @@
 @tailwind base;
 
 @font-face {
-    font-family: "Pixel Operator";
-    src: url("../assets/fonts/PixelOperator.eot?") format("eot"),
-      url("../assets/fonts/PixelOperator.woff") format("woff"),
-      url("../assets/fonts/PixelOperator.ttf") format("truetype"),
-      url("../assets/fonts/PixelOperator.svg#PixelOperator") format("svg");
-    font-weight: normal;
-    font-style: normal;
-  }
-  
+  font-family: "Pixel Operator";
+  src: url("../assets/fonts/PixelOperator.eot?") format("eot"),
+    url("../assets/fonts/PixelOperator.woff") format("woff"),
+    url("../assets/fonts/PixelOperator.ttf") format("truetype"),
+    url("../assets/fonts/PixelOperator.svg#PixelOperator") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
 @font-face {
-    font-family: "Pixel Operator";
-    src: url("../assets/fonts/PixelOperatorBold.ttf") format("truetype");
-    font-weight: bold;
-    font-style: normal;
-  }
-  
+  font-family: "Pixel Operator";
+  src: url("../assets/fonts/PixelOperatorBold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
 
 body {
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background-color: #25283d;
-    font-family: 'Pixel Operator', sans-serif;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #25283d;
+  font-family: 'Pixel Operator', sans-serif;
 }
 
 .truncate {
-    max-width: 200px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Hide scrollbar for end scene */
@@ -41,20 +41,36 @@ body {
 }
 
 #charts {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 /* Modify form input */
-input[type="text"] {
+input[type="text"]:not(:focus) {
   background-color: transparent;
-  border: none;
-  outline: none;
   text-align: center;
 }
 
-/* Modify form placeholder color */
+input[type="text"]:focus {
+  background-color: transparent;
+  text-align: center;
+  outline-style: solid;
+  outline-width: 4px;
+  outline-color: #6CEA6F;
+}
+
 input[type="text"]::placeholder {
+  color: #A5A7B4;
+  font-weight: bold;
+}
+
+input[type="text"]:focus::placeholder {
+  color: transparent;
+}
+
+input[type="text"] {
   color: #25283D;
   font-weight: bold;
 }
