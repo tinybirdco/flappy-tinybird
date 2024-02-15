@@ -1,76 +1,82 @@
 @tailwind base;
 
 @font-face {
-  font-family: "Pixel Operator";
-  src: url("../assets/fonts/PixelOperator.eot?") format("eot"),
-    url("../assets/fonts/PixelOperator.woff") format("woff"),
-    url("../assets/fonts/PixelOperator.ttf") format("truetype"),
-    url("../assets/fonts/PixelOperator.svg#PixelOperator") format("svg");
-  font-weight: normal;
-  font-style: normal;
+    font-family: "Pixel Operator";
+    src: url("../assets/fonts/PixelOperator.eot?") format("eot"),
+        url("../assets/fonts/PixelOperator.woff") format("woff"),
+        url("../assets/fonts/PixelOperator.ttf") format("truetype"),
+        url("../assets/fonts/PixelOperator.svg#PixelOperator") format("svg");
+    font-weight: normal;
+    font-style: normal;
 }
 
 @font-face {
-  font-family: "Pixel Operator";
-  src: url("../assets/fonts/PixelOperatorBold.ttf") format("truetype");
-  font-weight: bold;
-  font-style: normal;
+    font-family: "Pixel Operator";
+    src: url("../assets/fonts/PixelOperatorBold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
 }
 
+@font-face {
+    font-family: "Pixel Operator Bold";
+    src: url("../assets/fonts/PixelOperatorBold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
 
 body {
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background-color: #25283d;
-  font-family: 'Pixel Operator', sans-serif;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #25283d;
+    font-family: "Pixel Operator", sans-serif;
 }
 
 .truncate {
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* Hide scrollbar for end scene */
 #charts::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 #charts {
-  -ms-overflow-style: none;
-  /* IE and Edge */
-  scrollbar-width: none;
-  /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 /* Modify form input */
 input[type="text"]:not(:focus) {
-  background-color: transparent;
-  text-align: center;
+    background-color: transparent;
+    text-align: center;
 }
 
 input[type="text"]:focus {
-  background-color: transparent;
-  text-align: center;
-  outline-style: solid;
-  outline-width: 4px;
-  outline-color: #6CEA6F;
+    background-color: transparent;
+    text-align: center;
+    outline-style: solid;
+    outline-width: 4px;
+    outline-color: #6cea6f;
 }
 
 input[type="text"]::placeholder {
-  color: #A5A7B4;
-  font-weight: bold;
+    color: #a5a7b4;
+    font-weight: bold;
 }
 
 input[type="text"]:focus::placeholder {
-  color: transparent;
+    color: transparent;
 }
 
 input[type="text"] {
-  color: #25283D;
-  font-weight: bold;
+    color: #25283d;
+    font-weight: bold;
 }
