@@ -42,7 +42,7 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
         this.bird = this.physics.add.sprite(100, 245, "bird");
         this.bird.setOrigin(0);
         this.bird.body.setGravityY(1000);
-        this.bird.body.setSize(this.bird.width * this.bird.scaleX, this.bird.height * this.bird.scaleY);
+        this.bird.body.setSize(this.bird.width * this.bird.scaleX / 2, this.bird.height * this.bird.scaleY / 2);
         this.bird.setScale(0.2);
         this.bird.body.enable = false; // Disable physics initially
     }
