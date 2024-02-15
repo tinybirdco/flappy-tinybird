@@ -24,12 +24,12 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
         this.load.image("bg", "/Background.png");
         this.load.image("clouds", "/Clouds.png");
         this.load.image("bottomClouds", "/Bottom Clouds.png");
-        this.load.image("instructions", "/Instructions.png");
+        this.load.image("instructions", "/Instructions.svg");
         this.load.image("gameOver", "/GameOver.png");
         this.load.image("ad1","/1 ⎯ Message.png");
         this.load.image("ad2","/2 ⎯ Message.png");
         this.load.image("ad3","/3 ⎯ Message.png");
-        this.load.image("bird", "/bird.png");
+        this.load.image("bird", "/bird.svg");
         this.load.image("continue_button", "ContinueButton.png");
         this.load.spritesheet("pipe", "/pipe.png", {
             frameWidth: 80,
@@ -43,7 +43,7 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
         this.bird.setOrigin(0);
         this.bird.body.setGravityY(1000);
         this.bird.body.setSize(this.bird.width * this.bird.scaleX / 2, this.bird.height * this.bird.scaleY / 2);
-        this.bird.setScale(0.2);
+        // this.bird.setScale(0.2);
         this.bird.body.enable = false; // Disable physics initially
     }
 
@@ -150,7 +150,7 @@ export default class DealFlappyTinybirdScene extends Phaser.Scene {
         const instructions = this.add
             .image(0, 0, "instructions")
             .setOrigin(0)
-            .setScale(0.5)
+            // .setScale(0.5)
             .setDepth(2)
 
         // Function to start the timer
