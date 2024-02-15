@@ -20,38 +20,34 @@ export default class MainMenuScene extends Phaser.Scene {
     }
 
     create() {
-
         const centerX = this.cameras.main.width / 2;
         const centerY = this.cameras.main.height / 2;
-        
-        const userForm = this.add.dom(centerX, centerY - 50).createFromCache("userForm");
+
+        const userForm = this.add
+            .dom(centerX, centerY - 50)
+            .createFromCache("userForm");
         const nameElement = userForm.getChildByID("name");
         const errorElement = userForm.getChildByID("error");
 
-        this.add
-            .image(0, 0, "login")
-            .setOrigin(0)
-            .setScale(0.5);
+        this.add.image(0, 0, "login").setOrigin(0).setScale(0.5);
 
         this.add
-            .text(
-                this.cameras.main.width / 2,
-                470,
-                "tinybird.co", {
-                fontFamily: 'Pixel Operator',
-                fontSize: 18,
-                align: 'center',
-                color: '#b2e2f1'
+            .text(this.cameras.main.width / 2, 470, "tinybird.co", {
+                fontFamily: "Pixel Operator Bold",
+                fontSize: 22,
+                resolution: 10,
+                align: "center",
+                color: "#b2e2f1",
             })
             .setOrigin(0.5)
             .setInteractive({ cursor: "pointer" })
             .on("pointerup", () => {
-                window.open('https://www.tinybird.co/', '_blank');
+                window.open("https://www.tinybird.co/", "_blank");
             });
 
         this.add
             .image(centerX, centerY + 45, "PlayButton")
-            .setScale(.5)
+            .setScale(0.5)
             .setInteractive({ cursor: "pointer" })
             .on("pointerup", () => {
                 this.submitForm(nameElement, errorElement);
