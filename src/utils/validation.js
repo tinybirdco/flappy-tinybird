@@ -1,7 +1,8 @@
 import Filter from "badwords-filter";
+import badwords from "./badwords";
 
 const config = {
-    list: undefined,
+    list: badwords,
 };
 const filter = new Filter(config);
 
