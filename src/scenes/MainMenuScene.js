@@ -1,3 +1,5 @@
+import { isValidUser } from "../utils/validation";
+
 export default class MainMenuScene extends Phaser.Scene {
     constructor() {
         super({ key: "MainMenuScene" });
@@ -10,9 +12,11 @@ export default class MainMenuScene extends Phaser.Scene {
     }
 
     submitForm(nameElement, errorElement) {
-        const name = nameElement.value.toLowerCase();
+        const name = nameElement.value;
+        const validation = isValidUser(name);
 
-        if (name === "") {
+        if (!validation.status) {
+            errorElement.innerText = validation.message;
             errorElement.setAttribute("data-enabled", true);
         } else {
             this.scene.start("FlappyTinybirdScene", { name });
