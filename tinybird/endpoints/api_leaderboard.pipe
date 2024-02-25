@@ -18,7 +18,7 @@ SQL >
         maxMerge(game_ts) AS t
     FROM mv_player_stats
     GROUP BY player_id, session_id
-    ORDER BY total_score DESC
+    ORDER BY rank
 
 
 
