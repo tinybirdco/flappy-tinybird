@@ -7,15 +7,15 @@ DESCRIPTION >
 SQL >
 
     %
-        SELECT
-            session_id,
-            countMerge(scores) AS total_score,
-            toDateTime(maxMerge(game_ts)) AS t
-        FROM mv_player_stats
-        WHERE
-            player_id = {{ String(player_param, 'dm@test.1', description="Player to filter on", required=True) }}
-        GROUP BY session_id
-        ORDER BY t DESC
-        LIMIT 10
+    SELECT
+        session_id,
+        countMerge(scores) AS total_score,
+        toDateTime(maxMerge(game_ts)) AS t
+    FROM mv_player_stats
+    WHERE
+        player_id = {{ String(player_param, 'player1', description="Player to filter on", required=True) }}
+    GROUP BY session_id
+    ORDER BY t DESC
+    LIMIT 10
 
 

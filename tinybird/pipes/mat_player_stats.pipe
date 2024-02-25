@@ -18,6 +18,5 @@ SQL >
 
 TYPE materialized
 DATASOURCE mv_player_stats
-ENGINE "AggregatingMergeTree"
-ENGINE_SORTING_KEY "player_id, session_id"
+
 

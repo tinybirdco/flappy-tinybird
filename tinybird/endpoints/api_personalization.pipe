@@ -7,16 +7,16 @@ DESCRIPTION >
 SQL >
 
     %
-        SELECT
-            player_id,
-            session_id,
-            countMerge(scores) AS score,
-            countMerge(purchases) AS purchases,
-            maxMerge(game_ts) AS t
-        FROM mv_player_stats
-        WHERE
-            player_id = {{ String(player_param, 'dm@test.60', description="Player to filter on", required=True) }}
-        GROUP BY player_id, session_id
+    SELECT
+        player_id,
+        session_id,
+        countMerge(scores) AS score,
+        countMerge(purchases) AS purchases,
+        maxMerge(game_ts) AS t
+    FROM mv_player_stats
+    WHERE
+        player_id = {{ String(player_param, 'player1', description="Player to filter on", required=True) }}
+    GROUP BY player_id, session_id
 
 
 
