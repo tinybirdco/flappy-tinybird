@@ -6,27 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flappy Tinybird</title>
     <link rel="stylesheet" href="src/style.css" />
+    <link rel="icon" type="image/png" href="/bird.png">
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
-    <div class="flex">
-        <div id="app" class="mr-5"></div>
-        <div class="analytics flex justify-left items-left gap-5">
-            <div class="player_stats_container">
-                <h3>Player Stats</h3>
-                <div id="player_stats"></div>
-            </div>
-            <div id="top_10_leaderboard_container">
-                <h3>Leaderboard</h3>
-                <div id="top_10_leaderboard"></div>
-            </div>
-            <div id="recent_player_stats_container">
-                <h3>Recent Player Stats</h3>
-                <div id="recent_player_stats"></div>
-            </div>
-        </div>
-    </div>
+    <div id="app" class="aspect-[400/560]"></div>
+    <div style="font-family:'Pixel Operator Bold'; position:absolute; left:-1000px; visibility:hidden;">.</div>
     <script type="module" src="src/main.js"></script>
 </body>
 

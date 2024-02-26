@@ -1,7 +1,7 @@
 import { get_data_from_tinybird } from "../utils/tinybird";
 import { endpoints } from "./../config";
 
-export default class EndGameScene extends Phaser.Scene {
+export default class DealScene extends Phaser.Scene {
     session = {
         name: "",
         id: "",
@@ -9,13 +9,13 @@ export default class EndGameScene extends Phaser.Scene {
     score = 0;
 
     constructor() {
-        super({ key: "EndGameScene" });
+        super({ key: "DealScene" });
     }
 
     preload() {
         this.load.html("charts", "/charts.html");
         this.load.image("retryBg", "/Retry.png");
-        this.load.image("RetryButton", "/RetryButton.png");
+        this.load.image("OfferButton", "/OfferButton.png"); // Load the image for the offer button
     }
 
     init(data) {
@@ -31,8 +31,10 @@ export default class EndGameScene extends Phaser.Scene {
             .setScale(0.5);
     }
 
-    retry() {
-        this.scene?.start("FlappyTinybirdScene", this.session);
+    buyPowerUp() {
+        console.log(this.session.name + " bought a power up!"); // Log the event to the console
+
+        this.scene.start("DealFlappyTinybirdScene", this.session);
     }
 
     getDataFromTinybird() {
@@ -50,41 +52,42 @@ export default class EndGameScene extends Phaser.Scene {
             "player_param",
             this.session.name
         );
+
         const charts = this.add
             .dom(0, 0)
             .createFromCache("charts")
             .setOrigin(0);
-        
+
         // Add link to landing page
         charts.getChildByID("landing-text");
         
-        // Set name and score
-        charts.getChildByID("title").innerHTML = `${
-            this.session.name
-        },<br/>you scored ${this.score} point${this.score !== 1 ? "s" : ""}!`;
-
+        // Set title
+        charts.getChildByID('title').innerHTML = `Flappy is tired of dying :'(<br/>Purchase this power-up to activate easy mode!`
+        
         // Add event to DOM button
-        charts.getChildByID("retry-button").addEventListener("click", () => {
-            this.retry();
+        charts.getChildByID("offer-button").addEventListener("click", () => {
+            this.buyPowerUp();
         });
 
-        charts.getChildByID("offer-button").remove();
+        charts.getChildByID("retry-button").remove();
 
+        
         return Promise.all([
             get_data_from_tinybird(endpoints.top_10_url)
                 .then((r) => this.buildTopTen(charts, r)),
             get_data_from_tinybird(endpoints.player_stats_url)
                 .then((r) => this.buildPlayerStats(charts, r)),
             get_data_from_tinybird(endpoints.recent_player_stats_url)
-                .then((r) => this.buildLastPlayed(charts, r)),
+                .then((r) => this.buildLastPlayed(charts, r))
         ]);
     }
 
     buildTopTen(charts, top10_result) {
         if (!this.scene.isActive()) return;
+
         console.log("Building TopTen");
         const leaderboard = charts.getChildByID("leaderboard");
-
+        
         top10_result.data.forEach((entry, index) => {
             const score = leaderboard.querySelector(`#tr${index + 1}-score`);
             const name = leaderboard.querySelector(`#tr${index + 1}-name`);

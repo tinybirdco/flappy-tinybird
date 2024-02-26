@@ -1,6 +1,4 @@
-import { addDataToDOM } from "../analytics/statBuilder";
-import { get_data_from_tinybird } from "../utils/tinybird";
-import { endpoints } from "./../config";
+import { isValidUser } from "../utils/validation";
 
 export default class MainMenuScene extends Phaser.Scene {
     constructor() {
@@ -8,42 +6,52 @@ export default class MainMenuScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("bg", "/bg.png");
+        this.load.image("login", "/login.png");
         this.load.image("PlayButton", "/PlayButton.png");
         this.load.html("userForm", "/UserForm.html");
     }
 
     submitForm(nameElement, errorElement) {
         const name = nameElement.value;
+        const validation = isValidUser(name);
 
-        if (name === "") {
+        if (!validation.status) {
+            errorElement.innerText = validation.message;
             errorElement.setAttribute("data-enabled", true);
         } else {
             this.scene.start("FlappyTinybirdScene", { name });
         }
     }
 
-    getDataFromTinybird() {
-        get_data_from_tinybird(endpoints.top_10_url)
-            .then((data) => addDataToDOM(data, "top_10_leaderboard"))
-            .catch((e) => e.toString());
-
-        get_data_from_tinybird(endpoints.recent_player_stats_url)
-            .then((data) => addDataToDOM(data, "recent_player_stats"))
-            .catch((e) => e.toString());
-    }
-
     create() {
-        this.getDataFromTinybird();
+        const centerX = this.cameras.main.width / 2;
+        const centerY = this.cameras.main.height / 2;
 
-        const userForm = this.add.dom(140, 175).createFromCache("userForm");
+        const userForm = this.add
+            .dom(centerX, centerY - 50)
+            .createFromCache("userForm");
         const nameElement = userForm.getChildByID("name");
         const errorElement = userForm.getChildByID("error");
 
-        this.add.tileSprite(0, 0, 400, 560, "bg").setOrigin(0, 0);
+        this.add.image(0, 0, "login").setOrigin(0).setScale(0.5);
 
         this.add
-            .image(200, 290, "PlayButton")
+            .text(this.cameras.main.width / 2, 470, "tinybird.co", {
+                fontFamily: "Pixel Operator Bold",
+                fontSize: 22,
+                resolution: 10,
+                align: "center",
+                color: "#b2e2f1",
+            })
+            .setOrigin(0.5)
+            .setInteractive({ cursor: "pointer" })
+            .on("pointerup", () => {
+                window.open("https://www.tinybird.co/", "_blank");
+            });
+
+        this.add
+            .image(centerX, centerY + 45, "PlayButton")
+            .setScale(0.5)
             .setInteractive({ cursor: "pointer" })
             .on("pointerup", () => {
                 this.submitForm(nameElement, errorElement);
@@ -60,9 +68,5 @@ export default class MainMenuScene extends Phaser.Scene {
             .on("down", () => {
                 this.submitForm(nameElement, errorElement);
             });
-
-        this.input.on("pointerdown", () => {
-            this.submitForm(nameElement, errorElement);
-        });
     }
 }

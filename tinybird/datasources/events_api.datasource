@@ -1,0 +1,12 @@
+TOKEN "app_append_token" APPEND
+
+
+SCHEMA >
+    `name` String `json:$.name`,
+    `session_id` String `json:$.session_id`,
+    `timestamp` DateTime64(3) `json:$.timestamp`,
+    `type` String `json:$.type`
+
+ENGINE "MergeTree"
+ENGINE_PARTITION_KEY "toYear(timestamp)"
+ENGINE_SORTING_KEY "name, session_id, timestamp, type"

@@ -1,30 +1,82 @@
 @tailwind base;
 
-.analytics table {
-    width: 100%;
-    border-collapse: collapse;
+@font-face {
+    font-family: "Pixel Operator";
+    src: url("../assets/fonts/PixelOperator.eot?") format("eot"),
+        url("../assets/fonts/PixelOperator.woff") format("woff"),
+        url("../assets/fonts/PixelOperator.ttf") format("truetype"),
+        url("../assets/fonts/PixelOperator.svg#PixelOperator") format("svg");
+    font-weight: normal;
+    font-style: normal;
 }
 
-.analytics table,
-.analytics th,
-.analytics td {
-    border: 1px solid black;
+@font-face {
+    font-family: "Pixel Operator";
+    src: url("../assets/fonts/PixelOperatorBold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Pixel Operator Bold";
+    src: url("../assets/fonts/PixelOperatorBold.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #25283d;
+    font-family: "Pixel Operator", sans-serif;
+}
+
+.truncate {
+    max-width: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Hide scrollbar for end scene */
+#charts::-webkit-scrollbar {
+    display: none;
+}
+
+#charts {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* Modify form input */
+input[type="text"]:not(:focus) {
+    background-color: transparent;
     text-align: center;
-    padding: 10px;
 }
 
-.analytics th {
-    background-color: #f2f2f2;
+input[type="text"]:focus {
+    background-color: transparent;
+    text-align: center;
+    outline-style: solid;
+    outline-width: 4px;
+    outline-color: #6cea6f;
 }
 
-.analytics tr:nth-child(even) {
-    background-color: #f9f9f9;
+input[type="text"]::placeholder {
+    color: #a5a7b4;
+    font-weight: bold;
 }
 
-.analytics tr:nth-child(odd) {
-    background-color: #ffffff;
+input[type="text"]:focus::placeholder {
+    color: transparent;
 }
 
-.analytics tr:hover {
-    background-color: #ddd;
+input[type="text"] {
+    color: #25283d;
+    font-weight: bold;
 }

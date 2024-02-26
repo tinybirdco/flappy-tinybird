@@ -1,16 +1,15 @@
 import Phaser from "phaser";
 import { v4 as uuidv4 } from "uuid";
-import { get_data_from_tinybird, send_death, send_session_data } from "../utils/tinybird";
-import { endpoints } from "./../config";
+import { send_death, send_session_data, send_purchase } from "../utils/tinybird";
 
-export default class FlappyTinybirdScene extends Phaser.Scene {
+export default class DealFlappyTinybirdScene extends Phaser.Scene {
     session = {
         name: "",
         id: "",
     };
 
     constructor() {
-        super({ key: "FlappyTinybirdScene" });
+        super({ key: "DealFlappyTinybirdScene" });
         this.currentAdIndex = 0;
     }
 
@@ -18,7 +17,6 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.score = 0;
         this.session.name = player.name;
         this.session.id = uuidv4();
-        this.offer = null;
         this.ended = false;
     }
 
@@ -28,9 +26,9 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.load.image("bottomClouds", "/Bottom Clouds.png");
         this.load.image("instructions", "/Instructions.svg");
         this.load.image("gameOver", "/GameOver.png");
-        this.load.image("ad1", "/1 ⎯ Message.png");
-        this.load.image("ad2", "/2 ⎯ Message.png");
-        this.load.image("ad3", "/3 ⎯ Message.png");
+        this.load.image("ad1","/1 ⎯ Message.png");
+        this.load.image("ad2","/2 ⎯ Message.png");
+        this.load.image("ad3","/3 ⎯ Message.png");
         this.load.image("bird", "/bird.svg");
         this.load.image("continue_button", "ContinueButton.png");
         this.load.spritesheet("pipe", "/pipe.png", {
@@ -50,7 +48,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
     }
 
     jump() {
-        this.bird.body.setVelocityY(-350);
+        this.bird.body.setVelocityY(-350); //Updated this var
         this.bird.scene.tweens.add({
             targets: this.bird,
             props: { angle: -20 },
@@ -93,12 +91,17 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         const gap = Math.floor(Math.random() * 5) + 1;
 
         for (let i = 0; i < 10; i++) {
-            if (i !== gap && i !== gap + 1 && i !== gap + 2) {
+            // Adjust the gap size to make it bigger
+            if (i !== gap && i !== gap + 1 && i !== gap + 2 && i !== gap + 3 && i !== gap + 4) {
+                // Check if the current index is not part of the gap range
                 if (i === gap - 1) {
+                    // Create the pipe just before the gap
                     this.addPipe(400, i * 60, 0);
-                } else if (i === gap + 3) {
+                } else if (i === gap + 5) {
+                    // Create the pipe just after the gap
                     this.addPipe(400, i * 60, 1);
                 } else {
+                    // Create regular pipes within the range
                     this.addPipe(400, i * 60, 2);
                 }
             }
@@ -127,8 +130,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         this.scoreText = this.add
             .text(20, 20, "0", {
-                fontFamily: 'Pixel Operator',
-                fontSize: 30,
+                font: "30px",
                 color: '#25283d'
             })
             .setDepth(2);
@@ -144,7 +146,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
 
         // Add a flag to check if the timer is already started
         this.timerStarted = false;
-
+        
         const instructions = this.add
             .image(0, 0, "instructions")
             .setOrigin(0)
@@ -154,6 +156,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         // Function to start the timer
         const startTimer = () => {
             if (!this.timerStarted) {
+                send_purchase(this.session);
                 instructions.destroy();
                 this.scoreText.visible = true;
                 this.bird.body.enable = true; // Enable physics when the timer starts
@@ -166,7 +169,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
                 });
                 this.timerStarted = true;
             }
-        };
+        }
 
         // Start the timer when the player hits space or enter or clicks
         this.input.keyboard
@@ -190,38 +193,22 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         if (this.timerStarted) {
             this.updateBird();
         }
-    }
 
-    handleOffer(r) {
-        this.offer = r?.data?.[0]?.offer ?? 0;
-    }
-
-    getDataFromTinybird() {
-        endpoints.personalization_url.searchParams.set(
-            "player_param",
-            this.session.name
-        );
-
-        return Promise.all([
-            get_data_from_tinybird(endpoints.personalization_url)
-                .then((r) => this.handleOffer(r))
-        ]);
+        this.physics.overlap(this.bird, this.pipes, () => this.endGame());
     }
 
     showAd() {
         if (this.ad) {
             this.ad.destroy();
         }
-
+    
         this.ad = this.add.image(0, 0, this.ads[this.currentAdIndex]).setDepth(2);
         this.ad.setOrigin(0);
         this.ad.setDisplaySize(Number(this.sys.game.config.width), Number(this.sys.game.config.height));
 
         this.currentAdIndex = (this.currentAdIndex + 1) % this.ads.length;
         console.log(`Current ad index after increment: ${this.currentAdIndex}`);
-
-        this.getDataFromTinybird();
-
+    
         this.add
             .image(this.canvas.width / 2, this.canvas.height - 90, 'continue_button')
             .setDepth(3)
@@ -234,11 +221,7 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
                     session: this.session,
                     score: this.score,
                 };
-                if (this.offer == 1) {
-                    this.scene.start("DealScene", data);
-                } else {
-                    this.scene.start("EndGameScene", data);
-                }
+                this.scene.start("EndGameScene", data);
             });
     }
 
@@ -247,6 +230,11 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         this.ended = true;
 
         this.timer.remove();
+
+        const data = {
+            session: this.session,
+            score: this.score,
+        };
 
         send_death(this.session);
 

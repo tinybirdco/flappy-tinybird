@@ -1,0 +1,145 @@
+<div id="charts" class="grid place-items-center w-[400px] h-[560px] overflow-auto pt-8 pb-20">
+    <a href="https://github.com/tinybirdco/flappy-tinybird" target="_blank">
+        <img src="/RetryInput.png" alt="Retry Input" class="mb-8 mt-2" width="270" height="84">
+    </a>
+    <div class="text-center text-white mb-8 leading-5 px-8">
+        <button id="offer-button"><img src="./OfferButton.png" width="230" alt="Claim offer button" class="mb-4"/></button>
+        <button id="retry-button"><img src="./RetryButton.png" width="125" alt="Retry button" class="mb-4"/></button>
+        <p id="title" class="mb-8"></p>
+    </div>
+    <div id="leaderboard" class="w-[300px] h-[320px]">
+        <h1 class="text-left text-white font-bold mb-2 mt-6">Leaderboard</h1>
+        <table class="w-full text-white table-fixed py-2 border-collapse">
+            <tbody>
+                <tr>
+                    <td id="tr1-rank" style="width: 20%"></td>
+                    <td id="tr1-name" class="truncate" style="width: 60%"></td>
+                    <td id="tr1-score" style="width: 20%; text-align: right"></td>
+
+                </tr>
+                <tr>
+                    <td id="tr2-rank"></td>
+                    <td id="tr2-name" class="truncate"></td>
+                    <td id="tr2-score" style="width: 14%; text-align: right"></td>
+                </tr>
+                <tr>
+                    <td id="tr3-rank"></td>
+                    <td id="tr3-name" class="truncate"></td>
+                    <td id="tr3-score" style="width: 14%; text-align: right"></td>
+                </tr>
+                <tr>
+                    <td id="tr4-rank"></td>
+                    <td id="tr4-name" class="truncate"></td>
+                    <td id="tr4-score" style="width: 14%; text-align: right"></td>
+                </tr>
+                <tr>
+                    <td id="tr5-rank"></td>
+                    <td id="tr5-name" class="truncate"></td>
+                    <td id="tr5-score" style="width: 14%; text-align: right"></td>
+                </tr>
+                <tr>
+                    <td id="tr6-rank"></td>
+                    <td id="tr6-name" class="truncate"></td>
+                    <td id="tr6-score" style="width: 14%; text-align: right"></td>
+                </tr>
+                <tr>
+                    <td id="tr7-rank"></td>
+                    <td id="tr7-name" class="truncate"></td>
+                    <td id="tr7-score" style="width: 14%; text-align: right"></td>
+                </tr>
+                <tr>
+                    <td id="tr8-rank"></td>
+                    <td id="tr8-name" class="truncate"></td>
+                    <td id="tr8-score" style="width: 14%; text-align: right"></td>
+                </tr>
+                <tr>
+                    <td id="tr9-rank"></td>
+                    <td id="tr9-name" class="truncate"></td>
+                    <td id="tr9-score" style="width: 14%; text-align: right"></td>
+                </tr>
+                <tr>
+                    <td id="tr10-rank"></td>
+                    <td id="tr10-name" class="truncate"></td>
+                    <td id="tr10-score" style="width: 14%; text-align: right"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="playerStats" class="w-[300px] h-[110px]">
+        <h1 class="text-left text-white font-bold mb-2 mt-8">Player Stats</h1>
+        <table class="w-full text-white table-fixed py-2 border-collapse">
+            <thead>
+                <tr>
+                    <th class="text-left align-bottom font-light text-sm">Games</th>
+                    <th class="text-left align-bottom font-light text-sm">Total Score</th>
+                    <th class="text-left align-bottom font-light text-sm">Avg. Score</th>
+                    <th class="text-left align-bottom font-light text-sm">Max. Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="n_games"></td>
+                    <td id="total_score"></td>
+                    <td id="avg_score"></td>
+                    <td id="max_score"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="lastPlayed" class="w-[300px] h-[340px]">
+        <h1 class="text-left text-white font-bold mb-2 mt-8">Recent Games</h1>
+        <table class="w-full text-white py-2 border-collapse">
+            <thead>
+                <tr>
+                    <th class="text-left font-light text-sm">Time</th>
+                    <th class="text-left font-light text-sm">Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td id="tr1-time"></td>
+                    <td id="tr1-score"></td>
+
+                </tr>
+                <tr>
+                    <td id="tr2-time"></td>
+                    <td id="tr2-score"></td>
+                </tr>
+                <tr>
+                    <td id="tr3-time"></td>
+                    <td id="tr3-score"></td>
+                </tr>
+                <tr>
+                    <td id="tr4-time"></td>
+                    <td id="tr4-score"></td>
+                </tr>
+                <tr>
+                    <td id="tr5-time"></td>
+                    <td id="tr5-score"></td>
+                </tr>
+                <tr>
+                    <td id="tr6-time"></td>
+                    <td id="tr6-score"></td>
+                </tr>
+                <tr>
+                    <td id="tr7-time"></td>
+                    <td id="tr7-score"></td>
+                </tr>
+                <tr>
+                    <td id="tr8-time"></td>
+                    <td id="tr8-score"></td>
+                </tr>
+                <tr>
+                    <td id="tr9-time"></td>
+                    <td id="tr9-score"></td>
+                </tr>
+                <tr>
+                    <td id="tr10-time"></td>
+                    <td id="tr10-score"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

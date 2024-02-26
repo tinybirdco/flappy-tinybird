@@ -1,0 +1,13 @@
+# Data Source created from Pipe 'mat_player_stats'
+DESCRIPTION >
+    Pre-aggregated scores and purchases by player and session.
+
+SCHEMA >
+    `player_id` String,
+    `session_id` String,
+    `scores` AggregateFunction(countIf, UInt8),
+    `purchases` AggregateFunction(countIf, UInt8),
+    `game_ts` AggregateFunction(max, DateTime64(3))
+
+ENGINE "AggregatingMergeTree"
+ENGINE_SORTING_KEY "player_id, session_id"

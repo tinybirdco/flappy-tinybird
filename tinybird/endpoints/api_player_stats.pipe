@@ -1,0 +1,33 @@
+TOKEN "app_read_token" READ
+
+NODE agg
+DESCRIPTION >
+    Select from the MV and filter on a given player's games.
+
+SQL >
+
+    %
+    SELECT player_id, session_id, countMerge(scores) AS score
+    FROM mv_player_stats
+    WHERE
+        player_id = {{ String(player_param, 'player1', description="Player to filter on", required=True) }}
+    GROUP BY player_id, session_id
+
+
+
+NODE stats
+DESCRIPTION >
+    Calculate stats per player.
+
+SQL >
+
+    SELECT
+        player_id,
+        count() AS n_games,
+        sum(score) AS total_score,
+        round(total_score / n_games, 2) AS avg_score,
+        max(score) AS max_score
+    FROM agg
+    GROUP BY player_id
+
+
