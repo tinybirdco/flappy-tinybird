@@ -17,20 +17,16 @@ export async function send_data_to_tinybird(payload) {
 export async function sendToKafka(payload) {
     console.log('Sending data to Kafka:', payload);
 
-    try {
-        const response = await fetch('http://localhost:3000/sendToKafka', {
-            method: "POST",
-            body: JSON.stringify(payload),
-            headers: {
-                'Content-Type': 'application/vnd.kafka.binary.v2+json',
-            },
-        });
-
-        const responseData = await response.json();
-        console.log('Data sent to Kafka:', responseData);
-    } catch (error) {
-        console.error('Error sending data to Kafka:', error.message);
-    }
+    return fetch('http://localhost:3000/sendToKafka', {
+        method: "POST",
+        body: JSON.stringify(payload),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((res) => res.json())
+        // .then((data) => console.log('Data sent to Kafka:', data))
+        .catch((error) => console.log('Error sending data to Kafka:', error));
 }
 
 export async function get_data_from_tinybird(url) {

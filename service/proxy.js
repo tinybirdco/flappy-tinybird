@@ -24,6 +24,8 @@ app.post('/sendToKafka', async (req, res) => {
     const payload = req.body;
     const topic = 'demo_flappy';
 
+    console.log(payload)
+
     try {
         await producer.connect();
         await producer.send({
