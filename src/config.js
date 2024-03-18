@@ -34,6 +34,7 @@ export const config = {
 export const TINYBIRD_HOST = import.meta.env.VITE_TINYBIRD_HOST;
 export const TINYBIRD_READ_TOKEN = import.meta.env.VITE_TINYBIRD_READ_TOKEN;
 export const TINYBIRD_APPEND_TOKEN = import.meta.env.VITE_TINYBIRD_APPEND_TOKEN;
+export const EVENT_PARAM = import.meta.env.VITE_EVENT_PARAM;
 
 export const EVENTS_URL = `https://${TINYBIRD_HOST}/v0/events`;
 

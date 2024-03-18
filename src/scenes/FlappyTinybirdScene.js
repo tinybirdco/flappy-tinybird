@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import { v4 as uuidv4 } from "uuid";
 import { get_data_from_tinybird, send_death, send_session_data } from "../utils/tinybird";
-import { endpoints } from "./../config";
+import { endpoints, EVENT_PARAM } from "./../config";
 
 export default class FlappyTinybirdScene extends Phaser.Scene {
     session = {
@@ -200,6 +200,10 @@ export default class FlappyTinybirdScene extends Phaser.Scene {
         endpoints.personalization_url.searchParams.set(
             "player_param",
             this.session.name
+        );
+        endpoints.personalization_url.searchParams.set(
+            "event_param",
+            EVENT_PARAM
         );
 
         return Promise.all([

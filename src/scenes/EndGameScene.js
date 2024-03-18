@@ -1,5 +1,5 @@
 import { get_data_from_tinybird } from "../utils/tinybird";
-import { endpoints } from "./../config";
+import { endpoints, EVENT_PARAM } from "./../config";
 
 export default class EndGameScene extends Phaser.Scene {
     session = {
@@ -40,16 +40,29 @@ export default class EndGameScene extends Phaser.Scene {
             "player_param",
             this.session.name
         );
+        endpoints.top_10_url.searchParams.set(
+            "event_param",
+            EVENT_PARAM
+        );
         
         endpoints.player_stats_url.searchParams.set(
             "player_param",
             this.session.name
+        );
+        endpoints.player_stats_url.searchParams.set(
+            "event_param",
+            EVENT_PARAM
         );
 
         endpoints.recent_player_stats_url.searchParams.set(
             "player_param",
             this.session.name
         );
+        endpoints.recent_player_stats_url.searchParams.set(
+            "event_param",
+            EVENT_PARAM
+        );
+
         const charts = this.add
             .dom(0, 0)
             .createFromCache("charts")

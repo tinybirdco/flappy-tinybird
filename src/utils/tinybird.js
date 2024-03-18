@@ -1,4 +1,4 @@
-import { EVENTS_URL, TINYBIRD_READ_TOKEN, TINYBIRD_APPEND_TOKEN } from "../config";
+import { EVENTS_URL, TINYBIRD_READ_TOKEN, TINYBIRD_APPEND_TOKEN, EVENT_PARAM } from "../config";
 
 export async function send_data_to_tinybird(payload) {
     if (!TINYBIRD_READ_TOKEN) return;
@@ -34,7 +34,7 @@ export async function send_session_data(session) {
         name: session.name,
         timestamp: new Date().toISOString(),
         type: "score",
-
+        event: EVENT_PARAM
     };
     return send_data_to_tinybird(payload);
 }
@@ -47,6 +47,7 @@ export async function send_death(session) {
         name: session.name,
         timestamp: new Date().toISOString(),
         type: "game_over",
+        event: EVENT_PARAM
     };
     return send_data_to_tinybird(payload);
 }
@@ -59,6 +60,7 @@ export async function send_purchase(session) {
         name: session.name,
         timestamp: new Date().toISOString(),
         type: "purchase",
+        event: EVENT_PARAM
     };
     return send_data_to_tinybird(payload);
 }
