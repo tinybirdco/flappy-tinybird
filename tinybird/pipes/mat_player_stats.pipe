@@ -6,13 +6,16 @@ NODE mv
 SQL >
 
     SELECT
+        event,
         name AS player_id,
         session_id,
         countIfState(type = 'score') AS scores,
         countIfState(type = 'purchase') AS purchases,
-        maxState(timestamp) AS game_ts
+        minState(timestamp) AS start_ts,
+        maxState(timestamp) AS end_ts
     FROM events_api
     GROUP BY
+        event,
         player_id,
         session_id
 

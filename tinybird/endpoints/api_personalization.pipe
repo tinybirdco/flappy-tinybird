@@ -12,10 +12,15 @@ SQL >
         session_id,
         countMerge(scores) AS score,
         countMerge(purchases) AS purchases,
-        maxMerge(game_ts) AS t
+        maxMerge(end_ts) AS t
     FROM mv_player_stats
     WHERE
-        player_id = {{ String(player_param, 'player1', description="Player to filter on", required=True) }}
+        player_id
+        = {{ String(player_param, 'player1', description="Player to filter on", required=True) }}
+        {% if defined(event_param) %}
+            AND event
+            = {{ String(event_param, 'Austin Data Council', description="Event to filter on") }}
+        {% end %}
     GROUP BY player_id, session_id
 
 

@@ -1,0 +1,9 @@
+NODE mv
+SQL >
+
+    SELECT name, session_id, timestamp, type, event FROM kafka_events
+
+TYPE materialized
+DATASOURCE events_api
+
+

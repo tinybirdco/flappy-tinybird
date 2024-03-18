@@ -10,13 +10,19 @@ DESCRIPTION >
 
 SQL >
 
+    %
     SELECT
         ROW_NUMBER() OVER (ORDER BY total_score DESC, t) AS rank,
         player_id,
         session_id,
         countMerge(scores) AS total_score,
-        maxMerge(game_ts) AS t
+        maxMerge(end_ts) AS t
     FROM mv_player_stats
+    WHERE
+        1
+        {% if defined(event_param) %}
+            AND event = {{ String(event_param, 'Austin Data Council', description="Event to filter on") }}
+        {% end %}
     GROUP BY player_id, session_id
     ORDER BY rank
 
@@ -36,7 +42,8 @@ SQL >
         argMax(total_score, t) AS total_score
     FROM rank_games
     WHERE
-        player_id = {{ String(player_param, 'player1', description="Player to filter on", required=True) }}
+        player_id
+        = {{ String(player_param, 'player1', description="Player to filter on", required=True) }}
     GROUP BY player_id
 
 
