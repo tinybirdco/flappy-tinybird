@@ -59,8 +59,8 @@ Check the [Tinybird CLI documentation](https://docs.tinybird.co/cli.html) for ot
 
 ```bash
 cd tinybird/
-python3 -mvenv .e
-. .e/bin/activate
+python3 -m venv .venv
+source .venv/bin/activate
 pip install tinybird-cli
 tb auth --interactive
 ```
