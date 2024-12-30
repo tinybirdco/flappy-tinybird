@@ -113,10 +113,6 @@ In a real-world scenario, there are critical moments when a player decides what 
 
 The template was built using the Phaser 3 game framework, JavaScript, and [Tinybird](https://www.tinybird.co/), the real-time data platform for data and engineering teams.
 
-## Credits
-
-This game was built by [Joe Karlsson](https://github.com/JoeKarlsson), [Alasdair Brown](https://github.com/sdairs), [Joe Krawiec](https://github.com/simply-joe), [David Margulies](https://github.com/davidnmargulies), [Rafa Moreno](https://github.com/rmorehig), [Julia Vallina](https://github.com/juliavallina), and [Juanma Jimenez](https://github.com/juanma-tinybird) based on the original game by Dong Nguyen.
-
 ## License
 
 This project is licensed under the MIT License.
